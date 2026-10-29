@@ -1,0 +1,43 @@
+tok 1.0 "Fees and copies"
+
+item copy-t "Copy"
+  item shelfmark type=string
+  item year type=number
+  item condition type=string allowed="\"good\", \"damaged\""
+item copies-t "List of copies" collection type=copy-t
+
+inputdata kind "Kind of item" type=string
+inputdata days "Days late" type=number
+inputdata copies "Copies" type=copies-t
+
+bkm charge "Charge for a delay" params="days: number, rate: number" type=number
+  entry amount expr="days * rate"
+  result expr="min([amount, 100])"
+
+# a context with a relation, a function definition, an invocation and a result
+decision fee "Late fee" type=number requires="kind days charge"
+  entry rates
+    | type: string | rate: number |
+    | "book"       | 0.5          |
+    | "journal"    | 0.2          |
+    | "audiobook"  | 0.3          |
+  entry rate type=number expr="rates[type = kind].rate[1]"
+  entry round2 params="x: number" expr="round half up(x, 2)"
+  entry charged invoke=charge with="days = days; rate = rate"
+  result expr="round2(charged)"
+
+# a list
+decision account-types "Account types"
+  element expr="\"student\""
+  element expr="\"doctoral\""
+  element expr="\"staff\""
+
+# a context without a result: its value is the whole context
+decision overview "Overview of the copies" requires="copies"
+  entry count expr="count(copies)"
+  entry oldest expr="min(copies.year)"
+  entry "to repair" expr="copies[condition = \"damaged\"].shelfmark"
+  entry inspection type=boolean hit=first
+    | oldest: number || inspection: boolean |
+    | < 1950         || true                |
+    | -              || false               |

@@ -1,0 +1,24 @@
+# References {#references}
+
+## Standards {-}
+
+- Object Management Group. *Business Process Model and Notation (BPMN), Version 2.0.2*. 2013. https://www.omg.org/spec/BPMN/2.0.2/
+- ISO/IEC 19510:2013. *Information technology — Object Management Group Business Process Model and Notation*. International Organization for Standardization, 2013.
+- Object Management Group. *Decision Model and Notation (DMN), Version 1.5*. 2024. https://www.omg.org/spec/DMN/1.5/
+- IEEE Std 1849-2016. *IEEE Standard for eXtensible Event Stream (XES) for Achieving Interoperability in Event Logs and Event Streams*. IEEE, 2016.
+- Model Context Protocol. *Specification*. https://modelcontextprotocol.io/specification
+- Microsoft. *Language Server Protocol Specification 3.17*. https://microsoft.github.io/language-server-protocol/
+
+## Tools and test suites {-}
+
+- Camunda. *Camunda 8 documentation*: BPMN coverage, DMN coverage, FEEL, the Orchestration Cluster REST API. https://docs.camunda.io/
+- bpmn.io. *bpmn-js*, the BPMN viewer and modeler of Camunda Modeler. https://bpmn.io/
+- OMG BPMN Model Interchange Working Group. *Test cases of BPMN model interchange*. https://github.com/bpmn-miwg/bpmn-miwg-test-suite
+- DMN Technology Compatibility Kit. https://github.com/dmn-tck/tck
+
+## tok {-}
+
+- The language specification, the engine and the packages: https://github.com/tok-lang-bpm/tok
+- The skill and the MCP server for AI agents: https://github.com/tok-lang-bpm/tok-agent
+- The GitHub Action for continuous integration: https://github.com/tok-lang-bpm/setup-tok
+- The courses of the Jagiellonian University that use tok, in Polish: *Modelowanie procesów informacyjnych* (https://marekdeja.codeberg.page/ipm/) and *Język modelowania procesów tok* (https://marekdeja.codeberg.page/tok-course/).

@@ -1,0 +1,17 @@
+tok 1.0 "Reserving a group study room"
+
+start asked "Room requested"
+user check "Check the room calendar"
+xor free "Room free"
+usr book "Book the room"
+user offer "Offer another time"
+	end booked "Room booked"
+end offered "Other time offered"
+end booked "Booking confirmed"
+
+flow asked -> check -> free
+flow free -> book
+flow free -> offer "no" when="free = false" default
+flow book -> booked
+flow offer -> offered
+message offer -> asked "Offer"

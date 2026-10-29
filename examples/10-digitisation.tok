@@ -1,0 +1,32 @@
+tok 1.0 "Digitisation order" executable
+
+# multi-instance call activity, ad-hoc sub-process, compensation, an error boundary event,
+# the REST connector, listeners and a user task with an expression as its assignee
+pool library "Digitisation workshop" process=digitisation version-tag="2.1"
+  start received "Order received"
+  service reserve "Reserve scanner time" type="reserve-scanner" compensate=release
+  service release "Release scanner time" compensation type="release-scanner"
+  call scan "Scan volume" parallel process=scan-volume binding=deployment child-vars=none collection="volumes" item=volume output=files output-item="file" inputs="volume = volume" outputs="file = file"
+  boundary failed "Scanner fault" on=scan error="Scanner fault" code="SCAN-FAULT" outputs="reason = reason"
+  throw undo "Undo the reservation" compensate activity=reserve
+  end cancelled "Order cancelled"
+  service publish "Publish in the repository" result=publication connector=rest method=POST url="https://repository.example.org/api/items" body="={title: title, files: files}"
+  user check "Check the publication" form=f-check assignee="=requester" priority=50 listeners="creating: notify-requester"
+  end done "Order completed"
+
+pool volume "Scanning of one volume" process=scan-volume
+  start vol "Volume to scan"
+  service pages "Scan pages" type="scan-pages" retries=2 headers="resolution: 600"
+  adhoc extras "Optional treatments" wait active="treatments"
+    service ocr "Recognise text" type="ocr"
+    service mark "Add a watermark" type="watermark"
+  script name "Name the file" expr="\"vol-\" + string(volume)" result=file
+  end scanned "Volume scanned"
+
+flow received -> reserve -> scan -> publish -> check -> done
+flow failed -> undo -> cancelled
+flow vol -> pages -> extras -> name -> scanned
+
+form f-check "Check the publication"
+  text "## {{title}}\nPublished as {{publication.body.id}}"
+  field ok "Publication is correct" type=checkbox

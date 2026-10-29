@@ -1,0 +1,19 @@
+tok 1.0 "Reading room order"
+
+pool library "University library"
+  lane reader "Reader"
+    start wish "Reader needs a volume"
+    user order "Order the volume to the reading room"
+  lane stacks "Stacks"
+    user fetch "Fetch the volume from the stacks"
+    xor found "Volume found?"
+    user deliver "Deliver to the reading room"
+    end delivered "Volume ready in the reading room"
+    user notify "Notify the reader"
+    end missing "Volume reported missing"
+
+flow wish -> order -> fetch -> found
+flow found -> deliver "yes"
+flow found -> notify "no"
+flow deliver -> delivered
+flow notify -> missing

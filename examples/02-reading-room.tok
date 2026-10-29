@@ -1,0 +1,17 @@
+# Access to records in an archive reading room
+tok 1.0 "Reading room request"
+
+start submitted "Request submitted"
+# the archivist checks the reference code first
+user check "Check the reference code"
+xor available "Are the records available?"
+manual issue "Issue the records"  # at the reading room desk
+user inform "Inform the reader"
+end issued "Records issued"
+end informed "Reader informed"
+
+flow submitted -> check -> available
+flow available -> issue "yes"
+flow available -> inform "no"
+flow issue -> issued
+flow inform -> informed

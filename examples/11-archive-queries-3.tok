@@ -1,0 +1,31 @@
+tok 1.0 "Archive queries: three archivists"
+
+pool archive "State archive"
+  lane registry "Registry"
+    start arrived "Query request received"
+    user register "Register the request" by=clerks duration="tri(5m, 10m, 20m)"
+    send refuse "Send a refusal" by=clerks duration="tri(5m, 10m, 15m)"
+    end refused "Request refused"
+    send answer "Send the answer" by=clerks duration="tri(5m, 10m, 15m)"
+    end answered "Query answered"
+  lane archivist "Archivist"
+    user assess "Assess the request" by=archivists duration="lnorm(30m, 10m)" assign="complete=bern(0.9)"
+    xor is-complete "Is the request complete?"
+    send ask "Ask for missing details" by=archivists duration="5m"
+    catch details "Details received" message="Details" delay="exp(3d)"
+    xor feasible "Is the query feasible?"
+    user search "Search the holdings" by=archivists duration="lnorm(6h, 3h)"
+    user write "Write the answer" by=archivists duration="tri(30m, 1h, 2h)"
+
+flow arrived -> register -> assess -> is-complete
+flow is-complete -> feasible "yes" when="complete = true"
+flow is-complete -> ask "no" default
+flow ask -> details -> assess
+flow feasible -> search "yes" p=0.85
+flow feasible -> refuse "no" p=0.15
+flow refuse -> refused
+flow search -> write -> answer -> answered
+
+simulate cases=300 seed=7 arrival="exp(4h)"
+resource archivists "Archivists" count=3
+resource clerks "Registry clerks" count=1

@@ -1,0 +1,20 @@
+tok 1.0 "Thesis deposit"
+
+pool university "University"
+  lane student "Student"
+    start ready "Thesis ready"
+    user upload "Upload the thesis to the repository"
+  lane office "Dean's office"
+    user verify "Verify the metadata"
+    xor complete "Are the metadata complete?"
+    user correct "Ask for corrections"
+  lane system "Repository system"
+    service plagiarism "Run the similarity check"
+    service archive "Archive the thesis"
+    end deposited "Thesis deposited"
+
+flow ready -> upload -> verify -> complete
+flow complete -> plagiarism "yes"
+flow complete -> correct "no"
+flow correct -> upload
+flow plagiarism -> archive -> deposited

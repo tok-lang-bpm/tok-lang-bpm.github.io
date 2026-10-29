@@ -1,0 +1,22 @@
+bookdown::gitbook:
+  css: style.css
+  split_by: chapter
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">tok: Process Models as Text</a></li>
+      after: |
+        <li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+        <li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+        <li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+        <li><a href="playground/" target="_blank">Playground in the browser</a></li>
+    edit: null
+    download: null
+    sharing: null
+    info: false
+    search: true
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2

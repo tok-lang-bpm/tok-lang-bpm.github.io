@@ -1,0 +1,11 @@
+tok 1.0 "Loan limits"
+
+inputdata age "Reader's age" type=number
+inputdata account "Account type" type=string
+
+decision limit "Loan limit" requires="age account" hit=first
+  | age: number | account: string       || limit: number || note             |
+  | < 18        | -                     || 5             || minors           |
+  | >= 18       | "student", "doctoral" || 15            || students         |
+  | >= 18       | "staff"               || 30            || university staff |
+  | -           | -                     || 10            || everyone else    |

@@ -1,0 +1,254 @@
+# Editors and the playground {#editors}
+
+::: {.goals}
+**In this chapter** you will install the VS Code extension of tok and work with its diagnostics, formatting, navigation, rename, outline and live diagram · set up the language server `tok-lsp` in Neovim, Helix, Emacs or another editor with an LSP client · write, check, simulate and share models in the browser playground, which runs the engine as WebAssembly without a server
+:::
+
+A tok model is a text file, so any text editor can open it. The tools in this chapter make editing comfortable: they show the diagnostics of `tok check` while you type, format the text on request, take you from a name to its declaration, rename an element everywhere at once and draw the diagram next to the text. All of them run the tok engine itself, so they give exactly the results of the command line.
+
+There are three ways to work:
+
+| Tool | For whom | What you need |
+|---|---|---|
+| the VS Code extension | most users: one installation and everything works | VS Code, VSCodium or another editor that installs extensions from Open VSX |
+| `tok-lsp` in another editor | users of Neovim, Helix, Emacs, Sublime Text, Kate, Zed and other editors with an LSP client | the program `tok-lsp` and a few lines of configuration |
+| the playground | trying tok without installing anything, teaching, sharing a model by a link | a web browser |
+
+## The VS Code extension
+
+### Installing
+
+The extension is called **tok**, published by `tok-lang-bpm`. Install it in VS Code from the Extensions view (search for *tok* and check the publisher) or from the Visual Studio Marketplace. VSCodium, Eclipse Theia and other editors that use the Open VSX registry install the same extension from Open VSX. From a terminal:
+
+```sh
+code --install-extension tok-lang-bpm.tok
+```
+
+The packages for Windows, Linux and macOS carry the language server `tok-lsp` for their platform, so nothing else is needed: you do not have to install the `tok` command or Python for the editor to work. Open any `.tok` file and the extension starts.
+
+### What you see while editing
+
+Open `12-reading-room.tok`, a small model of a reading room order:
+
+```{r editors-reading-room-code, results='asis'}
+tok_code("12-reading-room")
+```
+
+`r download_tok("12-reading-room")` `r download_bpmn("12-reading-room")`
+
+- **Syntax highlighting** colours statements, identifiers, labels, attributes, flags, flows, comments and the rows of decision tables, so the structure of each line is visible at a glance.
+- **Diagnostics** appear as you type: every check of `tok check`, from the structure of the document through the BPMN 2.0 rules to the Camunda profile of executable models, decisions, FEEL and simulation parameters. They are underlined in the text and listed in the *Problems* panel with their codes. Make a typo in the first flow, `flow wish -> ordr -> fetch -> found`, and the line is marked at once with the message the command line would give:
+
+  ```
+  reading-room.tok:15: error R002: unknown flow node 'ordr'
+  reading-room.tok:15: error R002: unknown flow node 'ordr'
+  reading-room.tok: 2 error(s), 0 warning(s), 0 note(s)
+  ```
+
+  The error appears twice because the chain on line 15 is two flows, `wish -> ordr` and `ordr -> fetch`, and both name the unknown node. In the editor both are attached to the identifier `ordr` itself.
+- **Formatting** (*Format Document*, or format on save) rewrites the document in the canonical form of `tok fmt`. A document with syntax errors is not formatted, because the canonical form of a text that does not parse would lose part of it; the editor shows the first error instead.
+- **Hover** over an identifier shows the kind of the element, its label, the BPMN or DMN element it exports and the line of its declaration; over a keyword, what the statement declares; over a diagnostic or a diagnostic code, the explanation of the code in English and Polish.
+- **Completion** offers the keywords at the start of a line, the attribute keys and flags of a statement, the identifiers of the right kind after keys that name elements (activities after `on=`, forms after `form=`, decisions after `decision=`, resources after `by=`), the nodes after `->` on a flow line, the hit policies after `hit=` and the field types after `type=` on a form field.
+
+### Navigation and rename
+
+Every identifier of a model is declared once and used in many places: in flows, in `on=` of boundary events, in `form=` and `decision=`, in `reads` and `writes`, in `requires=` of decisions, and in the FEEL expressions of a decision model. The extension knows all of them:
+
+| Action | How | What it does |
+|---|---|---|
+| Go to definition | F12, or Ctrl+click | jumps from any use of an identifier to its declaration |
+| Find all references | Shift+F12 | lists every use of the identifier |
+| Highlight | place the cursor on a name | marks the declaration and every use in the document |
+| Rename | F2 | renames the identifier everywhere |
+| Outline | the *Outline* view, or Ctrl+Shift+O | pools with their lanes and nodes, sub-processes, decisions, forms with their fields and the other blocks |
+
+Rename is more than search and replace. It checks that the new name is a valid identifier (`[A-Za-z_][A-Za-z0-9_-]*`, ASCII, because identifiers become XML `id` attributes) and that no other element uses it, and refuses otherwise with the reason. Rename `fetch` to `retrieve` in the reading room model, and the declaration and the chain `order -> fetch -> found` change together. The derived identifiers of flows (`f-SOURCE-TARGET`) follow the names of their ends, also where another statement refers to them. In a decision model, FEEL names in expressions follow the rename too, while a word that only begins a longer name, a key of a context and a name inside a string literal are left alone.
+
+### The diagram beside the text
+
+**tok: Show diagram** (also the preview button in the title bar of a `.tok` editor) opens the diagram of the model in a panel beside the editor. It is the picture `tok svg` draws, made from the text in the editor whether it is saved or not, and it is redrawn as you type. While the document has errors, the panel lists them instead. When a layout sidecar `FILE.tok.layout` lies next to the file (Chapter \@ref(layout-import)), the diagram keeps the drawing of the imported model.
+
+Working with the diagram open is the fastest way to learn the language. Add a boundary event, and a moment later it sits on the border of its task; join two branches with the wrong kind of gateway, and you see the problem in the picture and in the *Problems* panel at the same time.
+
+### Commands and settings
+
+| Command | What it does |
+|---|---|
+| *tok: Show diagram* | the live diagram beside the editor |
+| *tok: Export BPMN* | writes `NAME.bpmn` (BPMN 2.0 XML with the diagram layout) next to the document |
+| *tok: Export all files* | writes every file of `tok export` (BPMN, SVG, DMN and forms) into a folder you choose |
+| *tok: Check* | summarises the diagnostics of the document |
+| *tok: Restart language server* | restarts `tok-lsp` |
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `tok.lang` | `auto` | language of the diagnostics: `en`, `pl`, or `auto` (Polish when VS Code runs in Polish) |
+| `tok.level` | `full` | teaching level, the elements a document may use: `basic`, `analytic`, `full`, as `tok check --level` |
+| `tok.class` | `none` | the BPMN 2.0.2 conformance class to check against: `descriptive`, `analytic`, `common-executable`, `full`, as `tok check --class` |
+| `tok.server.path` | empty | the path of `tok-lsp`; empty means the server of the extension, or else `tok-lsp` on the `PATH` |
+
+Changes of `tok.lang`, `tok.level` and `tok.class` apply at once to every open document. A teacher can set `tok.level` to `basic` in the workspace settings of a course, so that students see an error as soon as they use an element the first lessons do not cover. A change of `tok.server.path` restarts the server.
+
+## The language server for other editors
+
+`tok-lsp` is the language server of tok: a program that an editor starts and talks to over its standard input and output with the Language Server Protocol (LSP 3.17). The VS Code extension uses it, and so can every editor with an LSP client. The features are those described above: diagnostics on opening and after every change, formatting, go to definition, references, highlight, rename, outline, hover and completion. Positions are counted in UTF-16 code units, as every LSP client expects, so labels with accented letters or other non-ASCII characters do not shift what follows them.
+
+### Installing the server
+
+Install it from crates.io with Rust, or take the program from the release archives of the repository, and put it on the `PATH`:
+
+```sh
+cargo install tok-lsp
+tok-lsp --version
+```
+
+Without arguments, or with `--stdio`, which editors often add, the server serves one editor on its standard streams.
+
+### What an editor needs
+
+Every editor needs three things:
+
+1. the command: `tok-lsp`;
+2. the file type: files ending in `.tok`; comments start with `#`, indentation is two spaces and never tabs;
+3. optionally, the settings as initialization options: `{"lang": "en", "level": "full", "class": null}`, the same three settings as in VS Code (`class` set to one of the conformance classes, or `null` for none).
+
+The editor may change the settings later with `workspace/didChangeConfiguration`, either as `{"settings": {"tok": {…}}}` or directly as `{"settings": {…}}`; every open document is checked again. Messages are in Polish when the editor runs in Polish or `lang` is `pl`.
+
+### Neovim
+
+Neovim 0.11 and later configure language servers without plugins. In `init.lua`:
+
+```lua
+vim.filetype.add({ extension = { tok = "tok" } })
+
+vim.lsp.config("tok", {
+  cmd = { "tok-lsp" },
+  filetypes = { "tok" },
+  root_markers = { ".git" },
+  init_options = { lang = "en", level = "full" },
+})
+vim.lsp.enable("tok")
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tok",
+  callback = function()
+    vim.bo.commentstring = "# %s"
+    vim.bo.expandtab = true
+    vim.bo.shiftwidth = 2
+  end,
+})
+```
+
+Diagnostics appear as the file is edited; `vim.lsp.buf.format()` formats, `CTRL-]` goes to the definition, `grr` lists the references, `grn` renames, `gO` shows the outline and `K` the hover text.
+
+### Helix
+
+In `languages.toml`, in the configuration folder of Helix or as `.helix/languages.toml` of a project:
+
+```toml
+[language-server.tok-lsp]
+command = "tok-lsp"
+config = { lang = "en", level = "full" }
+
+[[language]]
+name = "tok"
+scope = "source.tok"
+file-types = ["tok"]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["tok-lsp"]
+```
+
+Helix sends `config` as the initialization options. `:format` formats, `gd` goes to the definition, `gr` lists the references, `<space>r` renames and `<space>s` opens the outline; `hx --health tok` shows whether Helix finds the server.
+
+### Emacs
+
+Emacs 29 and later include the LSP client eglot. A small major mode gives `.tok` files their comments and indentation, and eglot starts the server for it:
+
+```elisp
+(define-derived-mode tok-mode prog-mode "tok"
+  "Major mode for process models in the tok language."
+  (modify-syntax-entry ?# "<" tok-mode-syntax-table)
+  (modify-syntax-entry ?\n ">" tok-mode-syntax-table)
+  (modify-syntax-entry ?- "_" tok-mode-syntax-table)
+  (setq-local comment-start "# ")
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 2))
+
+(add-to-list 'auto-mode-alist '("\\.tok\\'" . tok-mode))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(tok-mode . ("tok-lsp" :initializationOptions (:lang "en" :level "full")))))
+
+(add-hook 'tok-mode-hook #'eglot-ensure)
+```
+
+`M-x eglot-format-buffer` formats, `M-.` goes to the definition, `M-?` lists the references, `M-x eglot-rename` renames and `M-x imenu` uses the outline; Flymake shows the diagnostics.
+
+### Other editors
+
+Sublime Text (with its LSP package), Kate, Zed and other editors with an LSP client take the same three things: the command `tok-lsp`, the extension `.tok` and, if you want them, the initialization options. Highlighting in these editors comes from the editor's own configuration; the language server supplies everything else.
+
+### Requests for editor extensions
+
+Besides the standard methods, the server answers four requests that let an editor extension show and export a model without running the `tok` command: `tok/check` (the numbers of errors, warnings and notes and the BPMN conformance class), `tok/svg` (the picture), `tok/bpmn` (the BPMN XML) and `tok/export` (every file of `tok export`). They take `{"textDocument": {"uri": URI}}` of an open document and use the text the editor holds, not the file on disk. The diagram panel of the VS Code extension is built on `tok/svg`; an extension for another editor can do the same.
+
+### Limits
+
+The server analyses each document on its own, as `tok check` does. Identifiers are not resolved across files, so a `process=` of a call activity that names a process in another file is left alone, and rename works within one document. The server never writes files: export goes through the commands of the extension or the `tok` command.
+
+## The playground in the browser
+
+The playground at **https://tok-lang-bpm.github.io/playground/** is a web page where you write and check a tok model in the browser. The engine runs inside the page, compiled to WebAssembly from the same Rust code as the `tok` command, so the diagnostics, the canonical form, the diagram, the BPMN file, the simulation and the decisions are exactly those of `tok`. Nothing is sent to a server: the page is a set of static files.
+
+### The page
+
+- **Editor** with line numbers. Every change is checked after a short pause. The diagnostics appear below the editor with their line, severity, code and message, in English or Polish (*Messages*), and a click on one selects its line. The summary gives the numbers of errors, warnings and notes and the smallest BPMN conformance class of the document.
+- **Diagram**: the SVG picture of the model, redrawn whenever the document has no errors. While it has errors, the last picture stays, dimmed, so you do not lose sight of the model while you fix a line.
+- **bpmn-js**: the BPMN 2.0 XML of the model in the bpmn-js viewer of bpmn.io, which you can zoom and move. This is how the file will look in bpmn.io and in Camunda Modeler.
+- **Simulation**: runs `tok sim` with the cases and seed of the model, or with the ones you give, and shows the report.
+- **Decisions**: evaluates a decision of the document for input values written as a JSON object, as `tok eval` does, for example `{"kind": "print", "price": 120}`.
+- **Files**: every file `tok export` writes (BPMN, SVG, DMN with its pictures, Camunda forms), each one a download.
+
+Above the editor, **Format** replaces the text with its canonical form; **Download .tok** and **Download BPMN** save the document and its BPMN file; **Open…** loads a `.tok` file, or imports a BPMN or DMN file into tok; **Example** loads one of the example models.
+
+### Sharing a model by a link
+
+**Copy link** puts the whole document into the address of the page, as `#doc=…` with the text encoded in base64url, and copies the link. Whoever opens the link sees the same model, checked and drawn, without any server storing it. The parameter `?tab=` opens a tab directly: `?tab=viewer` (bpmn-js), `diagram`, `simulation`, `decisions` or `files`. A teacher can put a link with `?tab=diagram` into an assignment, and a student can send a link to a model with a question about one line of it. Long models make long links; for anything you want to keep, download the `.tok` file.
+
+### Offline and privacy
+
+Once the page is loaded, everything works without a network connection, except the bpmn-js tab: the viewer is loaded from unpkg.com, with integrity hashes so the browser refuses any other file, and without access to it the tab says that the viewer could not be loaded. The text of your model never leaves the browser, which makes the playground suitable for models of internal procedures.
+
+The page can also be served from your own web server or from a local folder over HTTP (browsers load WebAssembly only over HTTP, not from `file:` addresses), for example a classroom without internet access. The same WebAssembly module can be used in your own web pages; Chapter \@ref(programming) shows how.
+
+### Limits of the browser
+
+- WebAssembly runs here without threads, so the simulator runs on a smaller stack than in the `tok` command. A model whose cases pass through very long chains of gateways and events without time in between could exhaust it.
+- FEEL `now()` and `today()` read the clock of the page, in UTC.
+- If the engine stops on an internal error, the page reports it, writes the message to the console of the browser and loads a fresh module.
+- The page has no layout sidecar: imported BPMN files are drawn with the automatic layout.
+
+## Choosing a tool
+
+| Task | Best tool |
+|---|---|
+| your first model, a quick test of a construct | the playground |
+| a model to share with someone who has nothing installed | the playground, with *Copy link* |
+| daily work on models in a repository | the VS Code extension, or `tok-lsp` in your editor |
+| renaming elements in a large model | the extension or `tok-lsp` (rename) |
+| teaching with a restricted subset of BPMN | the extension with `tok.level`, or `tok check --level` |
+| export for Camunda, simulation runs with files, automation | the `tok` command (Chapter \@ref(getting-started), the [command reference](#commands)) |
+
+All of them read and write the same text, so you can move between them at any time: draft in the playground, download the `.tok` file, continue in the editor, and check it in continuous integration (Chapter \@ref(integrations)).
+
+## Exercises {-}
+
+::: {.exercise}
+1. **First session in the editor.** Install the VS Code extension, open `12-reading-room.tok` and open the diagram beside it. Add a boundary timer "3 days passed" on the task `fetch` that leads to the notification of the reader. Watch the diagnostics and the diagram while you type, and stop when the *Problems* panel is empty.
+2. **Rename.** Rename `notify` to `inform-reader` with F2. Which lines changed? Then try to rename it to `deliver`, and to `inform reader`. What does the editor say, and why?
+3. **Teaching level.** Set `tok.level` to `basic` and add `eventgw` to the model. What does the editor report? Set the level back to `full` and set `tok.class` to `descriptive`; which elements of your model, if any, lie outside the descriptive class?
+4. **Another editor.** Configure `tok-lsp` in Neovim, Helix or Emacs with the snippets of this chapter. Check that diagnostics appear, that formatting works and that go to definition jumps from a flow to the declaration of a node.
+5. **Playground and link.** Paste `11-archive-queries.tok` into the playground, run the simulation in the *Simulation* tab and compare the report with the one in Chapter \@ref(simulation). Then change the number of archivists, copy the link with `?tab=simulation` and open it in another browser. What does the receiver see?
+:::

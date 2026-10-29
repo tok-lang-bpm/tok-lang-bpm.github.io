@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Thesis deposit" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="university" name="University" processRef="university-process" />
+  </bpmn:collaboration>
+  <bpmn:process id="university-process" name="Thesis deposit" isExecutable="false">
+    <bpmn:laneSet id="university-lanes">
+      <bpmn:lane id="student" name="Student">
+        <bpmn:flowNodeRef>ready</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>upload</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="office" name="Dean's office">
+        <bpmn:flowNodeRef>verify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>complete</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>correct</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="system" name="Repository system">
+        <bpmn:flowNodeRef>plagiarism</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>archive</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>deposited</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="ready" name="Thesis ready" />
+    <bpmn:userTask id="upload" name="Upload the thesis to the repository" />
+    <bpmn:userTask id="verify" name="Verify the metadata" />
+    <bpmn:exclusiveGateway id="complete" name="Are the metadata complete?" />
+    <bpmn:userTask id="correct" name="Ask for corrections" />
+    <bpmn:serviceTask id="plagiarism" name="Run the similarity check" />
+    <bpmn:serviceTask id="archive" name="Archive the thesis" />
+    <bpmn:endEvent id="deposited" name="Thesis deposited" />
+    <bpmn:sequenceFlow id="f-ready-upload" sourceRef="ready" targetRef="upload" />
+    <bpmn:sequenceFlow id="f-upload-verify" sourceRef="upload" targetRef="verify" />
+    <bpmn:sequenceFlow id="f-verify-complete" sourceRef="verify" targetRef="complete" />
+    <bpmn:sequenceFlow id="f-complete-plagiarism" name="yes" sourceRef="complete" targetRef="plagiarism" />
+    <bpmn:sequenceFlow id="f-complete-correct" name="no" sourceRef="complete" targetRef="correct" />
+    <bpmn:sequenceFlow id="f-correct-upload" sourceRef="correct" targetRef="upload" />
+    <bpmn:sequenceFlow id="f-plagiarism-archive" sourceRef="plagiarism" targetRef="archive" />
+    <bpmn:sequenceFlow id="f-archive-deposited" sourceRef="archive" targetRef="deposited" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="university_di" bpmnElement="university" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="950" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="student_di" bpmnElement="student" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="920" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="office_di" bpmnElement="office" isHorizontal="true">
+        <dc:Bounds x="30" y="140" width="920" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="system_di" bpmnElement="system" isHorizontal="true">
+        <dc:Bounds x="30" y="280" width="920" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ready_di" bpmnElement="ready">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="74" y="93" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="upload_di" bpmnElement="upload">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="verify_di" bpmnElement="verify">
+        <dc:Bounds x="326" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="complete_di" bpmnElement="complete" isMarkerVisible="true">
+        <dc:Bounds x="476" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="238" width="52" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="correct_di" bpmnElement="correct">
+        <dc:Bounds x="576" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="plagiarism_di" bpmnElement="plagiarism">
+        <dc:Bounds x="576" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archive_di" bpmnElement="archive">
+        <dc:Bounds x="726" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="deposited_di" bpmnElement="deposited">
+        <dc:Bounds x="876" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="849" y="373" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-ready-upload_di" bpmnElement="f-ready-upload">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-upload-verify_di" bpmnElement="f-upload-verify">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-verify-complete_di" bpmnElement="f-verify-complete">
+        <di:waypoint x="426" y="210" />
+        <di:waypoint x="476" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-complete-plagiarism_di" bpmnElement="f-complete-plagiarism">
+        <di:waypoint x="501" y="235" />
+        <di:waypoint x="501" y="350" />
+        <di:waypoint x="576" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="508" y="335" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-complete-correct_di" bpmnElement="f-complete-correct">
+        <di:waypoint x="526" y="210" />
+        <di:waypoint x="576" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="534" y="195" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-correct-upload_di" bpmnElement="f-correct-upload">
+        <di:waypoint x="626" y="170" />
+        <di:waypoint x="626" y="19" />
+        <di:waypoint x="226" y="19" />
+        <di:waypoint x="226" y="30" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-plagiarism-archive_di" bpmnElement="f-plagiarism-archive">
+        <di:waypoint x="676" y="350" />
+        <di:waypoint x="726" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-archive-deposited_di" bpmnElement="f-archive-deposited">
+        <di:waypoint x="826" y="350" />
+        <di:waypoint x="876" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

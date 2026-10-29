@@ -1,0 +1,12 @@
+# Command reference {#commands}
+
+The commands of the `tok` program, their options, their output for programs (`--json`) and their exit codes. The Python package adds one command of its own, `tok mcp`, which runs the MCP server for AI agents ([Chapter 14](#agents)):
+
+```
+tok mcp              # serve one MCP client on standard input and output
+tok mcp --version    # print the version of the server
+```
+
+```{r cli, results='asis'}
+include_md("reference/cli.md")
+```

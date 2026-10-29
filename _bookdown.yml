@@ -1,0 +1,32 @@
+book_filename: "tok-guide"
+output_dir: "_book"
+delete_merged_file: true
+new_session: false
+repo: https://github.com/tok-lang-bpm/tok-lang-bpm.github.io
+language:
+  ui:
+    chapter_name: "Chapter "
+rmd_files:
+  - "index.Rmd"
+  - "01-models-as-text.Rmd"
+  - "02-getting-started.Rmd"
+  - "03-process-basics.Rmd"
+  - "04-collaboration.Rmd"
+  - "05-events-and-exceptions.Rmd"
+  - "06-data-and-artifacts.Rmd"
+  - "07-checking-models.Rmd"
+  - "08-layout-export-import.Rmd"
+  - "09-decisions.Rmd"
+  - "10-executable-models.Rmd"
+  - "11-simulation-and-mining.Rmd"
+  - "12-editors-and-playground.Rmd"
+  - "13-programming-interfaces.Rmd"
+  - "14-ai-agents.Rmd"
+  - "15-integrations.Rmd"
+  - "90-symbols.Rmd"
+  - "91-cheatsheet.Rmd"
+  - "92-command-reference.Rmd"
+  - "93-diagnostics.Rmd"
+  - "94-conformance.Rmd"
+  - "95-glossary.Rmd"
+  - "96-references.Rmd"

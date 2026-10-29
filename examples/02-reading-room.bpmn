@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Reading room request" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:process id="process" name="Reading room request" isExecutable="false">
+    <bpmn:startEvent id="submitted" name="Request submitted" />
+    <bpmn:userTask id="check" name="Check the reference code" />
+    <bpmn:exclusiveGateway id="available" name="Are the records available?" />
+    <bpmn:manualTask id="issue" name="Issue the records" />
+    <bpmn:userTask id="inform" name="Inform the reader" />
+    <bpmn:endEvent id="issued" name="Records issued" />
+    <bpmn:endEvent id="informed" name="Reader informed" />
+    <bpmn:sequenceFlow id="f-submitted-check" sourceRef="submitted" targetRef="check" />
+    <bpmn:sequenceFlow id="f-check-available" sourceRef="check" targetRef="available" />
+    <bpmn:sequenceFlow id="f-available-issue" name="yes" sourceRef="available" targetRef="issue" />
+    <bpmn:sequenceFlow id="f-available-inform" name="no" sourceRef="available" targetRef="inform" />
+    <bpmn:sequenceFlow id="f-issue-issued" sourceRef="issue" targetRef="issued" />
+    <bpmn:sequenceFlow id="f-inform-informed" sourceRef="inform" targetRef="informed" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="submitted_di" bpmnElement="submitted">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="0" y="93" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check_di" bpmnElement="check">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="available_di" bpmnElement="available" isMarkerVisible="true">
+        <dc:Bounds x="266" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="297" y="98" width="56" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="issue_di" bpmnElement="issue">
+        <dc:Bounds x="366" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="inform_di" bpmnElement="inform">
+        <dc:Bounds x="366" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="issued_di" bpmnElement="issued">
+        <dc:Bounds x="516" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="494" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="informed_di" bpmnElement="informed">
+        <dc:Bounds x="516" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="492" y="223" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-submitted-check_di" bpmnElement="f-submitted-check">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-check-available_di" bpmnElement="f-check-available">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-available-issue_di" bpmnElement="f-available-issue">
+        <di:waypoint x="316" y="70" />
+        <di:waypoint x="366" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-available-inform_di" bpmnElement="f-available-inform">
+        <di:waypoint x="291" y="95" />
+        <di:waypoint x="291" y="200" />
+        <di:waypoint x="366" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="299" y="185" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-issue-issued_di" bpmnElement="f-issue-issued">
+        <di:waypoint x="466" y="70" />
+        <di:waypoint x="516" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-inform-informed_di" bpmnElement="f-inform-informed">
+        <di:waypoint x="466" y="200" />
+        <di:waypoint x="516" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

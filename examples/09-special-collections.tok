@@ -1,0 +1,13 @@
+tok 1.0 "Access to special collections"
+
+inputdata materialAge "Age of the material (years)" type=number
+inputdata personalData "Contains personal data" type=boolean
+inputdata purpose "Purpose" type=string
+
+decision Decision_0access name="Access mode" requires="materialAge personalData purpose" hit=first
+  | materialAge: number | personalData: boolean | purpose: string = "research","official","private" || mode: string = "reading room","anonymised copy","director's consent","refused" ||                                        |
+  | >= 100              | -                     | -                                                 || "reading room"                                                                 || Old material: no restrictions          |
+  | -                   | false                 | -                                                 || "reading room"                                                                 || No personal data                       |
+  | -                   | true                  | "research"                                        || "anonymised copy"                                                              || Research: a copy without personal data |
+  | < 30                | true                  | "private"                                         || "refused"                                                                      || Private purpose, recent material       |
+  | -                   | -                     | -                                                 || "director's consent"                                                           || Everything else                        |

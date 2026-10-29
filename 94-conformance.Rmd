@@ -1,0 +1,10 @@
+# Conformance with Camunda 8 {#conformance}
+
+What tok expresses of the BPMN, DMN and FEEL that Camunda 8 executes, the conformance case that fixes each translation, and the case of the executable conformance run that deploys it to Camunda 8 Run and drives it to its end. The same kind of table for every element of the BPMN 2.0.2 and DMN 1.5 metamodels, with the results of the round trip of the BPMN Model Interchange Working Group models and of the DMN Technology Compatibility Kit, is [docs/conformance-bpmn.md](https://github.com/tok-lang-bpm/tok/blob/main/docs/conformance-bpmn.md).
+
+```{r conformance, results='asis'}
+lines <- readLines("reference/conformance-camunda.md", encoding = "UTF-8", warn = FALSE)
+lines <- lines[-seq_len(which(grepl("^# ", lines))[1])]
+lines <- sub("^## (.*)$", "## \1 {-}", lines)
+cat(lines, sep = "\n")
+```

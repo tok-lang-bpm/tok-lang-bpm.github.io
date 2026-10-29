@@ -1,0 +1,130 @@
+---
+title: "tok: Process Models as Text"
+subtitle: "A guide to the language, the tools and the integrations"
+author: "Marek Deja"
+site: bookdown::bookdown_site
+documentclass: book
+description: "The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations."
+github-repo: tok-lang-bpm/tok-lang-bpm.github.io
+---
+
+```{r setup, include=FALSE}
+source("R/helpers.R")
+```
+
+# Preface {-}
+
+**tok** is a plain-text language for process models. A `.tok` file describes a BPMN 2.0 process, with its pools, lanes, events, tasks, gateways, flows and data, together with the DMN decisions the process uses, the forms people fill in and the parameters needed to simulate it. Every line of the file starts with a keyword and describes one element, so a model reads almost like a list of steps:
+
+```tok
+tok 1.0 "Interlibrary loan"
+
+pool library "University library"
+  lane reader "Reader"
+    start need "Book needed"
+    user request "Submit a loan request"
+  lane librarian "Librarian"
+    user catalogues "Search the catalogues"
+    xor available "Is the book held locally?"
+    user locate "Point to the local copy"
+    user order "Order from another library"
+    end located "Local copy located"
+    end ordered "Order placed"
+
+flow need -> request -> catalogues -> available
+flow available -> locate "yes"
+flow available -> order "no"
+flow locate -> located
+flow order -> ordered
+```
+
+The text is the model. The `tok` tools check it against the rules of BPMN 2.0.2 and turn it into everything else: a BPMN 2.0 XML file with a computed diagram layout, which Camunda Modeler and bpmn.io open like any other BPMN file; an SVG picture; DMN 1.5 decision files; Camunda 8 forms; simulation results and event logs. Existing BPMN and DMN files can be converted back to text with `tok import`. Nothing in the language is a coordinate: the drawing is computed whenever it is needed.
+
+The tools are built around one engine, written in Rust. You reach it from the command line (`tok`), from Python, R and Julia, from any program that can call a C library, from a web page through WebAssembly, from editors through a language server, and from AI agents through an MCP server. All of them give the same diagnostics, the same canonical text and the same exports, because they run the same code.
+
+This book is the guide to the language, the tools and their integrations. It explains the ideas behind tok, teaches the language from the first model to executable processes and decision models, and shows how to use tok in an editor, in a program, in a data analysis, with an AI agent and alongside Camunda 8.
+
+## Who this book is for {-}
+
+The book is written for four groups of readers. They share the first chapters and then take different routes.
+
+| Reader | You want to | Reading path |
+|---|---|---|
+| **Users**: analysts, process owners, consultants, people documenting procedures | write and maintain process models, publish diagrams, hand models to an engine | Chapters \@ref(models-as-text)–\@ref(checking), then \@ref(layout-import), \@ref(editors); \@ref(decisions) and \@ref(executable) when the models are to be run |
+| **Students and teachers** of process modelling | learn BPMN through a notation that can be read, checked and compared line by line | Chapters \@ref(models-as-text)–\@ref(checking) in order, with their exercises, then \@ref(decisions) and \@ref(simulation); the appendices on [symbols](#symbols) and the [cheat sheet](#cheatsheet) as references |
+| **Developers** | call the engine from code, build tok into a pipeline, a service or a tool | Chapters \@ref(models-as-text), \@ref(getting-started) and \@ref(process-basics) for the language, then \@ref(programming), \@ref(executable), \@ref(integrations) and the [command reference](#commands) |
+| **Agent users**: people who let an AI agent write or review models | give an agent the language and the tools, and check what it produces | Chapters \@ref(models-as-text)–\@ref(process-basics) to read models yourself, then \@ref(checking) and \@ref(agents) |
+
+No programming knowledge is needed for the language itself. Familiarity with BPMN helps but is not required: each construct is introduced with its meaning in BPMN 2.0.2, and the [glossary](#glossary) collects the terms.
+
+## How the book is organised {-}
+
+The first two chapters explain the idea of models as text and get the tools running. Chapters \@ref(process-basics) to \@ref(data-artifacts) teach the language of process models: the basic elements, collaboration between participants, events and exceptions, data and artifacts. Chapters \@ref(checking) and \@ref(layout-import) cover checking models and moving them between text, diagrams and other tools. Chapters \@ref(decisions) to \@ref(simulation) add the layers above the process structure: DMN decisions, executable models for Camunda 8, and simulation. Chapters \@ref(editors) to \@ref(integrations) are about the tools around the engine: editors and the playground, programming interfaces, AI agents and integrations with other software. The appendices are references to keep at hand: the symbol catalogue, the cheat sheet, the commands, the diagnostic codes, conformance with BPMN, DMN and Camunda, a glossary and the references.
+
+## Conventions {-}
+
+Models are printed in code blocks. They are complete documents that pass `tok check`, unless the text says that a model contains deliberate errors (the names of such files end in `-error.tok`):
+
+```tok
+tok 1.0 "Short example"
+
+start s "Request received"
+user check "Check the request"
+end e "Request handled"
+
+flow s -> check -> e
+```
+
+Commands you type in a terminal, and what the tools print, appear in plain blocks:
+
+```
+tok check model.tok
+model.tok: 0 error(s), 0 warning(s), 0 note(s)
+```
+
+Below the diagrams of the longer examples you will find two links: one to the `.tok` file and one to the BPMN file that `tok bpmn` writes from it. Every example of the book is in the folder `examples` of the book's repository.
+
+Four kinds of boxes appear in the text:
+
+::: {.goals}
+**In this chapter** you will find a box like this at the start of every chapter, listing what the chapter teaches.
+:::
+
+::: {.tip}
+A **tip** gives practical advice: a shortcut, a habit that saves time, a way to avoid a common mistake.
+:::
+
+::: {.note}
+A **note** marks something you must not overlook: a rule that differs from what you might expect, a limit, a difference between tools.
+:::
+
+::: {.exercise}
+An **exercise** box holds a task to do with the tools. Each chapter ends with a set of exercises.
+:::
+
+Keywords, identifiers, attributes, file names and commands are set in `monospace`. Labels, the human-readable names of elements, are in "quotes". BPMN element names follow the specification (`userTask`, `exclusiveGateway`); in the text they are written as words (user task, exclusive gateway).
+
+## Versions {-}
+
+This book describes **language 1.0** and **tools 1.0.1**. Language 1.0 is the stable language: every release 1.x of the tools reads it with the same meaning and the same outputs, and documents of the earlier versions 0.1 to 0.7 stay valid and keep their meaning. Release 1.0.1 of the tools changes nothing in the language: the project has its home on GitHub (the organisation `tok-lang-bpm`), issues are reported there, the Python package starts the MCP server with `tok mcp`, and the engine draws the catalogue of BPMN symbols in the [appendix](#symbols). Check your version with:
+
+```
+tok --version
+tok 1.0.1
+```
+
+The examples use the header `tok 1.0`. Models written for earlier versions of the language still work; Chapter \@ref(process-basics) explains the header line and the version it declares.
+
+## Licence {-}
+
+tok and this book are free software. The tools, the examples and the text are released under the GNU General Public License, version 3 or (at your option) any later version (GPL-3.0-or-later). The full text of the licence is in the file `LICENSE` of the tok repository and of the book's repository.
+
+## Reporting issues {-}
+
+The source code of tok is at <https://github.com/tok-lang-bpm/tok>. If a tool gives a wrong result, a message is unclear, an export does not open in another program, or something in this book is wrong or missing, please open an issue at <https://github.com/tok-lang-bpm/tok/issues>. A good report includes the version (`tok --version`), the smallest model that shows the problem, the command you ran and what it printed.
+
+## How to cite {-}
+
+If you use tok in research or teaching, please cite the software. The repository <https://github.com/tok-lang-bpm/tok> contains the file `CITATION.cff` with the citation metadata; GitHub shows it as *Cite this repository* and offers it in APA and BibTeX form, and reference managers can import it. A citation in text form:
+
+> Deja, M. (2026). *tok: a plain-text language for information-process models* (Version 1.0.1) [Computer software]. https://github.com/tok-lang-bpm/tok

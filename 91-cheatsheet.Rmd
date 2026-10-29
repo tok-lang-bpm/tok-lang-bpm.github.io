@@ -1,0 +1,7 @@
+# Language on one page {#cheatsheet}
+
+The whole language of tok 1.0 on one page, as `tok cheatsheet` prints it and as the skill for AI agents carries it. The normative description is the specification, [docs/spec.md](https://github.com/tok-lang-bpm/tok/blob/main/docs/spec.md).
+
+```{r cheatsheet, results='asis'}
+include_md("reference/cheatsheet.md")
+```

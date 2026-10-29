@@ -1,0 +1,23 @@
+tok 1.0 "Lending decisions" doc="Decisions about a reader's account."
+
+inputdata age "Reader's age" type=number
+inputdata account "Account type" type=string doc="student, doctoral, staff or guest"
+inputdata unpaid "Unpaid fees (EUR)" name="Unpaid fees" type=number
+inputdata days-late "Days late" type=number
+source rules "Lending rules" kind=regulation uri="https://library.example/rules"
+source director "Director's order" requires="rules unpaid" kind=order
+
+bkm late-fee "Late fee" params="days: number, rate: number" type=number requires="rules" expr="days * rate"
+
+decision limit "Loan limit" requires="age account rules" question="How many books may the reader borrow?" answers="a number from 0 to 30" hit=first
+  | age: number | account: string       || limit: number |
+  | < 18        | -                     || 5             |
+  | >= 18       | "student", "doctoral" || 15            |
+  | >= 18       | "staff"               || 30            |
+  | -           | -                     || 10            |
+
+decision blocked "Block the account?" name="Account blocked" type=boolean requires="limit unpaid director" expr="Unpaid fees > 50 or limit < 1"
+
+decision fee "Fee for the delay" type=number requires="late-fee days-late" invoke=late-fee with="days = days-late; rate = 0.5"
+
+decision summary "Summary for the reader" requires="limit fee blocked" expr="if Account blocked then \"account blocked\" else \"limit \" + string(limit) + \", fee \" + string(fee) + \" EUR\""

@@ -1,0 +1,21 @@
+tok 1.0 "Interlibrary loan: collaboration"
+
+pool library "University library"
+  lane reader "Reader"
+    start need "Book needed"
+    user request "Submit a loan request"
+    user collect "Collect the book"
+    end borrowed "Book borrowed"
+  lane ill "Interlibrary loan desk"
+    user catalogues "Search the union catalogue"
+    send order "Send the loan request" message="Loan request"
+    receive parcel "Receive the parcel" message="Parcel with the book"
+  lane system "Library system"
+    service record "Record the loan"
+
+pool lender "Lending library"
+
+flow need -> request -> catalogues -> order -> parcel -> record -> collect -> borrowed
+
+message order -> lender "Loan request"
+message lender -> parcel "Parcel with the book"

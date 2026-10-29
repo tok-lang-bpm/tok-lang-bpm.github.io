@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Approving a purchase proposal" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:process id="process" name="Approving a purchase proposal" isExecutable="false">
+    <bpmn:startEvent id="submitted" name="Proposal submitted" />
+    <bpmn:businessRuleTask id="mode" name="Determine the approval mode" />
+    <bpmn:exclusiveGateway id="needs-head" name="Must the head of department approve?" default="f-needs-head-merge" />
+    <bpmn:userTask id="approve" name="Review the proposal" />
+    <bpmn:exclusiveGateway id="agreed" name="Did the head agree?" default="f-agreed-rejected" />
+    <bpmn:exclusiveGateway id="merge" />
+    <bpmn:userTask id="order" name="Order the book" />
+    <bpmn:endEvent id="ordered" name="Book ordered" />
+    <bpmn:endEvent id="rejected" name="Proposal rejected" />
+    <bpmn:sequenceFlow id="f-submitted-mode" sourceRef="submitted" targetRef="mode" />
+    <bpmn:sequenceFlow id="f-mode-needs-head" sourceRef="mode" targetRef="needs-head" />
+    <bpmn:sequenceFlow id="f-needs-head-approve" name="yes" sourceRef="needs-head" targetRef="approve">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">mode = "head"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-needs-head-merge" name="no" sourceRef="needs-head" targetRef="merge" />
+    <bpmn:sequenceFlow id="f-approve-agreed" sourceRef="approve" targetRef="agreed" />
+    <bpmn:sequenceFlow id="f-agreed-merge" name="yes" sourceRef="agreed" targetRef="merge">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">agreed = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-agreed-rejected" name="no" sourceRef="agreed" targetRef="rejected" />
+    <bpmn:sequenceFlow id="f-merge-order" sourceRef="merge" targetRef="order" />
+    <bpmn:sequenceFlow id="f-order-ordered" sourceRef="order" targetRef="ordered" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="submitted_di" bpmnElement="submitted">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-3" y="93" width="102" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="mode_di" bpmnElement="mode">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="needs-head_di" bpmnElement="needs-head" isMarkerVisible="true">
+        <dc:Bounds x="266" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="100" width="108" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="approve_di" bpmnElement="approve">
+        <dc:Bounds x="366" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="agreed_di" bpmnElement="agreed" isMarkerVisible="true">
+        <dc:Bounds x="516" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="568" y="97" width="108" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="merge_di" bpmnElement="merge" isMarkerVisible="true">
+        <dc:Bounds x="616" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order_di" bpmnElement="order">
+        <dc:Bounds x="716" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ordered_di" bpmnElement="ordered">
+        <dc:Bounds x="866" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="850" y="93" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="rejected_di" bpmnElement="rejected">
+        <dc:Bounds x="623" y="160" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="593" y="201" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-submitted-mode_di" bpmnElement="f-submitted-mode">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-mode-needs-head_di" bpmnElement="f-mode-needs-head">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-needs-head-approve_di" bpmnElement="f-needs-head-approve">
+        <di:waypoint x="316" y="70" />
+        <di:waypoint x="366" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-needs-head-merge_di" bpmnElement="f-needs-head-merge">
+        <di:waypoint x="291" y="45" />
+        <di:waypoint x="291" y="30" />
+        <di:waypoint x="591" y="30" />
+        <di:waypoint x="591" y="70" />
+        <di:waypoint x="616" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="299" y="15" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-approve-agreed_di" bpmnElement="f-approve-agreed">
+        <di:waypoint x="466" y="70" />
+        <di:waypoint x="516" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-agreed-merge_di" bpmnElement="f-agreed-merge">
+        <di:waypoint x="566" y="70" />
+        <di:waypoint x="616" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="573" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-agreed-rejected_di" bpmnElement="f-agreed-rejected">
+        <di:waypoint x="541" y="95" />
+        <di:waypoint x="541" y="178" />
+        <di:waypoint x="623" y="178" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="549" y="163" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-merge-order_di" bpmnElement="f-merge-order">
+        <di:waypoint x="666" y="70" />
+        <di:waypoint x="716" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-order-ordered_di" bpmnElement="f-order-ordered">
+        <di:waypoint x="816" y="70" />
+        <di:waypoint x="866" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

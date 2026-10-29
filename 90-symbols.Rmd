@@ -1,0 +1,19 @@
+# (APPENDIX) Appendices {-}
+
+# BPMN symbols {#symbols}
+
+Every BPMN 2.0.2 symbol that tok draws, with the statement that produces it and whether Camunda 8 executes it. The pictures are made by the tok engine itself: each one comes from a small model exported with `tok bpmn` and `tok svg` and cut to the element (`tools/symbols.py` of the tok repository), so a symbol here looks exactly as it does in your diagrams.
+
+In the column *tok*, words in capitals (`ID`, `ACTIVITY`, `P`) stand for identifiers of your model, and the values (`"M"`, `P1D`) are examples. *Not executed* means that Camunda 8 does not run the element; in an executable document `tok check` reports the code given ([Chapter 10](#executable)). *Modelling only* elements are exported and kept, and the engine ignores them. Groups (`group ID "Label" members="A B"`) are exported as BPMN groups without a shape in the diagram, so they have no symbol here.
+
+```{r symbol-tables, results='asis'}
+family <- NULL
+for (s in symbol_catalogue()) {
+  if (!identical(s$family, family)) {
+    family <- s$family
+    cat("\n\n## ", family, " {-}\n\n", sep = "")
+    cat("| Symbol | Element | BPMN | tok | Camunda 8 |\n|---|---|---|---|---|\n")
+  }
+  cat(sprintf("| %s | %s | %s | `%s` | %s |\n", symbol(s$id, "2.6em"), s$en, s$bpmn, s$tok, s$camunda))
+}
+```

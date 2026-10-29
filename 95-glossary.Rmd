@@ -1,0 +1,63 @@
+# Glossary {#glossary}
+
+| Term | Meaning |
+|---|---|
+| activity | Work done in a process: a task, a sub-process or a call activity. Drawn as a rounded rectangle. |
+| ad-hoc sub-process | A sub-process whose activities run in any order, as the performers decide (`adhoc`). |
+| association | A dotted line that links an annotation or data to an element. |
+| attribute | A `key=value` pair on a statement, such as `message="Order"` or `timer=P3D`. |
+| black-box pool | A pool without a process inside, standing for a participant whose work is not modelled (`pool ID "Label"` without a block). |
+| boundary event | An event attached to the border of an activity: it catches something that happens while the activity runs (`boundary ID on=ACTIVITY …`). It interrupts the activity unless it is `noninterrupting`. |
+| BPMN | Business Process Model and Notation, the OMG standard (version 2.0.2, ISO/IEC 19510) for process diagrams and their XML files. |
+| BPMN conformance class | One of the subsets of BPMN the standard defines: descriptive, analytic, common executable, full. `tok check --class` checks a document against one. |
+| business knowledge model | A reusable piece of decision logic, a function that decisions invoke (`bkm`). |
+| business rule task | A task whose result comes from a decision (`rule … decision=`). |
+| call activity | An activity that runs another process or a global task (`call … process=` or `task=`). |
+| canonical form | The one way `tok fmt` prints a model: indentation, order of attributes, quoting. Two models with the same meaning print identically. |
+| catching event | An event that waits for something to happen (outline icon). |
+| choreography | A model of the messages exchanged between participants, without their internal processes (`choreography`). |
+| collaboration | Several pools that exchange messages. |
+| compensation | Undoing the effect of work already done, by a handler activity bound to the activity it undoes. |
+| conformance case | A document of the tok repository with its expected outputs (BPMN, SVG, DMN, diagnostics), which every implementation must reproduce byte for byte. |
+| conversation | A group of message exchanges between pools about one subject, drawn as a hexagon. |
+| data object | Information that exists while a case of the process runs, such as a request or a decision letter (`data`). |
+| data store | Information that outlives the process, such as a catalogue or a register (`store`). |
+| decision requirements graph | The decisions of a model with the input data, knowledge sources and business knowledge models they require (DMN). |
+| decision table | A table of rules that maps input values to outputs, with a hit policy. |
+| default flow | The flow a gateway takes when no condition of its other flows is true (`default`). |
+| diagnostic | A message of `tok check`: a code, a severity (error, warning, note), a line and a text. |
+| DMN | Decision Model and Notation, the OMG standard for decisions (version 1.5). |
+| engine | The program that does the work of tok: the Rust library that parses, checks, prints, exports, imports, evaluates and simulates. The command line, the Python, R and Julia packages, the language server, the MCP server and the playground all call it. |
+| event | Something that happens during a process: a message arrives, a time passes, an error occurs. Drawn as a circle. |
+| event sub-process | A sub-process started by an event at any moment while its process runs (`eventsub`). |
+| event-based gateway | A gateway after which the first of several events to happen decides the path (`eventgw`). |
+| executable document | A document with the flag `executable`, whose processes carry what Camunda 8 needs to run them. |
+| export | Writing a model in another format: BPMN, SVG, DMN, Camunda forms. |
+| FEEL | Friendly Enough Expression Language, the expression language of DMN, used in conditions, decisions and mappings. |
+| flag | An attribute without a value, such as `noninterrupting` or `parallel`. |
+| form | A Camunda form shown to the person who works on a user task or starts a process (`form`). |
+| gateway | A point where paths split or join. Drawn as a diamond. |
+| header | The first line of a document: `tok 1.0 "Title"`. |
+| hit policy | The rule that says what a decision table returns when several rules match (`unique`, `first`, `any`, `priority`, `collect`, `rule-order`, `output-order`). |
+| identifier | The name of an element for programs: ASCII letters, digits, `_` and `-`, unique in the document. |
+| import | Reading a BPMN or DMN file into a tok model (`tok import`). |
+| job | Work that Camunda 8 hands to a program (a worker): service tasks, message throw events. |
+| label | The name of an element for people, in quotes, in any language. |
+| lane | A partition of a pool, usually a role or a department (`lane`). |
+| language level | A subset of the language for teaching (`basic`, `analytic`, `full`); `tok check --level` rejects what is outside it. |
+| layout sidecar | The file `MODEL.tok.layout` that keeps the drawing of an imported diagram, so exports keep its geometry. |
+| LSP | Language Server Protocol: the protocol editors use to get diagnostics, formatting and navigation from a language server (`tok-lsp`). |
+| MCP | Model Context Protocol: the protocol AI agents use to call tools; the tok MCP server is `tok mcp`. |
+| message flow | A dashed line between pools: one participant sends something to another (`message A -> B`). |
+| multi-instance | An activity done once for every item of a collection, in parallel or in sequence (`parallel`, `sequential`). |
+| pool | A participant of a collaboration, with the process it performs (`pool`). |
+| process | The order of work of one participant: events, activities, gateways and flows. |
+| sequence flow | A solid arrow: what comes next in one process (`flow A -> B`). |
+| simulation | Running many cases of a process with random durations, arrivals and choices to estimate times and workloads (`tok sim`). |
+| skill | A folder of instructions and references that teaches an AI agent a task; the tok skill is `tok-modelling`. |
+| sub-process | An activity with its own inner process (`sub`). |
+| throwing event | An event that makes something happen, such as sending a message (filled icon). |
+| transaction | A sub-process whose work is completed together or undone together (`transaction`). |
+| trigger | What starts or is caught by an event: message, timer, signal, error, escalation, condition, link, compensation, cancel. |
+| user task | Work a person does in a system, for example by filling in a form (`user`). |
+| XES | eXtensible Event Stream, the IEEE standard format of event logs for process mining (IEEE 1849-2016). |

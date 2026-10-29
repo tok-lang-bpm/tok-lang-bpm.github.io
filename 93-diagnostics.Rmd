@@ -1,0 +1,10 @@
+# Diagnostics {#diagnostics}
+
+Every message of `tok check`, with its code, severity and text in English and Polish. [Chapter 7](#checking) explains how to read them and how to fix the most common ones.
+
+```{r diagnostics, results='asis'}
+lines <- readLines("reference/diagnostics.md", encoding = "UTF-8", warn = FALSE)
+lines <- lines[-seq_len(which(grepl("^# ", lines))[1])]
+lines <- sub("^## (.*)$", "## \1 {-}", lines)
+cat(lines, sep = "\n")
+```

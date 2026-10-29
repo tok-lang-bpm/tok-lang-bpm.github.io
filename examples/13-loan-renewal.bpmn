@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Loan renewal" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:resource id="desk" name="Loan desk" />
+  <bpmn:process id="process" name="Loan renewal" isExecutable="false">
+    <bpmn:startEvent id="asked" name="Reader asks for a renewal" />
+    <bpmn:businessRuleTask id="decide" name="Decide on the renewal">
+      <bpmn:performer id="decide-performer">
+        <bpmn:resourceRef>desk</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:businessRuleTask>
+    <bpmn:exclusiveGateway id="allowed" name="Is the renewal allowed?" default="f-allowed-explain" />
+    <bpmn:task id="extend" name="Extend the loan period">
+      <bpmn:performer id="extend-performer">
+        <bpmn:resourceRef>desk</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="explain" name="Explain the refusal">
+      <bpmn:performer id="explain-performer">
+        <bpmn:resourceRef>desk</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="extended" name="Loan extended" />
+    <bpmn:endEvent id="refused" name="Renewal refused" />
+    <bpmn:sequenceFlow id="f-asked-decide" sourceRef="asked" targetRef="decide" />
+    <bpmn:sequenceFlow id="f-decide-allowed" sourceRef="decide" targetRef="allowed" />
+    <bpmn:sequenceFlow id="f-allowed-extend" name="yes" sourceRef="allowed" targetRef="extend">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">renewal = "allowed"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-allowed-explain" name="no" sourceRef="allowed" targetRef="explain" />
+    <bpmn:sequenceFlow id="f-extend-extended" sourceRef="extend" targetRef="extended" />
+    <bpmn:sequenceFlow id="f-explain-refused" sourceRef="explain" targetRef="refused" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="asked_di" bpmnElement="asked">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="0" y="93" width="96" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="decide_di" bpmnElement="decide">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="allowed_di" bpmnElement="allowed" isMarkerVisible="true">
+        <dc:Bounds x="266" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="296" y="98" width="46" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="extend_di" bpmnElement="extend">
+        <dc:Bounds x="366" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="explain_di" bpmnElement="explain">
+        <dc:Bounds x="366" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="extended_di" bpmnElement="extended">
+        <dc:Bounds x="516" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="497" y="93" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refused_di" bpmnElement="refused">
+        <dc:Bounds x="516" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="492" y="223" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-asked-decide_di" bpmnElement="f-asked-decide">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-decide-allowed_di" bpmnElement="f-decide-allowed">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-allowed-extend_di" bpmnElement="f-allowed-extend">
+        <di:waypoint x="316" y="70" />
+        <di:waypoint x="366" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-allowed-explain_di" bpmnElement="f-allowed-explain">
+        <di:waypoint x="291" y="95" />
+        <di:waypoint x="291" y="200" />
+        <di:waypoint x="366" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="299" y="185" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-extend-extended_di" bpmnElement="f-extend-extended">
+        <di:waypoint x="466" y="70" />
+        <di:waypoint x="516" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-explain-refused_di" bpmnElement="f-explain-refused">
+        <di:waypoint x="466" y="200" />
+        <di:waypoint x="516" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

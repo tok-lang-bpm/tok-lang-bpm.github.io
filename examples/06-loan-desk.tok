@@ -1,0 +1,12 @@
+tok 1.0 "Lending a book at the desk"
+
+start arrived "Reader at the desk"
+user lend "Check the reader's account" by=librarian
+service record "Record the loan" by=system
+manual hand-over "Hand over the book" by=librarian
+end lent "Book lent"
+
+flow arrived -> lend -> record -> hand-over -> lent
+
+resource librarian "Librarian" count=2
+resource system "Library system"

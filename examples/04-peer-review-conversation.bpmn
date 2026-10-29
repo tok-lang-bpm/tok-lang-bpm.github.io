@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Peer review: conversations" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Manuscript" name="Manuscript" />
+  <bpmn:message id="Message_Decision" name="Decision" />
+  <bpmn:message id="Message_Review_invitation" name="Review invitation" />
+  <bpmn:message id="Message_Review_report" name="Review report" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="author" name="Author" />
+    <bpmn:participant id="journal" name="Journal editorial office" />
+    <bpmn:participant id="reviewer" name="Reviewer">
+      <bpmn:participantMultiplicity minimum="2" maximum="3" />
+    </bpmn:participant>
+    <bpmn:messageFlow id="m-manuscript" name="Manuscript" sourceRef="author" targetRef="journal" messageRef="Message_Manuscript" />
+    <bpmn:messageFlow id="m-decision" name="Decision" sourceRef="journal" targetRef="author" messageRef="Message_Decision" />
+    <bpmn:messageFlow id="m-invitation" name="Review invitation" sourceRef="journal" targetRef="reviewer" messageRef="Message_Review_invitation" />
+    <bpmn:messageFlow id="m-report" name="Review report" sourceRef="reviewer" targetRef="journal" messageRef="Message_Review_report" />
+    <bpmn:conversation id="submission" name="Submission">
+      <bpmn:participantRef>author</bpmn:participantRef>
+      <bpmn:participantRef>journal</bpmn:participantRef>
+      <bpmn:messageFlowRef>m-manuscript</bpmn:messageFlowRef>
+      <bpmn:messageFlowRef>m-decision</bpmn:messageFlowRef>
+    </bpmn:conversation>
+    <bpmn:conversation id="review" name="Review">
+      <bpmn:participantRef>journal</bpmn:participantRef>
+      <bpmn:participantRef>reviewer</bpmn:participantRef>
+      <bpmn:messageFlowRef>m-invitation</bpmn:messageFlowRef>
+      <bpmn:messageFlowRef>m-report</bpmn:messageFlowRef>
+    </bpmn:conversation>
+    <bpmn:conversationLink id="submission-link-author" sourceRef="author" targetRef="submission" />
+    <bpmn:conversationLink id="submission-link-journal" sourceRef="journal" targetRef="submission" />
+    <bpmn:conversationLink id="review-link-journal" sourceRef="journal" targetRef="review" />
+    <bpmn:conversationLink id="review-link-reviewer" sourceRef="reviewer" targetRef="review" />
+  </bpmn:collaboration>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="author_di" bpmnElement="author" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="600" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="journal_di" bpmnElement="journal" isHorizontal="true">
+        <dc:Bounds x="0" y="180" width="600" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reviewer_di" bpmnElement="reviewer" isHorizontal="true">
+        <dc:Bounds x="0" y="360" width="600" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="submission_di" bpmnElement="submission">
+        <dc:Bounds x="390" y="108" width="40" height="35" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="review_di" bpmnElement="review">
+        <dc:Bounds x="190" y="288" width="40" height="35" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="m-manuscript_di" bpmnElement="m-manuscript">
+        <di:waypoint x="285" y="70" />
+        <di:waypoint x="285" y="180" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="224" y="76" width="56" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-decision_di" bpmnElement="m-decision">
+        <di:waypoint x="315" y="180" />
+        <di:waypoint x="315" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="320" y="113" width="46" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-invitation_di" bpmnElement="m-invitation">
+        <di:waypoint x="285" y="250" />
+        <di:waypoint x="285" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="184" y="256" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-report_di" bpmnElement="m-report">
+        <di:waypoint x="315" y="360" />
+        <di:waypoint x="315" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="320" y="293" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="submission-link-author_di" bpmnElement="submission-link-author">
+        <di:waypoint x="410" y="108" />
+        <di:waypoint x="410" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="submission-link-journal_di" bpmnElement="submission-link-journal">
+        <di:waypoint x="410" y="143" />
+        <di:waypoint x="410" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="review-link-journal_di" bpmnElement="review-link-journal">
+        <di:waypoint x="210" y="288" />
+        <di:waypoint x="210" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="review-link-reviewer_di" bpmnElement="review-link-reviewer">
+        <di:waypoint x="210" y="323" />
+        <di:waypoint x="210" y="360" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

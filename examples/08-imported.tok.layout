@@ -1,0 +1,28 @@
+tok-layout 1
+Participant_0lib8rr 160 80 840 350
+Lane_0reader1 190 80 810 120
+Lane_1staff22 190 200 810 230
+Event_0asked1 232 122 36 36
+Event_0asked1/label 220 165 60 14
+Activity_0ask1ab 320 100 100 80
+Activity_1check3 480 250 100 80
+Gateway_0free5k 640 265 50 50
+Gateway_0free5k/label 575 335 70 14
+Activity_0assign 760 210 100 80
+Activity_1offer9 760 330 100 80
+Event_1booked7 922 232 36 36
+Event_1booked7/label 910 275 60 14
+Event_0other88 922 352 36 36
+Event_0other88/label 896 395 88 14
+TextAnnotation_0note1x 560 100 180 40
+Group_0alloc7 740 195 140 225
+Group_0alloc7/label 770 202 80 14
+f-Event_0asked1-Activity_0ask1ab 268 140 320 140
+f-Activity_0ask1ab-Activity_1check3 420 140 450 140 450 290 480 290
+f-Activity_1check3-Gateway_0free5k 580 290 640 290
+f-Gateway_0free5k-Activity_0assign 665 265 665 250 760 250
+f-Gateway_0free5k-Activity_0assign/label 700 232 18 14
+f-Gateway_0free5k-Activity_1offer9 665 315 665 370 760 370
+f-Gateway_0free5k-Activity_1offer9/label 700 352 14 14
+f-Activity_0assign-Event_1booked7 860 250 922 250
+f-Activity_1offer9-Event_0other88 860 370 922 370
