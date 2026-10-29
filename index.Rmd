@@ -106,11 +106,11 @@ Keywords, identifiers, attributes, file names and commands are set in `monospace
 
 ## Versions {-}
 
-This book describes **language 1.0** and **tools 1.0.1**. Language 1.0 is the stable language: every release 1.x of the tools reads it with the same meaning and the same outputs, and documents of the earlier versions 0.1 to 0.7 stay valid and keep their meaning. Release 1.0.1 of the tools changes nothing in the language: the project has its home on GitHub (the organisation `tok-lang-bpm`), issues are reported there, the Python package starts the MCP server with `tok mcp`, and the engine draws the catalogue of BPMN symbols in the [appendix](#symbols). Check your version with:
+This book describes **language 1.0** and **tools 1.0.2**. Language 1.0 is the stable language: every release 1.x of the tools reads it with the same meaning and the same outputs, and documents of the earlier versions 0.1 to 0.7 stay valid and keep their meaning. Release 1.0.1 of the tools changes nothing in the language: the project has its home on GitHub (the organisation `tok-lang-bpm`), issues are reported there, the Python package starts the MCP server with `tok mcp`, and the engine draws the catalogue of BPMN symbols in the [appendix](#symbols). Check your version with:
 
 ```
 tok --version
-tok 1.0.1
+tok 1.0.2
 ```
 
 The examples use the header `tok 1.0`. Models written for earlier versions of the language still work; Chapter \@ref(process-basics) explains the header line and the version it declares.
@@ -127,4 +127,4 @@ The source code of tok is at <https://github.com/tok-lang-bpm/tok>. If a tool gi
 
 If you use tok in research or teaching, please cite the software. The repository <https://github.com/tok-lang-bpm/tok> contains the file `CITATION.cff` with the citation metadata; GitHub shows it as *Cite this repository* and offers it in APA and BibTeX form, and reference managers can import it. A citation in text form:
 
-> Deja, M. (2026). *tok: a plain-text language for information-process models* (Version 1.0.1) [Computer software]. https://github.com/tok-lang-bpm/tok
+> Deja, M. (2026). *tok: a plain-text language for information-process models* (Version 1.0.2) [Computer software]. https://github.com/tok-lang-bpm/tok

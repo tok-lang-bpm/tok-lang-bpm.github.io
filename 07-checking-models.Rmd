@@ -153,11 +153,11 @@ The `E`, `W` and `L` codes come from the BPMN 2.0.2 specification. Every rule th
 | Area | What is checked | Codes |
 |---|---|---|
 | identifiers and references | identifiers are unique, ASCII and refer to existing elements of the right kind | `R001`–`R004`, `E003`, `E004`, `E018` |
-| sequence flows | they connect flow nodes of one process or sub-process; no flow into a start event or out of an end event; a default flow has no condition; a parallel gateway has no conditions | `R021`, `E005`, `E006`, `E011`, `E015`, `E017` |
+| sequence flows | they connect flow nodes of one process or sub-process; no flow into a start event or out of an end event; a default flow has no condition; a parallel gateway has no conditions; no flow written twice or from an element back to itself | `R021`, `E005`, `E006`, `E011`, `E015`, `E017`, `W023`, `W043` |
 | message flows | they connect two different pools, and end at a message event, a task, a sub-process or a pool | `R022`, `E007`–`E009`, `W054` |
 | events | each trigger only in the positions BPMN allows; boundary events attached to activities; error boundary events interrupting; event sub-processes without sequence flows | `E010`, `E012`, `E013`, `R032`, `R060`, `R062` |
 | activities and handlers | compensation handlers without sequence flows; ad-hoc sub-processes without start and end events; loop attributes only on loops | `R050`, `R051`, `E014`, `R061`, `R063`, `R065` |
-| gateways | an event-based gateway followed only by catching events or receive tasks; a split joined by a gateway of the same type; an inclusive split with a default | `E016`, `W016`, `W020`, `W021`, `W050`, `W051` |
+| gateways | an event-based gateway followed only by catching events or receive tasks; a split joined by a gateway of the same type; an inclusive split with a default; next to a default flow, every other branch has a condition | `E016`, `W016`, `W020`, `W021`, `W022`, `W050`, `W051` |
 | reachability | every process has a start and an end; every element can be reached from a start and leads to an end | `W040`–`W042` |
 | lanes | a node in at most one lane; in a pool with lanes, every node in a lane | `E030`, `R030`, `W030`, `W031` |
 | escalations and errors | what a boundary event of a sub-process catches is thrown inside it; a thrown escalation is caught somewhere | `W052`, `W053` |
@@ -311,6 +311,8 @@ The canonical form is a matter of order, not of correctness: the careless model 
 | `E010` | a trigger in a position BPMN does not allow, or an intermediate catch event without a trigger | see the table of triggers in Chapter \@ref(events-exceptions) |
 | `E015` | `when=` and `default` on the same flow | a default flow has no condition |
 | `W021` | a branch of a split without label or condition | label every branch with the answer to the gateway's question |
+| `W022` | a branch without a condition next to a default flow | give every other branch its condition (`when="…"`, or `when=""` until it is known) |
+| `W023`, `W043` | a flow written twice, or a flow from an element back to itself | delete the copy; repeat an activity with `loop` or with a gateway |
 | `W041`, `W042` | an element that cannot be reached, or a path that does not end | add the missing flow or end event |
 | `W051` | a parallel split joined by an exclusive gateway, or the reverse | join with the same type of gateway |
 

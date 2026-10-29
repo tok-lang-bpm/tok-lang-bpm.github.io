@@ -44,7 +44,7 @@ Then check that the command works:
 
 ```
 tok --version
-tok 1.0.1
+tok 1.0.2
 ```
 
 If the system answers that it does not know the command `tok`, the folder where pip puts commands is not on your path. You can always run the same program through Python instead: `py -m tok --version` on Windows, `python3 -m tok --version` elsewhere. Every command in this book works in that form.
@@ -70,7 +70,7 @@ This compiles the program `tok` (Rust 1.99 or newer) and puts it in Cargo's fold
 Three commands confirm that everything is in place:
 
 ```
-tok --version          # prints the version: tok 1.0.1
+tok --version          # prints the version: tok 1.0.2
 tok --help             # lists the commands
 tok cheatsheet         # prints the whole language on one page
 ```
