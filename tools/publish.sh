@@ -11,6 +11,7 @@ trap 'rm -rf "$SITE"' EXIT
 cp -r _book/. "$SITE/"
 cd "$SITE"
 git init -q -b gh-pages
+git config core.autocrlf false
 git config user.name "$(git -C "$ROOT" config user.name)"
 git config user.email "$(git -C "$ROOT" config user.email)"
 git add -A
