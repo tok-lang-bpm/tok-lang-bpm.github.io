@@ -16,7 +16,7 @@ All the tools of tok run the same engine, so you may start with whichever suits 
 | Julia package `Tok` | the engine in Julia, a native simulator, calibration on event logs | `Pkg.add(["Tok", "tok_jll"])` |
 | VS Code extension *tok* | highlighting, live diagnostics, formatting, a diagram beside the editor, export | from the Visual Studio Marketplace or Open VSX |
 | Playground | the engine in a web page: editor, diagnostics, diagram, simulation, downloads | nothing: <https://tok-lang-bpm.github.io/playground/> |
-| Agent bundle | the skill that teaches an agent to model in tok, with the MCP server | see Chapter \@ref(agents) |
+| Agent bundle | the skills that teach an agent to model in tok and in BPMN XML, with the MCP server | see Chapter \@ref(agents) |
 
 For this book you need the `tok` command. The rest of this section shows how to install it; the other ways are described afterwards.
 
@@ -44,7 +44,7 @@ Then check that the command works:
 
 ```
 tok --version
-tok 1.0.2
+tok 1.0.3
 ```
 
 If the system answers that it does not know the command `tok`, the folder where pip puts commands is not on your path. You can always run the same program through Python instead: `py -m tok --version` on Windows, `python3 -m tok --version` elsewhere. Every command in this book works in that form.
@@ -70,7 +70,7 @@ This compiles the program `tok` (Rust 1.99 or newer) and puts it in Cargo's fold
 Three commands confirm that everything is in place:
 
 ```
-tok --version          # prints the version: tok 1.0.2
+tok --version          # prints the version: tok 1.0.3
 tok --help             # lists the commands
 tok cheatsheet         # prints the whole language on one page
 ```

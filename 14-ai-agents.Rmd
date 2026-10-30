@@ -53,7 +53,7 @@ A skill is plain text. You can read it before you let an agent use it, and you c
 
 ## The MCP server
 
-The **Model Context Protocol** (MCP) is a standard way for an agent application to call tools of local programs. The MCP server of tok gives an agent the engine as tools: it checks a model and returns the diagnostics, prints the canonical form, exports BPMN, SVG, DMN and form files, imports BPMN and DMN, simulates and evaluates decisions, and returns the language reference. The skill uses the server when the agent has it, and the `tok` command otherwise.
+The **Model Context Protocol** (MCP) is a standard way for an agent application to call tools of local programs. The MCP server of tok gives an agent the engine as tools: it checks a model and returns the diagnostics, prints the canonical form, exports BPMN, SVG, DMN and form files, imports BPMN and DMN, simulates and evaluates decisions, checks BPMN XML files from any tool (`check_bpmn`), and returns the language reference. The skill uses the server when the agent has it, and the `tok` command otherwise.
 
 ### Starting the server
 
@@ -134,7 +134,7 @@ For Claude Code, the repository **tok-agent** (https://github.com/tok-lang-bpm/t
 /plugin install tok@tok-lang-bpm
 ```
 
-The first command adds the marketplace (named `tok-lang-bpm`), the second installs the plugin `tok` from it; the skill is then available as `tok:tok-modelling`, and the plugin starts the MCP server with `tok mcp`. Install the engine on the computer first (`pip install tok-lang`), so that the tools of the server and the commands of the skill can run. To add only the MCP server to Claude Code, without the plugin, the command line of Claude Code takes the command of the server after `--`: `claude mcp add tok -- tok mcp`.
+The first command adds the marketplace (named `tok-lang-bpm`), the second installs the plugin `tok` from it; the skill is then available as `tok:tok-modelling`, with its companion `tok:bpmn-modelling` for agents that write BPMN 2.0 XML directly, and the plugin starts the MCP server with `tok mcp`. Install the engine on the computer first (`pip install tok-lang`), so that the tools of the server and the commands of the skill can run. To add only the MCP server to Claude Code, without the plugin, the command line of Claude Code takes the command of the server after `--`: `claude mcp add tok -- tok mcp`.
 
 ### Other agents
 

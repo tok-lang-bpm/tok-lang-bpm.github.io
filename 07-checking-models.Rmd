@@ -153,10 +153,10 @@ The `E`, `W` and `L` codes come from the BPMN 2.0.2 specification. Every rule th
 | Area | What is checked | Codes |
 |---|---|---|
 | identifiers and references | identifiers are unique, ASCII and refer to existing elements of the right kind | `R001`–`R004`, `E003`, `E004`, `E018` |
-| sequence flows | they connect flow nodes of one process or sub-process; no flow into a start event or out of an end event; a default flow has no condition; a parallel gateway has no conditions; no flow written twice or from an element back to itself | `R021`, `E005`, `E006`, `E011`, `E015`, `E017`, `W023`, `W043` |
+| sequence flows | they connect flow nodes of one process or sub-process; no flow into a start event or out of an end event; a default flow has no condition; a parallel gateway has no conditions; no flow written twice or from an element back to itself; a task or an event splits only through conditions or a gateway | `R021`, `E005`, `E006`, `E011`, `E015`, `E017`, `W023`, `W043` |
 | message flows | they connect two different pools, and end at a message event, a task, a sub-process or a pool | `R022`, `E007`–`E009`, `W054` |
-| events | each trigger only in the positions BPMN allows; boundary events attached to activities; error boundary events interrupting; event sub-processes without sequence flows | `E010`, `E012`, `E013`, `R032`, `R060`, `R062` |
-| activities and handlers | compensation handlers without sequence flows; ad-hoc sub-processes without start and end events; loop attributes only on loops | `R050`, `R051`, `E014`, `R061`, `R063`, `R065` |
+| events | each trigger only in the positions BPMN allows; boundary events attached to activities; error boundary events interrupting; event sub-processes without sequence flows; an event with several triggers is reported, since the bpmn.io linters reject it | `E010`, `E012`, `E013`, `R032`, `R060`, `R062`, `W047` |
+| activities and handlers | compensation handlers without sequence flows; ad-hoc sub-processes without start and end events, every other sub-process with its own; loop attributes only on loops | `R050`, `R051`, `E014`, `R061`, `R063`, `R065`, `W045`, `W046` |
 | gateways | an event-based gateway followed only by catching events or receive tasks; a split joined by a gateway of the same type; an inclusive split with a default; next to a default flow, every other branch has a condition | `E016`, `W016`, `W020`, `W021`, `W022`, `W050`, `W051` |
 | reachability | every process has a start and an end; every element can be reached from a start and leads to an end | `W040`–`W042` |
 | lanes | a node in at most one lane; in a pool with lanes, every node in a lane | `E030`, `R030`, `W030`, `W031` |
@@ -165,6 +165,20 @@ The `E`, `W` and `L` codes come from the BPMN 2.0.2 specification. Every rule th
 | style | splitting gateways ask a question; a gateway either splits or joins; tasks have names | `L020`, `L021`, `L030` |
 
 The style notes `L` are conventions of good modelling, not rules of BPMN. A model with notes is valid BPMN; the notes help the reader.
+
+### BPMN files from other tools
+
+The same rules check a BPMN 2.0 XML file drawn in Camunda Modeler, bpmn.io or any other tool, or written by an agent: give `tok check` the `.bpmn` file. Each finding names the element and the line of the file where it is defined.
+
+```
+tok check order.bpmn                                  # the BPMN rules
+tok check order.bpmn --steps --steps-from process.md  # and the step numbers of a description
+tok check order.bpmn --camunda                        # and the Camunda 8 profile of executable models
+tok bpmn order.bpmn                                   # a fresh diagram layout, written into the file
+tok svg order.bpmn                                    # the picture of its diagram
+```
+
+`--steps` asks for element names that start with the step number of a process description (`12. Request for quotation`); `--steps-from` reads the steps from the table of the description and reports those without an element. The codes of BPMN files are in Appendix \@ref(diagnostics). An agent that writes BPMN XML instead of tok uses these commands through the skill `bpmn-modelling` (Chapter \@ref(agents)).
 
 ## Levels of the language
 
@@ -313,6 +327,8 @@ The canonical form is a matter of order, not of correctness: the careless model 
 | `W021` | a branch of a split without label or condition | label every branch with the answer to the gateway's question |
 | `W022` | a branch without a condition next to a default flow | give every other branch its condition (`when="…"`, or `when=""` until it is known) |
 | `W023`, `W043` | a flow written twice, or a flow from an element back to itself | delete the copy; repeat an activity with `loop` or with a gateway |
+| `W044` | a task or an event with several outgoing flows and no gateway: all of them are taken | split with an `and` gateway, or give the flows conditions behind an `xor` |
+| `W045`, `W046` | a sub-process without its own start or end event | give the block of the `sub` its `start` and `end` |
 | `W041`, `W042` | an element that cannot be reached, or a path that does not end | add the missing flow or end event |
 | `W051` | a parallel split joined by an exclusive gateway, or the reverse | join with the same type of gateway |
 

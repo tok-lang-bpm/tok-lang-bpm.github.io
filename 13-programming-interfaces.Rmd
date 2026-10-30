@@ -374,7 +374,7 @@ int main(void) {
 Compiled against the library (on Linux `cc app.c -I include -L lib -ltokengine -o app`, with the folders of `tok.h` and of the library), it prints:
 
 ```
-engine 1.0.2, interface 1
+engine 1.0.3, interface 1
 {"ok": {"errors": 0, "bpmn_class": "descriptive", "diagnostics": []}}
 {"error": {"kind": "document", "message": "line 2: error T001: invalid token: unterminated string", "diagnostics": [{"code": "T001", "severity": "error", "line": 2, "id": null, "message": "invalid token: unterminated string"}]}}
 ```
@@ -407,8 +407,8 @@ In a Rust program, the simplest entry point is `tok_cli::api`: the functions of 
 
 ```toml
 [dependencies]
-tok-cli = "1.0.2"
-tok-core = "1.0.2"
+tok-cli = "1.0.3"
+tok-core = "1.0.3"
 ```
 
 ```rust
