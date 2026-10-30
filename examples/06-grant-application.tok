@@ -1,0 +1,26 @@
+tok 1.0 "Assessing a grant application"
+
+item application-type "Grant application" structure="Application"
+item decision-type "Decision letter" structure="xsd:string" kind=information
+item file-type "Paper file" kind=physical
+
+start received "Application received"
+user assess "Assess the application"
+task archive "Archive the paper file"
+end decided "Application decided"
+input application "Grant application" type=application-type
+output decision "Decision" type=decision-type
+input criteria "Assessment criteria" collection on=assess
+input scan-in "Scan to assess" on=assess
+property reviews "Number of reviews" on=assess
+data scan "Scanned application" state=received type=application-type
+data scan-assessed "Scanned application" state=assessed
+store files "Paper files" type=file-type
+
+flow received -> assess -> archive -> decided
+
+reads assess application
+reads assess scan input=scan-in
+writes assess scan-assessed
+writes assess decision
+writes archive files

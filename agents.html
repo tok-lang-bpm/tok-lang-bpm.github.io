@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 14 Working with AI agents | tok: Process Models as Text</title>
+  <meta name="description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 14 Working with AI agents | tok: Process Models as Text" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="github-repo" content="tok-lang-bpm/tok-lang-bpm.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 14 Working with AI agents | tok: Process Models as Text" />
+  
+  <meta name="twitter:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  
+
+<meta name="author" content="Marek Deja" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="programming.html"/>
+<link rel="next" href="integrations.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tok: Process Models as Text</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-this-book-is-for"><i class="fa fa-check"></i>Who this book is for</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-the-book-is-organised"><i class="fa fa-check"></i>How the book is organised</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#conventions"><i class="fa fa-check"></i>Conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#versions"><i class="fa fa-check"></i>Versions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#licence"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reporting-issues"><i class="fa fa-check"></i>Reporting issues</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-cite"><i class="fa fa-check"></i>How to cite</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="models-as-text.html"><a href="models-as-text.html"><i class="fa fa-check"></i><b>1</b> Models as text</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="models-as-text.html"><a href="models-as-text.html#two-layers-of-a-bpmn-file"><i class="fa fa-check"></i><b>1.1</b> Two layers of a BPMN file</a></li>
+<li class="chapter" data-level="1.2" data-path="models-as-text.html"><a href="models-as-text.html#reading-a-model-line-by-line"><i class="fa fa-check"></i><b>1.2</b> Reading a model line by line</a></li>
+<li class="chapter" data-level="1.3" data-path="models-as-text.html"><a href="models-as-text.html#the-text-is-the-model"><i class="fa fa-check"></i><b>1.3</b> The text is the model</a></li>
+<li class="chapter" data-level="1.4" data-path="models-as-text.html"><a href="models-as-text.html#why-text"><i class="fa fa-check"></i><b>1.4</b> Why text</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="models-as-text.html"><a href="models-as-text.html#version-control"><i class="fa fa-check"></i><b>1.4.1</b> Version control</a></li>
+<li class="chapter" data-level="1.4.2" data-path="models-as-text.html"><a href="models-as-text.html#review"><i class="fa fa-check"></i><b>1.4.2</b> Review</a></li>
+<li class="chapter" data-level="1.4.3" data-path="models-as-text.html"><a href="models-as-text.html#why-collaboration"><i class="fa fa-check"></i><b>1.4.3</b> Collaboration</a></li>
+<li class="chapter" data-level="1.4.4" data-path="models-as-text.html"><a href="models-as-text.html#why-agents"><i class="fa fa-check"></i><b>1.4.4</b> Agents</a></li>
+<li class="chapter" data-level="1.4.5" data-path="models-as-text.html"><a href="models-as-text.html#text-tools"><i class="fa fa-check"></i><b>1.4.5</b> Text tools</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="models-as-text.html"><a href="models-as-text.html#tok-among-other-text-notations"><i class="fa fa-check"></i><b>1.5</b> tok among other text notations</a></li>
+<li class="chapter" data-level="1.6" data-path="models-as-text.html"><a href="models-as-text.html#the-metamodel-underneath"><i class="fa fa-check"></i><b>1.6</b> The metamodel underneath</a></li>
+<li class="chapter" data-level="1.7" data-path="models-as-text.html"><a href="models-as-text.html#round-trip-from-bpmn-back-to-text"><i class="fa fa-check"></i><b>1.7</b> Round trip: from BPMN back to text</a></li>
+<li class="chapter" data-level="" data-path="models-as-text.html"><a href="models-as-text.html#exercises"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started.html"><a href="getting-started.html#ways-to-use-tok"><i class="fa fa-check"></i><b>2.1</b> Ways to use tok</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started.html"><a href="getting-started.html#installing-the-command-line"><i class="fa fa-check"></i><b>2.2</b> Installing the command line</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="getting-started.html"><a href="getting-started.html#with-python"><i class="fa fa-check"></i><b>2.2.1</b> With Python</a></li>
+<li class="chapter" data-level="2.2.2" data-path="getting-started.html"><a href="getting-started.html#with-cargo"><i class="fa fa-check"></i><b>2.2.2</b> With Cargo</a></li>
+<li class="chapter" data-level="2.2.3" data-path="getting-started.html"><a href="getting-started.html#checking-the-installation"><i class="fa fa-check"></i><b>2.2.3</b> Checking the installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="getting-started.html"><a href="getting-started.html#other-ways-to-reach-the-engine"><i class="fa fa-check"></i><b>2.3</b> Other ways to reach the engine</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="getting-started.html"><a href="getting-started.html#r"><i class="fa fa-check"></i><b>2.3.1</b> R</a></li>
+<li class="chapter" data-level="2.3.2" data-path="getting-started.html"><a href="getting-started.html#julia"><i class="fa fa-check"></i><b>2.3.2</b> Julia</a></li>
+<li class="chapter" data-level="2.3.3" data-path="getting-started.html"><a href="getting-started.html#visual-studio-code"><i class="fa fa-check"></i><b>2.3.3</b> Visual Studio Code</a></li>
+<li class="chapter" data-level="2.3.4" data-path="getting-started.html"><a href="getting-started.html#the-playground"><i class="fa fa-check"></i><b>2.3.4</b> The playground</a></li>
+<li class="chapter" data-level="2.3.5" data-path="getting-started.html"><a href="getting-started.html#the-agent-bundle"><i class="fa fa-check"></i><b>2.3.5</b> The agent bundle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="getting-started.html"><a href="getting-started.html#your-first-model"><i class="fa fa-check"></i><b>2.4</b> Your first model</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="getting-started.html"><a href="getting-started.html#step-1-write-the-text"><i class="fa fa-check"></i><b>2.4.1</b> Step 1: write the text</a></li>
+<li class="chapter" data-level="2.4.2" data-path="getting-started.html"><a href="getting-started.html#step-2-check-the-model"><i class="fa fa-check"></i><b>2.4.2</b> Step 2: check the model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="getting-started.html"><a href="getting-started.html#step-3-format-the-text"><i class="fa fa-check"></i><b>2.4.3</b> Step 3: format the text</a></li>
+<li class="chapter" data-level="2.4.4" data-path="getting-started.html"><a href="getting-started.html#step-4-export-bpmn"><i class="fa fa-check"></i><b>2.4.4</b> Step 4: export BPMN</a></li>
+<li class="chapter" data-level="2.4.5" data-path="getting-started.html"><a href="getting-started.html#step-5-draw-the-picture"><i class="fa fa-check"></i><b>2.4.5</b> Step 5: draw the picture</a></li>
+<li class="chapter" data-level="2.4.6" data-path="getting-started.html"><a href="getting-started.html#step-6-open-the-model-in-a-bpmn-tool"><i class="fa fa-check"></i><b>2.4.6</b> Step 6: open the model in a BPMN tool</a></li>
+<li class="chapter" data-level="2.4.7" data-path="getting-started.html"><a href="getting-started.html#step-7-change-and-repeat"><i class="fa fa-check"></i><b>2.4.7</b> Step 7: change and repeat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="getting-started.html"><a href="getting-started.html#setting-up-your-editor"><i class="fa fa-check"></i><b>2.5</b> Setting up your editor</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-1"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="process-basics.html"><a href="process-basics.html"><i class="fa fa-check"></i><b>3</b> Process basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="process-basics.html"><a href="process-basics.html#the-header-line"><i class="fa fa-check"></i><b>3.1</b> The header line</a></li>
+<li class="chapter" data-level="3.2" data-path="process-basics.html"><a href="process-basics.html#statements"><i class="fa fa-check"></i><b>3.2</b> Statements</a></li>
+<li class="chapter" data-level="3.3" data-path="process-basics.html"><a href="process-basics.html#identifiers-and-labels"><i class="fa fa-check"></i><b>3.3</b> Identifiers and labels</a></li>
+<li class="chapter" data-level="3.4" data-path="process-basics.html"><a href="process-basics.html#tasks"><i class="fa fa-check"></i><b>3.4</b> Tasks</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="process-basics.html"><a href="process-basics.html#markers-of-repetition"><i class="fa fa-check"></i><b>3.4.1</b> Markers of repetition</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="process-basics.html"><a href="process-basics.html#events"><i class="fa fa-check"></i><b>3.5</b> Events</a></li>
+<li class="chapter" data-level="3.6" data-path="process-basics.html"><a href="process-basics.html#gateways"><i class="fa fa-check"></i><b>3.6</b> Gateways</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="process-basics.html"><a href="process-basics.html#exclusive-parallel-and-inclusive-gateways"><i class="fa fa-check"></i><b>3.6.1</b> Exclusive, parallel and inclusive gateways</a></li>
+<li class="chapter" data-level="3.6.2" data-path="process-basics.html"><a href="process-basics.html#the-event-based-gateway"><i class="fa fa-check"></i><b>3.6.2</b> The event-based gateway</a></li>
+<li class="chapter" data-level="3.6.3" data-path="process-basics.html"><a href="process-basics.html#the-complex-gateway"><i class="fa fa-check"></i><b>3.6.3</b> The complex gateway</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="process-basics.html"><a href="process-basics.html#sequence-flows"><i class="fa fa-check"></i><b>3.7</b> Sequence flows</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="process-basics.html"><a href="process-basics.html#labels-and-attributes"><i class="fa fa-check"></i><b>3.7.1</b> Labels and attributes</a></li>
+<li class="chapter" data-level="3.7.2" data-path="process-basics.html"><a href="process-basics.html#conditions"><i class="fa fa-check"></i><b>3.7.2</b> Conditions</a></li>
+<li class="chapter" data-level="3.7.3" data-path="process-basics.html"><a href="process-basics.html#default-flows"><i class="fa fa-check"></i><b>3.7.3</b> Default flows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="process-basics.html"><a href="process-basics.html#indentation-and-blocks"><i class="fa fa-check"></i><b>3.8</b> Indentation and blocks</a></li>
+<li class="chapter" data-level="3.9" data-path="process-basics.html"><a href="process-basics.html#comments"><i class="fa fa-check"></i><b>3.9</b> Comments</a></li>
+<li class="chapter" data-level="3.10" data-path="process-basics.html"><a href="process-basics.html#levels-of-the-language"><i class="fa fa-check"></i><b>3.10</b> Levels of the language</a></li>
+<li class="chapter" data-level="3.11" data-path="process-basics.html"><a href="process-basics.html#typical-mistakes"><i class="fa fa-check"></i><b>3.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="process-basics.html"><a href="process-basics.html#exercises-2"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="collaboration.html"><a href="collaboration.html"><i class="fa fa-check"></i><b>4</b> Pools, lanes and messages</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="collaboration.html"><a href="collaboration.html#from-one-process-to-a-collaboration"><i class="fa fa-check"></i><b>4.1</b> From one process to a collaboration</a></li>
+<li class="chapter" data-level="4.2" data-path="collaboration.html"><a href="collaboration.html#pools"><i class="fa fa-check"></i><b>4.2</b> Pools</a></li>
+<li class="chapter" data-level="4.3" data-path="collaboration.html"><a href="collaboration.html#lanes-and-nested-lanes"><i class="fa fa-check"></i><b>4.3</b> Lanes and nested lanes</a></li>
+<li class="chapter" data-level="4.4" data-path="collaboration.html"><a href="collaboration.html#message-flows"><i class="fa fa-check"></i><b>4.4</b> Message flows</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="collaboration.html"><a href="collaboration.html#a-collaboration-with-a-black-box-pool"><i class="fa fa-check"></i><b>4.4.1</b> A collaboration with a black-box pool</a></li>
+<li class="chapter" data-level="4.4.2" data-path="collaboration.html"><a href="collaboration.html#two-processes-that-talk-to-each-other"><i class="fa fa-check"></i><b>4.4.2</b> Two processes that talk to each other</a></li>
+<li class="chapter" data-level="4.4.3" data-path="collaboration.html"><a href="collaboration.html#correlation-keys"><i class="fa fa-check"></i><b>4.4.3</b> Correlation keys</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="collaboration.html"><a href="collaboration.html#structural-rules"><i class="fa fa-check"></i><b>4.5</b> Structural rules</a></li>
+<li class="chapter" data-level="4.6" data-path="collaboration.html"><a href="collaboration.html#conversations"><i class="fa fa-check"></i><b>4.6</b> Conversations</a></li>
+<li class="chapter" data-level="4.7" data-path="collaboration.html"><a href="collaboration.html#choreographies"><i class="fa fa-check"></i><b>4.7</b> Choreographies</a></li>
+<li class="chapter" data-level="4.8" data-path="collaboration.html"><a href="collaboration.html#participant-multiplicity"><i class="fa fa-check"></i><b>4.8</b> Participant multiplicity</a></li>
+<li class="chapter" data-level="4.9" data-path="collaboration.html"><a href="collaboration.html#collaborations-levels-and-camunda"><i class="fa fa-check"></i><b>4.9</b> Collaborations, levels and Camunda</a></li>
+<li class="chapter" data-level="4.10" data-path="collaboration.html"><a href="collaboration.html#the-canonical-form-of-a-collaboration"><i class="fa fa-check"></i><b>4.10</b> The canonical form of a collaboration</a></li>
+<li class="chapter" data-level="" data-path="collaboration.html"><a href="collaboration.html#exercises-3"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="events-exceptions.html"><a href="events-exceptions.html"><i class="fa fa-check"></i><b>5</b> Events, sub-processes and exceptions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="events-exceptions.html"><a href="events-exceptions.html#catching-and-throwing"><i class="fa fa-check"></i><b>5.1</b> Catching and throwing</a></li>
+<li class="chapter" data-level="5.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers"><i class="fa fa-check"></i><b>5.2</b> Triggers</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="events-exceptions.html"><a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier"><i class="fa fa-check"></i><b>5.2.1</b> Events on a path: waiting for a supplier</a></li>
+<li class="chapter" data-level="5.2.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers-without-a-value"><i class="fa fa-check"></i><b>5.2.2</b> Triggers without a value</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="events-exceptions.html"><a href="events-exceptions.html#boundary-events"><i class="fa fa-check"></i><b>5.3</b> Boundary events</a></li>
+<li class="chapter" data-level="5.4" data-path="events-exceptions.html"><a href="events-exceptions.html#embedded-sub-processes"><i class="fa fa-check"></i><b>5.4</b> Embedded sub-processes</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="events-exceptions.html"><a href="events-exceptions.html#escalation-from-a-sub-process"><i class="fa fa-check"></i><b>5.4.1</b> Escalation from a sub-process</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="events-exceptions.html"><a href="events-exceptions.html#event-sub-processes"><i class="fa fa-check"></i><b>5.5</b> Event sub-processes</a></li>
+<li class="chapter" data-level="5.6" data-path="events-exceptions.html"><a href="events-exceptions.html#compensation"><i class="fa fa-check"></i><b>5.6</b> Compensation</a></li>
+<li class="chapter" data-level="5.7" data-path="events-exceptions.html"><a href="events-exceptions.html#transactions-and-cancellation"><i class="fa fa-check"></i><b>5.7</b> Transactions and cancellation</a></li>
+<li class="chapter" data-level="5.8" data-path="events-exceptions.html"><a href="events-exceptions.html#multiple-and-parallel-multiple-events"><i class="fa fa-check"></i><b>5.8</b> Multiple and parallel multiple events</a></li>
+<li class="chapter" data-level="5.9" data-path="events-exceptions.html"><a href="events-exceptions.html#ad-hoc-sub-processes"><i class="fa fa-check"></i><b>5.9</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="5.10" data-path="events-exceptions.html"><a href="events-exceptions.html#call-activities-and-global-tasks"><i class="fa fa-check"></i><b>5.10</b> Call activities and global tasks</a></li>
+<li class="chapter" data-level="5.11" data-path="events-exceptions.html"><a href="events-exceptions.html#loops-and-multi-instance"><i class="fa fa-check"></i><b>5.11</b> Loops and multi-instance</a></li>
+<li class="chapter" data-level="5.12" data-path="events-exceptions.html"><a href="events-exceptions.html#exceptions-and-process-engines"><i class="fa fa-check"></i><b>5.12</b> Exceptions and process engines</a></li>
+<li class="chapter" data-level="5.13" data-path="events-exceptions.html"><a href="events-exceptions.html#typical-mistakes-1"><i class="fa fa-check"></i><b>5.13</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="events-exceptions.html"><a href="events-exceptions.html#exercises-4"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data-artifacts.html"><a href="data-artifacts.html"><i class="fa fa-check"></i><b>6</b> Data, resources and artifacts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="data-artifacts.html"><a href="data-artifacts.html#data-objects"><i class="fa fa-check"></i><b>6.1</b> Data objects</a></li>
+<li class="chapter" data-level="6.2" data-path="data-artifacts.html"><a href="data-artifacts.html#data-stores"><i class="fa fa-check"></i><b>6.2</b> Data stores</a></li>
+<li class="chapter" data-level="6.3" data-path="data-artifacts.html"><a href="data-artifacts.html#reading-and-writing"><i class="fa fa-check"></i><b>6.3</b> Reading and writing</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="data-artifacts.html"><a href="data-artifacts.html#states-and-state-transitions"><i class="fa fa-check"></i><b>6.3.1</b> States and state transitions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="data-artifacts.html"><a href="data-artifacts.html#process-data"><i class="fa fa-check"></i><b>6.4</b> Process data</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="data-artifacts.html"><a href="data-artifacts.html#item-definitions"><i class="fa fa-check"></i><b>6.4.1</b> Item definitions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="data-artifacts.html"><a href="data-artifacts.html#inputs-outputs-and-properties"><i class="fa fa-check"></i><b>6.4.2</b> Inputs, outputs and properties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="data-artifacts.html"><a href="data-artifacts.html#resources-and-performers"><i class="fa fa-check"></i><b>6.5</b> Resources and performers</a></li>
+<li class="chapter" data-level="6.6" data-path="data-artifacts.html"><a href="data-artifacts.html#text-annotations"><i class="fa fa-check"></i><b>6.6</b> Text annotations</a></li>
+<li class="chapter" data-level="6.7" data-path="data-artifacts.html"><a href="data-artifacts.html#groups"><i class="fa fa-check"></i><b>6.7</b> Groups</a></li>
+<li class="chapter" data-level="6.8" data-path="data-artifacts.html"><a href="data-artifacts.html#documentation"><i class="fa fa-check"></i><b>6.8</b> Documentation</a></li>
+<li class="chapter" data-level="6.9" data-path="data-artifacts.html"><a href="data-artifacts.html#typical-mistakes-2"><i class="fa fa-check"></i><b>6.9</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="data-artifacts.html"><a href="data-artifacts.html#exercises-5"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking.html"><a href="checking.html"><i class="fa fa-check"></i><b>7</b> Checking models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking.html"><a href="checking.html#what-tok-check-does"><i class="fa fa-check"></i><b>7.1</b> What <code>tok check</code> does</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="checking.html"><a href="checking.html#severities"><i class="fa fa-check"></i><b>7.1.1</b> Severities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="checking.html"><a href="checking.html#layers-and-codes"><i class="fa fa-check"></i><b>7.2</b> Layers and codes</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="checking.html"><a href="checking.html#the-order-of-the-layers-and-cascades"><i class="fa fa-check"></i><b>7.2.1</b> The order of the layers and cascades</a></li>
+<li class="chapter" data-level="7.2.2" data-path="checking.html"><a href="checking.html#messages-in-polish"><i class="fa fa-check"></i><b>7.2.2</b> Messages in Polish</a></li>
+<li class="chapter" data-level="7.2.3" data-path="checking.html"><a href="checking.html#diagnostics-for-programs"><i class="fa fa-check"></i><b>7.2.3</b> Diagnostics for programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="checking.html"><a href="checking.html#the-bpmn-rules"><i class="fa fa-check"></i><b>7.3</b> The BPMN rules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="checking.html"><a href="checking.html#bpmn-files-from-other-tools"><i class="fa fa-check"></i><b>7.3.1</b> BPMN files from other tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="checking.html"><a href="checking.html#levels-of-the-language-1"><i class="fa fa-check"></i><b>7.4</b> Levels of the language</a></li>
+<li class="chapter" data-level="7.5" data-path="checking.html"><a href="checking.html#bpmn-conformance-classes"><i class="fa fa-check"></i><b>7.5</b> BPMN conformance classes</a></li>
+<li class="chapter" data-level="7.6" data-path="checking.html"><a href="checking.html#the-canonical-form"><i class="fa fa-check"></i><b>7.6</b> The canonical form</a></li>
+<li class="chapter" data-level="7.7" data-path="checking.html"><a href="checking.html#typical-errors-and-their-corrections"><i class="fa fa-check"></i><b>7.7</b> Typical errors and their corrections</a></li>
+<li class="chapter" data-level="7.8" data-path="checking.html"><a href="checking.html#what-a-clean-check-means"><i class="fa fa-check"></i><b>7.8</b> What a clean check means</a></li>
+<li class="chapter" data-level="" data-path="checking.html"><a href="checking.html#exercises-6"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="layout-import.html"><a href="layout-import.html"><i class="fa fa-check"></i><b>8</b> Layout, export and import</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="layout-import.html"><a href="layout-import.html#the-automatic-layout"><i class="fa fa-check"></i><b>8.1</b> The automatic layout</a></li>
+<li class="chapter" data-level="8.2" data-path="layout-import.html"><a href="layout-import.html#pictures-tok-svg"><i class="fa fa-check"></i><b>8.2</b> Pictures: <code>tok svg</code></a></li>
+<li class="chapter" data-level="8.3" data-path="layout-import.html"><a href="layout-import.html#bpmn-files-tok-bpmn"><i class="fa fa-check"></i><b>8.3</b> BPMN files: <code>tok bpmn</code></a></li>
+<li class="chapter" data-level="8.4" data-path="layout-import.html"><a href="layout-import.html#everything-at-once-tok-export"><i class="fa fa-check"></i><b>8.4</b> Everything at once: <code>tok export</code></a></li>
+<li class="chapter" data-level="8.5" data-path="layout-import.html"><a href="layout-import.html#opening-the-files-in-bpmn-tools"><i class="fa fa-check"></i><b>8.5</b> Opening the files in BPMN tools</a></li>
+<li class="chapter" data-level="8.6" data-path="layout-import.html"><a href="layout-import.html#importing-bpmn-files"><i class="fa fa-check"></i><b>8.6</b> Importing BPMN files</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="layout-import.html"><a href="layout-import.html#what-is-kept"><i class="fa fa-check"></i><b>8.6.1</b> What is kept</a></li>
+<li class="chapter" data-level="8.6.2" data-path="layout-import.html"><a href="layout-import.html#what-is-reported"><i class="fa fa-check"></i><b>8.6.2</b> What is reported</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="layout-import.html"><a href="layout-import.html#the-layout-sidecar"><i class="fa fa-check"></i><b>8.7</b> The layout sidecar</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="layout-import.html"><a href="layout-import.html#changing-a-model-that-has-a-sidecar"><i class="fa fa-check"></i><b>8.7.1</b> Changing a model that has a sidecar</a></li>
+<li class="chapter" data-level="8.7.2" data-path="layout-import.html"><a href="layout-import.html#the-round-trip"><i class="fa fa-check"></i><b>8.7.2</b> The round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="layout-import.html"><a href="layout-import.html#importing-dmn-files"><i class="fa fa-check"></i><b>8.8</b> Importing DMN files</a></li>
+<li class="chapter" data-level="8.9" data-path="layout-import.html"><a href="layout-import.html#models-and-sidecars-in-version-control"><i class="fa fa-check"></i><b>8.9</b> Models and sidecars in version control</a></li>
+<li class="chapter" data-level="" data-path="layout-import.html"><a href="layout-import.html#exercises-7"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="decisions.html"><a href="decisions.html"><i class="fa fa-check"></i><b>9</b> Decisions with DMN and FEEL</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="decisions.html"><a href="decisions.html#a-first-decision-table"><i class="fa fa-check"></i><b>9.1</b> A first decision table</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="decisions.html"><a href="decisions.html#testing-with-tok-eval"><i class="fa fa-check"></i><b>9.1.1</b> Testing with <code>tok eval</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="decisions.html"><a href="decisions.html#hit-policies"><i class="fa fa-check"></i><b>9.2</b> Hit policies</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="decisions.html"><a href="decisions.html#overlapping-rules"><i class="fa fa-check"></i><b>9.2.1</b> Overlapping rules</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="decisions.html"><a href="decisions.html#decision-requirements-graphs"><i class="fa fa-check"></i><b>9.3</b> Decision requirements graphs</a></li>
+<li class="chapter" data-level="9.4" data-path="decisions.html"><a href="decisions.html#boxed-expressions"><i class="fa fa-check"></i><b>9.4</b> Boxed expressions</a></li>
+<li class="chapter" data-level="9.5" data-path="decisions.html"><a href="decisions.html#dmn-types"><i class="fa fa-check"></i><b>9.5</b> Types</a></li>
+<li class="chapter" data-level="9.6" data-path="decisions.html"><a href="decisions.html#feel-in-tok"><i class="fa fa-check"></i><b>9.6</b> FEEL in tok</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="decisions.html"><a href="decisions.html#names-with-spaces"><i class="fa fa-check"></i><b>9.6.1</b> Names with spaces</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="decisions.html"><a href="decisions.html#decisions-in-a-process"><i class="fa fa-check"></i><b>9.7</b> Decisions in a process</a></li>
+<li class="chapter" data-level="9.8" data-path="decisions.html"><a href="decisions.html#dmn-export"><i class="fa fa-check"></i><b>9.8</b> DMN export</a></li>
+<li class="chapter" data-level="9.9" data-path="decisions.html"><a href="decisions.html#dmn-import"><i class="fa fa-check"></i><b>9.9</b> DMN import</a></li>
+<li class="chapter" data-level="9.10" data-path="decisions.html"><a href="decisions.html#the-dmn-tck-as-evidence"><i class="fa fa-check"></i><b>9.10</b> The DMN TCK as evidence</a></li>
+<li class="chapter" data-level="9.11" data-path="decisions.html"><a href="decisions.html#typical-mistakes-3"><i class="fa fa-check"></i><b>9.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="decisions.html"><a href="decisions.html#exercises-8"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="executable.html"><a href="executable.html"><i class="fa fa-check"></i><b>10</b> Executable models on Camunda 8</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="executable.html"><a href="executable.html#the-executable-flag"><i class="fa fa-check"></i><b>10.1</b> The executable flag</a></li>
+<li class="chapter" data-level="10.2" data-path="executable.html"><a href="executable.html#the-executable-profile"><i class="fa fa-check"></i><b>10.2</b> The executable profile</a></li>
+<li class="chapter" data-level="10.3" data-path="executable.html"><a href="executable.html#a-complete-executable-model"><i class="fa fa-check"></i><b>10.3</b> A complete executable model</a></li>
+<li class="chapter" data-level="10.4" data-path="executable.html"><a href="executable.html#static-values-and-expressions-the-rule"><i class="fa fa-check"></i><b>10.4</b> Static values and expressions: the <code>=</code> rule</a></li>
+<li class="chapter" data-level="10.5" data-path="executable.html"><a href="executable.html#feel-in-executable-models"><i class="fa fa-check"></i><b>10.5</b> FEEL in executable models</a></li>
+<li class="chapter" data-level="10.6" data-path="executable.html"><a href="executable.html#service-tasks-and-jobs"><i class="fa fa-check"></i><b>10.6</b> Service tasks and jobs</a></li>
+<li class="chapter" data-level="10.7" data-path="executable.html"><a href="executable.html#user-tasks"><i class="fa fa-check"></i><b>10.7</b> User tasks</a></li>
+<li class="chapter" data-level="10.8" data-path="executable.html"><a href="executable.html#camunda-forms"><i class="fa fa-check"></i><b>10.8</b> Camunda forms</a></li>
+<li class="chapter" data-level="10.9" data-path="executable.html"><a href="executable.html#variable-mappings"><i class="fa fa-check"></i><b>10.9</b> Variable mappings</a></li>
+<li class="chapter" data-level="10.10" data-path="executable.html"><a href="executable.html#messages-and-correlation"><i class="fa fa-check"></i><b>10.10</b> Messages and correlation</a></li>
+<li class="chapter" data-level="10.11" data-path="executable.html"><a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities"><i class="fa fa-check"></i><b>10.11</b> Multi-instance, ad-hoc sub-processes and call activities</a>
+<ul>
+<li class="chapter" data-level="10.11.1" data-path="executable.html"><a href="executable.html#multi-instance"><i class="fa fa-check"></i><b>10.11.1</b> Multi-instance</a></li>
+<li class="chapter" data-level="10.11.2" data-path="executable.html"><a href="executable.html#ad-hoc-sub-processes-1"><i class="fa fa-check"></i><b>10.11.2</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="10.11.3" data-path="executable.html"><a href="executable.html#call-activities"><i class="fa fa-check"></i><b>10.11.3</b> Call activities</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="executable.html"><a href="executable.html#compensation-errors-and-listeners"><i class="fa fa-check"></i><b>10.12</b> Compensation, errors and listeners</a></li>
+<li class="chapter" data-level="10.13" data-path="executable.html"><a href="executable.html#version-tags-and-bindings"><i class="fa fa-check"></i><b>10.13</b> Version tags and bindings</a></li>
+<li class="chapter" data-level="10.14" data-path="executable.html"><a href="executable.html#the-rest-connector"><i class="fa fa-check"></i><b>10.14</b> The REST connector</a></li>
+<li class="chapter" data-level="10.15" data-path="executable.html"><a href="executable.html#elements-camunda-8-does-not-execute"><i class="fa fa-check"></i><b>10.15</b> Elements Camunda 8 does not execute</a></li>
+<li class="chapter" data-level="10.16" data-path="executable.html"><a href="executable.html#exporting-with-tok-export"><i class="fa fa-check"></i><b>10.16</b> Exporting with <code>tok export</code></a></li>
+<li class="chapter" data-level="10.17" data-path="executable.html"><a href="executable.html#executable-run"><i class="fa fa-check"></i><b>10.17</b> Deploying and running on Camunda 8 Run</a>
+<ul>
+<li class="chapter" data-level="10.17.1" data-path="executable.html"><a href="executable.html#deploy"><i class="fa fa-check"></i><b>10.17.1</b> Deploy</a></li>
+<li class="chapter" data-level="10.17.2" data-path="executable.html"><a href="executable.html#start-an-instance"><i class="fa fa-check"></i><b>10.17.2</b> Start an instance</a></li>
+<li class="chapter" data-level="10.17.3" data-path="executable.html"><a href="executable.html#complete-a-user-task"><i class="fa fa-check"></i><b>10.17.3</b> Complete a user task</a></li>
+<li class="chapter" data-level="10.17.4" data-path="executable.html"><a href="executable.html#work-on-a-job"><i class="fa fa-check"></i><b>10.17.4</b> Work on a job</a></li>
+<li class="chapter" data-level="10.17.5" data-path="executable.html"><a href="executable.html#publish-a-message"><i class="fa fa-check"></i><b>10.17.5</b> Publish a message</a></li>
+<li class="chapter" data-level="10.17.6" data-path="executable.html"><a href="executable.html#follow-the-instance"><i class="fa fa-check"></i><b>10.17.6</b> Follow the instance</a></li>
+<li class="chapter" data-level="10.17.7" data-path="executable.html"><a href="executable.html#evaluate-a-decision"><i class="fa fa-check"></i><b>10.17.7</b> Evaluate a decision</a></li>
+<li class="chapter" data-level="10.17.8" data-path="executable.html"><a href="executable.html#the-same-run-in-python"><i class="fa fa-check"></i><b>10.17.8</b> The same run in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.18" data-path="executable.html"><a href="executable.html#camunda-8-saas-and-self-managed"><i class="fa fa-check"></i><b>10.18</b> Camunda 8 SaaS and Self-Managed</a></li>
+<li class="chapter" data-level="10.19" data-path="executable.html"><a href="executable.html#how-the-translation-is-verified"><i class="fa fa-check"></i><b>10.19</b> How the translation is verified</a></li>
+<li class="chapter" data-level="" data-path="executable.html"><a href="executable.html#exercises-9"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>11</b> Simulation and process mining</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simulation.html"><a href="simulation.html#the-simulation-layer"><i class="fa fa-check"></i><b>11.1</b> The simulation layer</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="simulation.html"><a href="simulation.html#distributions"><i class="fa fa-check"></i><b>11.1.1</b> Distributions</a></li>
+<li class="chapter" data-level="11.1.2" data-path="simulation.html"><a href="simulation.html#choosing-a-branch"><i class="fa fa-check"></i><b>11.1.2</b> Choosing a branch</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="simulation.html"><a href="simulation.html#a-simulation-model"><i class="fa fa-check"></i><b>11.2</b> A simulation model</a></li>
+<li class="chapter" data-level="11.3" data-path="simulation.html"><a href="simulation.html#running-tok-sim"><i class="fa fa-check"></i><b>11.3</b> Running <code>tok sim</code></a></li>
+<li class="chapter" data-level="11.4" data-path="simulation.html"><a href="simulation.html#reading-the-indicators"><i class="fa fa-check"></i><b>11.4</b> Reading the indicators</a></li>
+<li class="chapter" data-level="11.5" data-path="simulation.html"><a href="simulation.html#seeds-cases-and-replications"><i class="fa fa-check"></i><b>11.5</b> Seeds, cases and replications</a></li>
+<li class="chapter" data-level="11.6" data-path="simulation.html"><a href="simulation.html#comparing-scenarios"><i class="fa fa-check"></i><b>11.6</b> Comparing scenarios</a></li>
+<li class="chapter" data-level="11.7" data-path="simulation.html"><a href="simulation.html#event-logs"><i class="fa fa-check"></i><b>11.7</b> Event logs</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="simulation.html"><a href="simulation.html#xes-for-process-mining-tools"><i class="fa fa-check"></i><b>11.7.1</b> XES for process-mining tools</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="simulation.html"><a href="simulation.html#process-mining-on-simulated-logs"><i class="fa fa-check"></i><b>11.8</b> Process mining on simulated logs</a></li>
+<li class="chapter" data-level="11.9" data-path="simulation.html"><a href="simulation.html#simulation-in-r"><i class="fa fa-check"></i><b>11.9</b> Simulation in R</a></li>
+<li class="chapter" data-level="11.10" data-path="simulation.html"><a href="simulation.html#simulation-in-python"><i class="fa fa-check"></i><b>11.10</b> Simulation in Python</a></li>
+<li class="chapter" data-level="11.11" data-path="simulation.html"><a href="simulation.html#native-simulation-in-julia"><i class="fa fa-check"></i><b>11.11</b> Native simulation in Julia</a></li>
+<li class="chapter" data-level="11.12" data-path="simulation.html"><a href="simulation.html#calibration-on-an-event-log"><i class="fa fa-check"></i><b>11.12</b> Calibration on an event log</a></li>
+<li class="chapter" data-level="11.13" data-path="simulation.html"><a href="simulation.html#what-the-simulator-does-not-do"><i class="fa fa-check"></i><b>11.13</b> What the simulator does not do</a></li>
+<li class="chapter" data-level="" data-path="simulation.html"><a href="simulation.html#exercises-10"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="editors.html"><a href="editors.html"><i class="fa fa-check"></i><b>12</b> Editors and the playground</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="editors.html"><a href="editors.html#the-vs-code-extension"><i class="fa fa-check"></i><b>12.1</b> The VS Code extension</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="editors.html"><a href="editors.html#installing"><i class="fa fa-check"></i><b>12.1.1</b> Installing</a></li>
+<li class="chapter" data-level="12.1.2" data-path="editors.html"><a href="editors.html#what-you-see-while-editing"><i class="fa fa-check"></i><b>12.1.2</b> What you see while editing</a></li>
+<li class="chapter" data-level="12.1.3" data-path="editors.html"><a href="editors.html#navigation-and-rename"><i class="fa fa-check"></i><b>12.1.3</b> Navigation and rename</a></li>
+<li class="chapter" data-level="12.1.4" data-path="editors.html"><a href="editors.html#the-diagram-beside-the-text"><i class="fa fa-check"></i><b>12.1.4</b> The diagram beside the text</a></li>
+<li class="chapter" data-level="12.1.5" data-path="editors.html"><a href="editors.html#commands-and-settings"><i class="fa fa-check"></i><b>12.1.5</b> Commands and settings</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="editors.html"><a href="editors.html#the-language-server-for-other-editors"><i class="fa fa-check"></i><b>12.2</b> The language server for other editors</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="editors.html"><a href="editors.html#installing-the-server"><i class="fa fa-check"></i><b>12.2.1</b> Installing the server</a></li>
+<li class="chapter" data-level="12.2.2" data-path="editors.html"><a href="editors.html#what-an-editor-needs"><i class="fa fa-check"></i><b>12.2.2</b> What an editor needs</a></li>
+<li class="chapter" data-level="12.2.3" data-path="editors.html"><a href="editors.html#neovim"><i class="fa fa-check"></i><b>12.2.3</b> Neovim</a></li>
+<li class="chapter" data-level="12.2.4" data-path="editors.html"><a href="editors.html#helix"><i class="fa fa-check"></i><b>12.2.4</b> Helix</a></li>
+<li class="chapter" data-level="12.2.5" data-path="editors.html"><a href="editors.html#emacs"><i class="fa fa-check"></i><b>12.2.5</b> Emacs</a></li>
+<li class="chapter" data-level="12.2.6" data-path="editors.html"><a href="editors.html#other-editors"><i class="fa fa-check"></i><b>12.2.6</b> Other editors</a></li>
+<li class="chapter" data-level="12.2.7" data-path="editors.html"><a href="editors.html#requests-for-editor-extensions"><i class="fa fa-check"></i><b>12.2.7</b> Requests for editor extensions</a></li>
+<li class="chapter" data-level="12.2.8" data-path="editors.html"><a href="editors.html#limits"><i class="fa fa-check"></i><b>12.2.8</b> Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="editors.html"><a href="editors.html#the-playground-in-the-browser"><i class="fa fa-check"></i><b>12.3</b> The playground in the browser</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="editors.html"><a href="editors.html#the-page"><i class="fa fa-check"></i><b>12.3.1</b> The page</a></li>
+<li class="chapter" data-level="12.3.2" data-path="editors.html"><a href="editors.html#sharing-a-model-by-a-link"><i class="fa fa-check"></i><b>12.3.2</b> Sharing a model by a link</a></li>
+<li class="chapter" data-level="12.3.3" data-path="editors.html"><a href="editors.html#offline-and-privacy"><i class="fa fa-check"></i><b>12.3.3</b> Offline and privacy</a></li>
+<li class="chapter" data-level="12.3.4" data-path="editors.html"><a href="editors.html#limits-of-the-browser"><i class="fa fa-check"></i><b>12.3.4</b> Limits of the browser</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="editors.html"><a href="editors.html#choosing-a-tool"><i class="fa fa-check"></i><b>12.4</b> Choosing a tool</a></li>
+<li class="chapter" data-level="" data-path="editors.html"><a href="editors.html#exercises-11"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>13</b> Programming interfaces</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="programming.html"><a href="programming.html#one-engine-many-bindings"><i class="fa fa-check"></i><b>13.1</b> One engine, many bindings</a></li>
+<li class="chapter" data-level="13.2" data-path="programming.html"><a href="programming.html#python"><i class="fa fa-check"></i><b>13.2</b> Python</a></li>
+<li class="chapter" data-level="13.3" data-path="programming.html"><a href="programming.html#r-1"><i class="fa fa-check"></i><b>13.3</b> R</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="programming.html"><a href="programming.html#the-knitr-engine"><i class="fa fa-check"></i><b>13.3.1</b> The knitr engine</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="programming.html"><a href="programming.html#julia-1"><i class="fa fa-check"></i><b>13.4</b> Julia</a></li>
+<li class="chapter" data-level="13.5" data-path="programming.html"><a href="programming.html#javascript-and-webassembly"><i class="fa fa-check"></i><b>13.5</b> JavaScript and WebAssembly</a></li>
+<li class="chapter" data-level="13.6" data-path="programming.html"><a href="programming.html#the-c-interface"><i class="fa fa-check"></i><b>13.6</b> The C interface</a></li>
+<li class="chapter" data-level="13.7" data-path="programming.html"><a href="programming.html#the-rust-crates"><i class="fa fa-check"></i><b>13.7</b> The Rust crates</a></li>
+<li class="chapter" data-level="13.8" data-path="programming.html"><a href="programming.html#which-interface-to-choose"><i class="fa fa-check"></i><b>13.8</b> Which interface to choose</a></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#exercises-12"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="agents.html"><a href="agents.html"><i class="fa fa-check"></i><b>14</b> Working with AI agents</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="agents.html"><a href="agents.html#why-a-text-language-suits-agents"><i class="fa fa-check"></i><b>14.1</b> Why a text language suits agents</a></li>
+<li class="chapter" data-level="14.2" data-path="agents.html"><a href="agents.html#the-skill-tok-modelling"><i class="fa fa-check"></i><b>14.2</b> The skill <code>tok-modelling</code></a></li>
+<li class="chapter" data-level="14.3" data-path="agents.html"><a href="agents.html#the-mcp-server"><i class="fa fa-check"></i><b>14.3</b> The MCP server</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="agents.html"><a href="agents.html#starting-the-server"><i class="fa fa-check"></i><b>14.3.1</b> Starting the server</a></li>
+<li class="chapter" data-level="14.3.2" data-path="agents.html"><a href="agents.html#tools"><i class="fa fa-check"></i><b>14.3.2</b> Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="agents.html"><a href="agents.html#configuring-clients"><i class="fa fa-check"></i><b>14.4</b> Configuring clients</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="agents.html"><a href="agents.html#clients-with-an-mcpservers-configuration"><i class="fa fa-check"></i><b>14.4.1</b> Clients with an <code>mcpServers</code> configuration</a></li>
+<li class="chapter" data-level="14.4.2" data-path="agents.html"><a href="agents.html#vs-code"><i class="fa fa-check"></i><b>14.4.2</b> VS Code</a></li>
+<li class="chapter" data-level="14.4.3" data-path="agents.html"><a href="agents.html#claude-code"><i class="fa fa-check"></i><b>14.4.3</b> Claude Code</a></li>
+<li class="chapter" data-level="14.4.4" data-path="agents.html"><a href="agents.html#other-agents"><i class="fa fa-check"></i><b>14.4.4</b> Other agents</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="agents.html"><a href="agents.html#working-without-mcp"><i class="fa fa-check"></i><b>14.5</b> Working without MCP</a></li>
+<li class="chapter" data-level="14.6" data-path="agents.html"><a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file"><i class="fa fa-check"></i><b>14.6</b> A session: from a table of steps to a BPMN file</a></li>
+<li class="chapter" data-level="14.7" data-path="agents.html"><a href="agents.html#reviewing-what-an-agent-produces"><i class="fa fa-check"></i><b>14.7</b> Reviewing what an agent produces</a></li>
+<li class="chapter" data-level="" data-path="agents.html"><a href="agents.html#exercises-13"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="integrations.html"><a href="integrations.html"><i class="fa fa-check"></i><b>15</b> Integrations</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="integrations.html"><a href="integrations.html#continuous-integration-on-github"><i class="fa fa-check"></i><b>15.1</b> Continuous integration on GitHub</a></li>
+<li class="chapter" data-level="15.2" data-path="integrations.html"><a href="integrations.html#other-ci-systems"><i class="fa fa-check"></i><b>15.2</b> Other CI systems</a></li>
+<li class="chapter" data-level="15.3" data-path="integrations.html"><a href="integrations.html#a-pre-commit-hook"><i class="fa fa-check"></i><b>15.3</b> A pre-commit hook</a></li>
+<li class="chapter" data-level="15.4" data-path="integrations.html"><a href="integrations.html#models-in-documents"><i class="fa fa-check"></i><b>15.4</b> Models in documents</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="integrations.html"><a href="integrations.html#r-markdown-and-quarto"><i class="fa fa-check"></i><b>15.4.1</b> R Markdown and Quarto</a></li>
+<li class="chapter" data-level="15.4.2" data-path="integrations.html"><a href="integrations.html#jupyter"><i class="fa fa-check"></i><b>15.4.2</b> Jupyter</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="integrations.html"><a href="integrations.html#bpmn-tools"><i class="fa fa-check"></i><b>15.5</b> BPMN tools</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="integrations.html"><a href="integrations.html#how-much-survives-a-round-trip"><i class="fa fa-check"></i><b>15.5.1</b> How much survives a round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="integrations.html"><a href="integrations.html#camunda-8"><i class="fa fa-check"></i><b>15.6</b> Camunda 8</a></li>
+<li class="chapter" data-level="15.7" data-path="integrations.html"><a href="integrations.html#process-mining-tools"><i class="fa fa-check"></i><b>15.7</b> Process-mining tools</a></li>
+<li class="chapter" data-level="15.8" data-path="integrations.html"><a href="integrations.html#decisions-in-other-dmn-engines"><i class="fa fa-check"></i><b>15.8</b> Decisions in other DMN engines</a></li>
+<li class="chapter" data-level="15.9" data-path="integrations.html"><a href="integrations.html#a-version-control-workflow"><i class="fa fa-check"></i><b>15.9</b> A version-control workflow</a></li>
+<li class="chapter" data-level="" data-path="integrations.html"><a href="integrations.html#exercises-14"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="symbols.html"><a href="symbols.html"><i class="fa fa-check"></i><b>A</b> BPMN symbols</a>
+<ul>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events"><i class="fa fa-check"></i>Start events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events-of-event-sub-processes"><i class="fa fa-check"></i>Start events of event sub-processes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#intermediate-events"><i class="fa fa-check"></i>Intermediate events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#boundary-events-1"><i class="fa fa-check"></i>Boundary events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#end-events"><i class="fa fa-check"></i>End events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activities"><i class="fa fa-check"></i>Activities</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activity-markers"><i class="fa fa-check"></i>Activity markers</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#gateways-1"><i class="fa fa-check"></i>Gateways</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#connections"><i class="fa fa-check"></i>Connections</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#artifacts"><i class="fa fa-check"></i>Artifacts</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#pools-and-lanes"><i class="fa fa-check"></i>Pools and lanes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#conversations-1"><i class="fa fa-check"></i>Conversations</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#choreographies-1"><i class="fa fa-check"></i>Choreographies</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="cheatsheet.html"><a href="cheatsheet.html"><i class="fa fa-check"></i><b>B</b> Language on one page</a></li>
+<li class="chapter" data-level="C" data-path="commands.html"><a href="commands.html"><i class="fa fa-check"></i><b>C</b> Command reference</a></li>
+<li class="chapter" data-level="D" data-path="diagnostics.html"><a href="diagnostics.html"><i class="fa fa-check"></i><b>D</b> Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-1"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-2"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-3"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-4"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-5"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-6"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-7"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-8"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-9"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="E" data-path="conformance.html"><a href="conformance.html"><i class="fa fa-check"></i><b>E</b> Conformance with Camunda 8</a>
+<ul>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-10"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-11"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-12"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-13"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-14"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-15"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>F</b> Glossary</a></li>
+<li class="chapter" data-level="G" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>G</b> References</a>
+<ul>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#standards"><i class="fa fa-check"></i>Standards</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tools-and-test-suites"><i class="fa fa-check"></i>Tools and test suites</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tok"><i class="fa fa-check"></i>tok</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+<li><a href="playground/" target="_blank">Playground in the browser</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tok: Process Models as Text</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="agents" class="section level1 hasAnchor" number="14">
+<h1><span class="header-section-number">Chapter 14</span> Working with AI agents<a href="agents.html#agents" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="goals">
+<p><strong>In this chapter</strong> you will see why a short text language suits AI agents that write process models · learn what the skill <code>tok-modelling</code> teaches an agent and which files it contains · start the MCP server with <code>tok mcp</code> or <code>tok-mcp</code> and know its tools · configure MCP clients, VS Code and Claude Code, and point other agents to the skill · work without MCP with <code>tok cheatsheet</code> and <code>tok check --json</code> · follow a session from a table of process steps to a checked model and a BPMN file · review what an agent produces, because a clean check is not proof that the model matches reality</p>
+</div>
+<p>An <strong>AI agent</strong> is a language model that does not only answer but acts: it reads and writes files, runs commands, looks at their output and plans its next step from it. Agents are good at turning a description of a process into a structured model, and they are increasingly used for it. This chapter shows how to give an agent the tok language and the tok tools, and how to check what it produces.</p>
+<div id="why-a-text-language-suits-agents" class="section level2 hasAnchor" number="14.1">
+<h2><span class="header-section-number">14.1</span> Why a text language suits agents<a href="agents.html#why-a-text-language-suits-agents" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An agent asked to produce a BPMN diagram directly has to write XML: hundreds of lines with namespaces, generated identifiers, references between elements and, in the diagram interchange part, coordinates of every shape and every bend of every arrow. Each of these is a place for a mistake that is hard to see and hard to locate, and coordinates are something a language model has no good way to compute.</p>
+<p>With tok the work is divided differently. The agent writes a short text that describes only the meaning of the process. The engine checks it, reports each problem with a code and a line number, prints the canonical form and produces the BPMN file with a computed layout. The agent never writes XML and never places a shape. The same features that make tok easy to review for people make it easy to write for agents:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature of tok</th>
+<th>What it gives the agent</th>
+<th>What it gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>one statement per line, one keyword per statement</td>
+<td>a mistake concerns one line, and a fix changes one line</td>
+<td>you review the model line by line, like text</td>
+</tr>
+<tr class="even">
+<td>explicit identifiers</td>
+<td>references cannot dangle silently: an unknown name is the error <code>R002</code> with its line</td>
+<td>you refer to elements by name in reviews and in requests for corrections</td>
+</tr>
+<tr class="odd">
+<td>the whole language on one page</td>
+<td>the cheat sheet fits into the context of the agent</td>
+<td>the same cheat sheet is the <a href="cheatsheet.html#cheatsheet">appendix</a> of this book</td>
+</tr>
+<tr class="even">
+<td>diagnostics with stable codes, line numbers and <code>--json</code></td>
+<td>the agent reads the result of a check without guessing</td>
+<td>you can follow what the agent fixed and why</td>
+</tr>
+<tr class="odd">
+<td>one canonical form (<code>tok fmt</code>)</td>
+<td>the text has one layout, whoever wrote it</td>
+<td>the differences between versions are small and readable</td>
+</tr>
+<tr class="even">
+<td>no coordinates</td>
+<td>nothing to draw</td>
+<td>the diagram is always drawn the same way</td>
+</tr>
+</tbody>
+</table>
+<p>The division of work is worth keeping in mind through the whole chapter: <strong>the agent is responsible for the meaning, the engine for the mechanics, and you for the judgement.</strong> The engine can tell the agent that a message flow connects two lanes of one pool; it cannot tell either of you that a step the description calls “automatic” was modelled as a user task.</p>
+</div>
+<div id="the-skill-tok-modelling" class="section level2 hasAnchor" number="14.2">
+<h2><span class="header-section-number">14.2</span> The skill <code>tok-modelling</code><a href="agents.html#the-skill-tok-modelling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>skill</strong> is a folder of instructions and reference material that an agent loads when a task matches its description. The skill <code>tok-modelling</code> teaches an agent to model processes in tok. Its files are:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SKILL.md</code></td>
+<td>the instructions: when the skill applies, which tools to use, the workflow, the rules models most often break, and a summary of every layer of the language</td>
+</tr>
+<tr class="even">
+<td><code>references/cheatsheet.md</code></td>
+<td>the language on one page, read before writing the first line</td>
+</tr>
+<tr class="odd">
+<td><code>references/spec.md</code></td>
+<td>the specification, for the sections the cheat sheet does not cover</td>
+</tr>
+<tr class="even">
+<td><code>references/feel.md</code></td>
+<td>FEEL in tok</td>
+</tr>
+<tr class="odd">
+<td><code>references/diagnostics.md</code></td>
+<td>every diagnostic code with its explanation, in English and Polish</td>
+</tr>
+</tbody>
+</table>
+<p><code>SKILL.md</code> begins with a front matter that names the skill and describes when to use it: for <code>.tok</code> files, for turning a process description such as a table of steps into a model, for decision models, and for executable or simulated processes. Agent tools that support skills read this description and load the skill when a task matches it.</p>
+<p>The workflow the skill prescribes is the one an experienced modeller follows:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Read the process description completely</strong>: the participants, the roles, the steps, the decisions, the deadlines, the messages to other organisations and the documents.</li>
+<li><strong>Write a mapping first</strong>: a file <code>mapping.md</code> with one row per step, giving the tok element (kind and identifier), the lane, the words of the description that justify the choice, and any doubts. The person the agent works for reviews the model through this table.</li>
+<li><strong>Write the <code>.tok</code> file</strong>: one statement per line, short ASCII identifiers, labels in the language of the description, the header <code>tok 1.0</code> for a new model.</li>
+<li><strong>Check</strong> the model and fix every error, then check again until there are none; fix or justify the warnings.</li>
+<li><strong>Format</strong> it into canonical form.</li>
+<li><strong>Export</strong> what the task asks for: the BPMN file, the picture, the files for Camunda.</li>
+<li><strong>Report briefly</strong>: the files created, the number of elements, the decisions that were ambiguous.</li>
+</ol>
+<p>The skill ends its workflow with the sentence that matters most for the person who uses it: no errors means the model follows the rules of the notation, not that it matches the description; the mapping is there for that. It then lists the rules models most often break: a message flow connects different pools, a splitting gateway is labelled with a question and its flows with the answers, branches are joined with the same kind of gateway they were split with, deadlines during a task are boundary events and not extra gateways, an event sub-process has no incoming or outgoing flows, and a flow line with a label has exactly one arrow.</p>
+<p>A skill is plain text. You can read it before you let an agent use it, and you can extend it: an institution can add its own naming rules, its own roles or its own patterns. Writing a good skill is a way of handing an agent the knowledge of your organisation.</p>
+</div>
+<div id="the-mcp-server" class="section level2 hasAnchor" number="14.3">
+<h2><span class="header-section-number">14.3</span> The MCP server<a href="agents.html#the-mcp-server" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>Model Context Protocol</strong> (MCP) is a standard way for an agent application to call tools of local programs. The MCP server of tok gives an agent the engine as tools: it checks a model and returns the diagnostics, prints the canonical form, exports BPMN, SVG, DMN and form files, imports BPMN and DMN, simulates and evaluates decisions, checks BPMN XML files from any tool (<code>check_bpmn</code>), and returns the language reference. The skill uses the server when the agent has it, and the <code>tok</code> command otherwise.</p>
+<div id="starting-the-server" class="section level3 hasAnchor" number="14.3.1">
+<h3><span class="header-section-number">14.3.1</span> Starting the server<a href="agents.html#starting-the-server" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>There are two ways to run it. Both speak MCP over standard input and output (the stdio transport) and serve one client until it closes the connection:</p>
+<ul>
+<li><strong><code>tok mcp</code></strong> from the Python package. If you have installed tok with <code>pip install tok-lang</code>, you already have the server: the command <code>tok mcp</code> starts it. This is the simplest way on any computer with Python.</li>
+<li><strong><code>tok-mcp</code></strong>, a separate program, from crates.io (<code>cargo install tok-mcp</code>) or from the release archives of the repository. It is useful where you do not want Python, for example in a container.</li>
+</ul>
+<p><code>tok mcp --version</code> and <code>tok-mcp --version</code> print the version of the server. You do not normally start the server yourself: the agent application starts it when it needs it, using the configuration below.</p>
+</div>
+<div id="tools" class="section level3 hasAnchor" number="14.3.2">
+<h3><span class="header-section-number">14.3.2</span> Tools<a href="agents.html#tools" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Every tool that reads a document takes it either as <code>text</code> (the tok text) or as <code>path</code> (a <code>.tok</code> file the server reads), never both. <code>lang</code> (<code>en</code> or <code>pl</code>) chooses the language of the diagnostics and reports.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Arguments</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>check</code></td>
+<td><code>text</code> or <code>path</code>, <code>lang</code>, <code>level</code> (<code>basic</code>, <code>analytic</code>, <code>full</code>), <code>class</code> (<code>descriptive</code>, <code>analytic</code>, <code>common-executable</code>, <code>full</code>), <code>bpmn</code> (default <code>true</code>: also the BPMN 2.0 rules)</td>
+<td><code>{"errors", "bpmn_class", "diagnostics"}</code>, as <code>tok check --json</code></td>
+</tr>
+<tr class="even">
+<td><code>fmt</code></td>
+<td><code>text</code> or <code>path</code>, <code>lang</code></td>
+<td><code>{"text"}</code>: the canonical form</td>
+</tr>
+<tr class="odd">
+<td><code>export</code></td>
+<td><code>text</code> or <code>path</code>, <code>formats</code> (a list of <code>bpmn</code>, <code>svg</code>, <code>dmn</code>, <code>forms</code>; all when left out), <code>name</code>, <code>sidecar</code>, <code>lang</code></td>
+<td><code>{"files": {NAME: CONTENT}}</code>: the files <code>tok export</code> writes</td>
+</tr>
+<tr class="even">
+<td><code>import</code></td>
+<td><code>xml</code> or <code>path</code>, <code>format</code> (<code>auto</code>, <code>bpmn</code>, <code>dmn</code>), <code>flow_ids</code>, <code>layout</code></td>
+<td><code>{"format", "text", "warnings", "layout"}</code>: the tok document, what was not kept, and for BPMN the layout sidecar</td>
+</tr>
+<tr class="odd">
+<td><code>sim</code></td>
+<td><code>text</code> or <code>path</code>, <code>cases</code>, <code>seed</code>, and the booleans <code>log</code>, <code>cases_table</code>, <code>csv</code>, <code>xes</code></td>
+<td><code>{"kpi", "report"}</code> and, on request, the event log and the table of cases</td>
+</tr>
+<tr class="even">
+<td><code>eval</code></td>
+<td><code>text</code> or <code>path</code>, <code>decision</code>, <code>values</code> (an object input name → value), <code>lang</code></td>
+<td><code>{"value"}</code>: the value of the decision</td>
+</tr>
+<tr class="odd">
+<td><code>reference</code></td>
+<td><code>topic</code>: <code>cheatsheet</code> (default), <code>spec</code>, <code>diagnostics</code>, <code>feel</code>, <code>cli</code></td>
+<td><code>{"text"}</code>: the reference document</td>
+</tr>
+</tbody>
+</table>
+<p>The same reference documents are also available as resources, for clients that attach resources to the context: <code>tok://reference/cheatsheet</code>, <code>tok://reference/spec</code>, <code>tok://reference/diagnostics</code>, <code>tok://reference/feel</code> and <code>tok://reference/cli</code>.</p>
+<p>Three properties of the server are worth knowing:</p>
+<ul>
+<li><strong>It writes nothing.</strong> <code>fmt</code> and <code>export</code> return the text and the files; the agent writes them with its own file tools. This keeps every change to your files visible in the agent’s normal workflow.</li>
+<li><strong>Two kinds of errors.</strong> A problem the agent can fix (a document with errors, an unknown decision, an argument of the wrong type) is a tool error with an explanation; a malformed request is a protocol error. <code>check</code> is the exception: a document with errors is its normal result, with <code>errors</code> greater than 0.</li>
+<li><strong>No network, the rights of its user.</strong> The server opens no network connection and runs with the rights of the user who starts it; it reads the files named by <code>path</code> and the layout sidecars next to them. A client that lets an agent call tools should still show you the calls, as MCP recommends.</li>
+</ul>
+<p>To try the server by hand, the MCP Inspector of the protocol project starts it and lists its tools: <code>npx @modelcontextprotocol/inspector tok mcp</code>.</p>
+</div>
+</div>
+<div id="configuring-clients" class="section level2 hasAnchor" number="14.4">
+<h2><span class="header-section-number">14.4</span> Configuring clients<a href="agents.html#configuring-clients" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="clients-with-an-mcpservers-configuration" class="section level3 hasAnchor" number="14.4.1">
+<h3><span class="header-section-number">14.4.1</span> Clients with an <code>mcpServers</code> configuration<a href="agents.html#clients-with-an-mcpservers-configuration" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Many agent applications read a JSON configuration with an object <code>mcpServers</code>. The server needs no environment and, with the Python package, one argument:</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb239-1"><a href="agents.html#cb239-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb239-2"><a href="agents.html#cb239-2" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb239-3"><a href="agents.html#cb239-3" tabindex="-1"></a>    <span class="dt">&quot;tok&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb239-4"><a href="agents.html#cb239-4" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;tok&quot;</span><span class="fu">,</span></span>
+<span id="cb239-5"><a href="agents.html#cb239-5" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp&quot;</span><span class="ot">]</span></span>
+<span id="cb239-6"><a href="agents.html#cb239-6" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb239-7"><a href="agents.html#cb239-7" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb239-8"><a href="agents.html#cb239-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>With the separate program, the command is <code>"tok-mcp"</code> without arguments. When the program is not on the <code>PATH</code>, give its full path; on Windows, for example, <code>"command": "C:\\tools\\tok\\tok-mcp.exe"</code>. Paths given to the tools are read relative to the working directory of the server, which is the folder the client starts it in; give the agent absolute paths when in doubt.</p>
+</div>
+<div id="vs-code" class="section level3 hasAnchor" number="14.4.2">
+<h3><span class="header-section-number">14.4.2</span> VS Code<a href="agents.html#vs-code" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>VS Code reads the MCP servers of a workspace from <code>.vscode/mcp.json</code>, with the key <code>servers</code> and the type of the transport:</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb240-1"><a href="agents.html#cb240-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb240-2"><a href="agents.html#cb240-2" tabindex="-1"></a>  <span class="dt">&quot;servers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb240-3"><a href="agents.html#cb240-3" tabindex="-1"></a>    <span class="dt">&quot;tok&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb240-4"><a href="agents.html#cb240-4" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;stdio&quot;</span><span class="fu">,</span></span>
+<span id="cb240-5"><a href="agents.html#cb240-5" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;tok&quot;</span><span class="fu">,</span></span>
+<span id="cb240-6"><a href="agents.html#cb240-6" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp&quot;</span><span class="ot">]</span></span>
+<span id="cb240-7"><a href="agents.html#cb240-7" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb240-8"><a href="agents.html#cb240-8" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb240-9"><a href="agents.html#cb240-9" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Commit the file with the project, and everyone who opens the folder gets the server for the agent of VS Code. The VS Code extension of tok (Chapter <a href="editors.html#editors">12</a>) is independent of it: the extension serves you while you edit, the MCP server serves the agent.</p>
+</div>
+<div id="claude-code" class="section level3 hasAnchor" number="14.4.3">
+<h3><span class="header-section-number">14.4.3</span> Claude Code<a href="agents.html#claude-code" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For Claude Code, the repository <strong>tok-agent</strong> (<a href="https://github.com/tok-lang-bpm/tok-agent" class="uri">https://github.com/tok-lang-bpm/tok-agent</a>) is a plugin marketplace with a plugin that brings both the skill and the MCP server. In Claude Code:</p>
+<pre><code>/plugin marketplace add tok-lang-bpm/tok-agent
+/plugin install tok@tok-lang-bpm</code></pre>
+<p>The first command adds the marketplace (named <code>tok-lang-bpm</code>), the second installs the plugin <code>tok</code> from it; the skill is then available as <code>tok:tok-modelling</code>, with its companion <code>tok:bpmn-modelling</code> for agents that write BPMN 2.0 XML directly, and the plugin starts the MCP server with <code>tok mcp</code>. Install the engine on the computer first (<code>pip install tok-lang</code>), so that the tools of the server and the commands of the skill can run. To add only the MCP server to Claude Code, without the plugin, the command line of Claude Code takes the command of the server after <code>--</code>: <code>claude mcp add tok -- tok mcp</code>.</p>
+</div>
+<div id="other-agents" class="section level3 hasAnchor" number="14.4.4">
+<h3><span class="header-section-number">14.4.4</span> Other agents<a href="agents.html#other-agents" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Agents that read skills in the format of a folder with <code>SKILL.md</code> can use the skill folder of the tok-agent repository, <code>plugins/tok/skills/tok-modelling</code>, directly: copy it to the place where your agent looks for skills, or point the agent to it. The README of tok-agent gives the MCP configuration for other clients (Claude Desktop, Cursor, Gemini CLI, Codex CLI), and its file <code>templates/AGENTS.md</code> is a ready section for the <code>AGENTS.md</code> of a project. Agents that read an <code>AGENTS.md</code> file at the root of a project (a file of standing instructions read at the start of each session) need only a few lines there that point to the skill files and state the rules of the project, for example:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb242-1"><a href="agents.html#cb242-1" tabindex="-1"></a><span class="fu">## Process models</span></span>
+<span id="cb242-2"><a href="agents.html#cb242-2" tabindex="-1"></a></span>
+<span id="cb242-3"><a href="agents.html#cb242-3" tabindex="-1"></a>Process models in this repository are tok files (<span class="in">`models/*.tok`</span>).</span>
+<span id="cb242-4"><a href="agents.html#cb242-4" tabindex="-1"></a>Before writing or changing one, read <span class="in">`skills/tok-modelling/SKILL.md`</span> and</span>
+<span id="cb242-5"><a href="agents.html#cb242-5" tabindex="-1"></a><span class="in">`skills/tok-modelling/references/cheatsheet.md`</span>, and follow their workflow.</span>
+<span id="cb242-6"><a href="agents.html#cb242-6" tabindex="-1"></a>Check every model with <span class="in">`tok check FILE --json`</span> until it has no errors,</span>
+<span id="cb242-7"><a href="agents.html#cb242-7" tabindex="-1"></a>format it with <span class="in">`tok fmt FILE -w`</span>, and never edit the <span class="in">`.bpmn`</span> files by hand:</span>
+<span id="cb242-8"><a href="agents.html#cb242-8" tabindex="-1"></a>export them with <span class="in">`tok bpmn FILE`</span>.</span></code></pre></div>
+<p>Most agents can also use an MCP server; configure it as above where the agent supports it.</p>
+</div>
+</div>
+<div id="working-without-mcp" class="section level2 hasAnchor" number="14.5">
+<h2><span class="header-section-number">14.5</span> Working without MCP<a href="agents.html#working-without-mcp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An agent that can run commands in a shell needs no MCP server. Two commands give it everything:</p>
+<ul>
+<li><p><strong><code>tok cheatsheet</code></strong> prints the one-page summary of the language. Put it into the context of the agent, or tell the agent to run it before writing the first line. It begins like this:</p>
+<pre><code># tok 1.0 — cheat sheet
+
+One statement per line. Blocks by indentation (spaces). `#` starts a comment.
+Every statement starts with a keyword. Identifiers: `[A-Za-z_][A-Za-z0-9_-]*`, unique. Labels: &quot;quoted text&quot;.</code></pre></li>
+<li><p><strong><code>tok check FILE --json</code></strong> prints the diagnostics in a form a program reads without parsing text. The agent reads the code, the line and the identifier of each diagnostic, fixes the line and runs the check again:</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb244-1"><a href="agents.html#cb244-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb244-2"><a href="agents.html#cb244-2" tabindex="-1"></a>  <span class="dt">&quot;file&quot;</span><span class="fu">:</span> <span class="st">&quot;complaint.tok&quot;</span><span class="fu">,</span></span>
+<span id="cb244-3"><a href="agents.html#cb244-3" tabindex="-1"></a>  <span class="dt">&quot;errors&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb244-4"><a href="agents.html#cb244-4" tabindex="-1"></a>  <span class="dt">&quot;bpmn_class&quot;</span><span class="fu">:</span> <span class="st">&quot;analytic&quot;</span><span class="fu">,</span></span>
+<span id="cb244-5"><a href="agents.html#cb244-5" tabindex="-1"></a>  <span class="dt">&quot;diagnostics&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb244-6"><a href="agents.html#cb244-6" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb244-7"><a href="agents.html#cb244-7" tabindex="-1"></a>      <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;W054&quot;</span><span class="fu">,</span></span>
+<span id="cb244-8"><a href="agents.html#cb244-8" tabindex="-1"></a>      <span class="dt">&quot;severity&quot;</span><span class="fu">:</span> <span class="st">&quot;warning&quot;</span><span class="fu">,</span></span>
+<span id="cb244-9"><a href="agents.html#cb244-9" tabindex="-1"></a>      <span class="dt">&quot;line&quot;</span><span class="fu">:</span> <span class="dv">9</span><span class="fu">,</span></span>
+<span id="cb244-10"><a href="agents.html#cb244-10" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;remind&quot;</span><span class="fu">,</span></span>
+<span id="cb244-11"><a href="agents.html#cb244-11" tabindex="-1"></a>      <span class="dt">&quot;message&quot;</span><span class="fu">:</span> <span class="st">&quot;message task or event without a message flow in a model with several pools (remind)&quot;</span></span>
+<span id="cb244-12"><a href="agents.html#cb244-12" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb244-13"><a href="agents.html#cb244-13" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb244-14"><a href="agents.html#cb244-14" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul>
+<p>With <code>tok fmt FILE -w</code>, <code>tok bpmn FILE</code>, <code>tok svg FILE</code>, <code>tok export FILE -o DIR</code>, <code>tok sim FILE --seed N</code> and <code>tok eval FILE DECISION name=value …</code> the agent has every operation of the MCP server. If the agent can run neither the server nor the command, it can still write a model by the cheat sheet, and it should then say clearly that the model has not been checked.</p>
+</div>
+<div id="a-session-from-a-table-of-steps-to-a-bpmn-file" class="section level2 hasAnchor" number="14.6">
+<h2><span class="header-section-number">14.6</span> A session: from a table of steps to a BPMN file<a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The following session shows the workflow on a small but realistic task. A university repository receives complaints about publications that may infringe copyright. The person in charge writes the procedure as a table and asks an agent, which has the skill and the MCP server, to model it.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Step</th>
+<th>Who</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>A complainant sends a complaint about a publication by e-mail.</td>
+<td>complainant</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>The repository officer registers the complaint in the repository system.</td>
+<td>repository officer</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>The system hides the publication automatically until the complaint is resolved.</td>
+<td>repository system</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>The officer assesses whether the complaint is justified. If the assessment is not finished within 10 days, the officer reminds the head of the repository; the assessment continues.</td>
+<td>repository officer</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>If the complaint is justified, the officer informs the author that the publication will be removed, and the system removes it.</td>
+<td>repository officer, system</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>If the complaint is not justified, the system restores the publication.</td>
+<td>repository system</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>In both cases the officer replies to the complainant, and the complaint is closed.</td>
+<td>repository officer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The mapping.</strong> The agent reads the table and first writes <code>mapping.md</code>. Its rows record decisions such as these: the complainant and the author are outside the university, so they are pools without a block, black boxes that only exchange messages; the officer and the system are lanes of the repository’s pool; step 1 is a message start event, because the process begins when the e-mail arrives; step 3 says “automatically”, so it is a service task in the lane of the system; the 10-day reminder of step 4 happens while the assessment continues, so it is a non-interrupting boundary timer; steps 5 and 6 are the two answers of an exclusive gateway, joined again before step 7. One row records a doubt: the table does not say how the officer reminds the head of the repository.</p>
+<p><strong>The first check.</strong> The agent writes <code>complaint.tok</code> and calls <code>check</code>. The answer contains one error (the diagnostics are shown here as <code>tok check</code> prints them; the tool returns the same as JSON):</p>
+<pre><code>complaint.tok:35: error R022: message flow register -&gt; hide must connect two different pools
+complaint.tok: 1 error(s), 0 warning(s), 0 note(s)</code></pre>
+<p>The agent had written a message flow from the registration to the hiding of the publication, as if the officer sent a message to the system. Both lanes belong to one pool, and within a pool the order of work is a sequence flow. The agent removes the message flow; the sequence flow <code>register -&gt; hide</code> is already in the chain of flows.</p>
+<p><strong>The second check.</strong> Now the BPMN rules run, and they find a warning:</p>
+<pre><code>complaint.tok:9: warning W054: message task or event without a message flow in a model with several pools (remind)
+complaint.tok: 0 error(s), 1 warning(s), 0 note(s)</code></pre>
+<p>The agent had made the reminder a send task with a message, but the head of the repository is not a participant of the model, so the message goes nowhere. This is the doubt from the mapping, and the warning makes it visible. Two readings are possible: the head is a separate participant (a third black-box pool with a message flow), or the reminder is internal work of the officer. The agent chooses the second, changes the line to a user task <code>user remind "Remind the head of the repository"</code>, and writes the choice and its reason into the mapping, so that the person reviewing it can disagree.</p>
+<p><strong>The third check</strong> is clean:</p>
+<pre><code>complaint.tok: 0 error(s), 0 warning(s), 0 note(s)</code></pre>
+<p>The agent then formats the file and exports the diagram:</p>
+<pre><code>tok fmt complaint.tok -w
+tok bpmn complaint.tok
+BPMN: complaint.bpmn
+tok svg complaint.tok
+SVG: complaint.svg</code></pre>
+<p>The result is the model below. It is the file <code>14-copyright-complaint.tok</code> of this book.</p>
+<pre class="tok"><code>tok 1.0 &quot;Copyright complaint in the university repository&quot;
+
+pool repository &quot;University repository&quot;
+  lane officer &quot;Repository officer&quot;
+    start received &quot;Complaint received&quot; message=&quot;Complaint&quot;
+    user register &quot;Register the complaint&quot;
+    user assess &quot;Assess the complaint&quot;
+    boundary reminder &quot;10 days passed&quot; noninterrupting on=assess timer=P10D
+    user remind &quot;Remind the head of the repository&quot;
+    end reminded &quot;Head reminded&quot;
+    xor justified &quot;Is the complaint justified?&quot;
+    send inform &quot;Inform the author&quot; message=&quot;Notice of removal&quot;
+    xor merge
+    send reply &quot;Reply to the complainant&quot; message=&quot;Reply&quot;
+    end closed &quot;Complaint closed&quot;
+  lane system &quot;Repository system&quot;
+    service hide &quot;Hide the publication&quot;
+    service remove &quot;Remove the publication&quot;
+    service restore &quot;Restore the publication&quot;
+
+pool complainant &quot;Complainant&quot;
+
+pool author &quot;Author&quot;
+
+flow received -&gt; register -&gt; hide -&gt; assess -&gt; justified
+flow justified -&gt; inform &quot;yes&quot;
+flow justified -&gt; restore &quot;no&quot;
+flow inform -&gt; remove -&gt; merge
+flow restore -&gt; merge -&gt; reply -&gt; closed
+flow reminder -&gt; remind -&gt; reminded
+
+message complainant -&gt; received &quot;Complaint&quot;
+message inform -&gt; author &quot;Notice of removal&quot;
+message reply -&gt; complainant &quot;Reply&quot;</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:agents-complaint-diagram"></span>
+<img src="examples/14-copyright-complaint.svg" alt="The copyright complaint, modelled from the table of steps and checked by the engine." width="100%" />
+<p class="caption">
+Figure 14.1: The copyright complaint, modelled from the table of steps and checked by the engine.
+</p>
+</div>
+<p><a class="download" href="examples/14-copyright-complaint.tok" download>Download the model (.tok)</a> <a class="download" href="examples/14-copyright-complaint.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>Its report to the person is short: the files <code>mapping.md</code>, <code>complaint.tok</code>, <code>complaint.bpmn</code> and <code>complaint.svg</code>; three pools, two lanes, fourteen flow nodes in the repository’s process; one ambiguous point, the reminder, modelled as internal work of the officer.</p>
+<p>Notice what the engine contributed. It found the message flow between lanes, which a reader of the XML might have missed, and it turned an unstated assumption about the reminder into a warning with a line number. Notice also what it could not contribute. Whether the hiding of the publication really happens before the assessment, whether the author is informed before or after the removal, whether “the system removes it” might rather be a decision of a person: these are questions about the procedure, and only someone who knows it can answer them.</p>
+</div>
+<div id="reviewing-what-an-agent-produces" class="section level2 hasAnchor" number="14.7">
+<h2><span class="header-section-number">14.7</span> Reviewing what an agent produces<a href="agents.html#reviewing-what-an-agent-produces" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An agent can be wrong in a convincing way. A model without errors and with a clean diagram can still have the wrong kinds of tasks, the wrong kind of boundary event or a missing branch. <strong>A clean check is not a proof that the model matches reality.</strong> It proves that the model follows the rules of BPMN and of tok; whether it says what the description says is for you to judge.</p>
+<p>A review in four passes covers most of what goes wrong:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Participants and roles.</strong> Do the pools and lanes correspond to the description? Are outside parties black-box pools? Is every element in the lane of the role that performs the step?</li>
+<li><strong>Kinds of elements.</strong> For each step, compare the keyword (<code>user</code>, <code>service</code>, <code>manual</code>, <code>rule</code>, <code>send</code>, …) with the words of the description: “in the system” points to a user task, “automatically” to a service task, “face to face” or “on paper” to a manual task, “strictly by a table of rules” to a business rule task.</li>
+<li><strong>The flow.</strong> Walk the flow lines from the start to every end. Are splits and joins of the same kind? Does every loop return to the right place?</li>
+<li><strong>Exceptions and messages.</strong> Are boundary events on the right activities, and are they interrupting or non-interrupting as the description says? Does every message of the description have a message flow?</li>
+</ol>
+<p>The mapping makes this review fast, because every choice is written next to the words that justify it. When you find a mistake, ask for a correction precisely: name the step, what is wrong, what it should be and why, quoting the description. “Step 4: the reminder must not stop the assessment, because the description says the assessment continues; make the boundary event non-interrupting” leads to the fix you want. “Fix the model” leads to the fixes the agent thinks of.</p>
+<p>A few further habits help:</p>
+<ul>
+<li><strong>Keep the model in version control.</strong> Each change by the agent is then a small diff of text that you can read and revert. The canonical form keeps the diffs small.</li>
+<li><strong>Keep a record of the requests.</strong> What you asked the agent to do is part of the documentation of the model, and some institutions require you to disclose generated content.</li>
+<li><strong>Do not put personal data into requests.</strong> Process models describe roles, not people.</li>
+<li><strong>Check the executable layer and the simulation separately.</strong> An executable model is tested by running it (Chapter <a href="executable.html#executable">10</a>); a simulation by checking its assumptions and its arithmetic (Chapter <a href="simulation.html#simulation">11</a>). Neither is established by a clean check.</li>
+</ul>
+</div>
+<div id="exercises-13" class="section level2 unnumbered hasAnchor">
+<h2>Exercises<a href="agents.html#exercises-13" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-15" class="exercise"><strong>Exercise 14.1  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><strong>Read the skill.</strong> Read <code>SKILL.md</code> of the skill <code>tok-modelling</code> before using it. Which three rules in its list of frequent mistakes would you have broken yourself when you started with BPMN? Add one rule of your own organisation to a copy of the skill.</li>
+<li><strong>Configure a client.</strong> Configure the MCP server in an agent application you use, with <code>tok mcp</code> or <code>tok-mcp</code>. Ask the agent to call the tool <code>reference</code> and to summarise the header line of a tok document. Then ask it to check <code>14-copyright-complaint.tok</code> with the tool <code>check</code> and report the BPMN conformance class.</li>
+<li><strong>A session of your own.</strong> Write a table of six to ten steps for a procedure you know, with at least one decision, one deadline and one message to an outside party. Let an agent model it with the skill, following the workflow of this chapter. Note every diagnostic the agent met on the way, and classify each as a mistake of notation or a mistake of understanding.</li>
+<li><strong>Review.</strong> Review the model of exercise 3 in the four passes. Write at least two precise requests for corrections, quoting your table, and check the result again.</li>
+<li><strong>Without MCP.</strong> Repeat a short session with an agent that has only a shell: give it the output of <code>tok cheatsheet</code> and tell it to use <code>tok check --json</code>. Compare the number of steps and the result with the session that used the MCP server.</li>
+<li><strong>Find what the check cannot.</strong> Take the final model of the copyright complaint and change it so that it still checks without errors but no longer matches the table of steps (for example, make the reminder interrupting). Give the changed model to a colleague, or to an agent, with the table, and ask for a review. Is the change found?</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="programming.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="integrations.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

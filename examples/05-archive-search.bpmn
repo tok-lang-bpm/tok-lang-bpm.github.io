@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Archival search with a sub-process" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Search_request" name="Search request" />
+  <bpmn:message id="Message_Search_answer" name="Search answer" />
+  <bpmn:message id="Message_Withdrawal" name="Withdrawal" />
+  <bpmn:escalation id="Escalation_Difficult_search" name="Difficult search" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="archive" name="State archive" processRef="archive-process" />
+    <bpmn:participant id="applicant" name="Applicant" />
+    <bpmn:messageFlow id="m-applicant-request" name="Search request" sourceRef="applicant" targetRef="request" messageRef="Message_Search_request" />
+    <bpmn:messageFlow id="m-answered-applicant" name="Search answer" sourceRef="answered" targetRef="applicant" messageRef="Message_Search_answer" />
+    <bpmn:messageFlow id="m-applicant-withdrawn" name="Withdrawal" sourceRef="applicant" targetRef="withdrawn" messageRef="Message_Withdrawal" />
+  </bpmn:collaboration>
+  <bpmn:process id="archive-process" name="Archival search with a sub-process" isExecutable="false">
+    <bpmn:laneSet id="archive-lanes">
+      <bpmn:lane id="registry" name="Registry office">
+        <bpmn:flowNodeRef>request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>in-scope</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>out-of-scope</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>withdrawal</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="archivist" name="Archivist">
+        <bpmn:flowNodeRef>search</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>escalated</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>answer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>answered</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="head" name="Head of department">
+        <bpmn:flowNodeRef>decide</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>decided</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="request" name="Search request received">
+      <bpmn:messageEventDefinition id="request-def" messageRef="Message_Search_request" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="register" name="Register the request" />
+    <bpmn:exclusiveGateway id="in-scope" name="Does the request concern the holdings?" />
+    <bpmn:endEvent id="out-of-scope" name="Request outside the holdings">
+      <bpmn:terminateEventDefinition id="out-of-scope-def" />
+    </bpmn:endEvent>
+    <bpmn:subProcess id="withdrawal" name="Withdrawal of the request" triggeredByEvent="true">
+      <bpmn:startEvent id="withdrawn" name="Request withdrawn">
+        <bpmn:messageEventDefinition id="withdrawn-def" messageRef="Message_Withdrawal" />
+      </bpmn:startEvent>
+      <bpmn:userTask id="close" name="Close the case" />
+      <bpmn:endEvent id="closed" name="Case closed" />
+      <bpmn:sequenceFlow id="f-withdrawn-close" sourceRef="withdrawn" targetRef="close" />
+      <bpmn:sequenceFlow id="f-close-closed" sourceRef="close" targetRef="closed" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="search" name="Search the holdings">
+      <bpmn:startEvent id="search-start" />
+      <bpmn:userTask id="finding-aids" name="Review the finding aids" />
+      <bpmn:exclusiveGateway id="found" name="Were the records found?" />
+      <bpmn:intermediateThrowEvent id="difficult" name="Head of department must decide">
+        <bpmn:escalationEventDefinition id="difficult-def" escalationRef="Escalation_Difficult_search" />
+      </bpmn:intermediateThrowEvent>
+      <bpmn:userTask id="analyse" name="Analyse the records" />
+      <bpmn:endEvent id="search-end" name="Search finished" />
+      <bpmn:sequenceFlow id="f-search-start-finding-aids" sourceRef="search-start" targetRef="finding-aids" />
+      <bpmn:sequenceFlow id="f-finding-aids-found" sourceRef="finding-aids" targetRef="found" />
+      <bpmn:sequenceFlow id="f-found-analyse" name="yes" sourceRef="found" targetRef="analyse" />
+      <bpmn:sequenceFlow id="f-found-difficult" name="no" sourceRef="found" targetRef="difficult" />
+      <bpmn:sequenceFlow id="f-difficult-analyse" sourceRef="difficult" targetRef="analyse" />
+      <bpmn:sequenceFlow id="f-analyse-search-end" sourceRef="analyse" targetRef="search-end" />
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="escalated" name="Difficult search" attachedToRef="search" cancelActivity="false">
+      <bpmn:escalationEventDefinition id="escalated-def" escalationRef="Escalation_Difficult_search" />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="answer" name="Prepare the answer" />
+    <bpmn:endEvent id="answered" name="Answer sent">
+      <bpmn:messageEventDefinition id="answered-def" messageRef="Message_Search_answer" />
+    </bpmn:endEvent>
+    <bpmn:userTask id="decide" name="Decide on further searching" />
+    <bpmn:endEvent id="decided" name="Decision recorded" />
+    <bpmn:sequenceFlow id="f-request-register" sourceRef="request" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-in-scope" sourceRef="register" targetRef="in-scope" />
+    <bpmn:sequenceFlow id="f-in-scope-search" name="yes" sourceRef="in-scope" targetRef="search" />
+    <bpmn:sequenceFlow id="f-in-scope-out-of-scope" name="no" sourceRef="in-scope" targetRef="out-of-scope" />
+    <bpmn:sequenceFlow id="f-search-answer" sourceRef="search" targetRef="answer" />
+    <bpmn:sequenceFlow id="f-answer-answered" sourceRef="answer" targetRef="answered" />
+    <bpmn:sequenceFlow id="f-escalated-decide" sourceRef="escalated" targetRef="decide" />
+    <bpmn:sequenceFlow id="f-decide-decided" sourceRef="decide" targetRef="decided" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="archive_di" bpmnElement="archive" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="1370" height="690" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="applicant_di" bpmnElement="applicant" isHorizontal="true">
+        <dc:Bounds x="0" y="730" width="1370" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="registry_di" bpmnElement="registry" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="1340" height="340" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archivist_di" bpmnElement="archivist" isHorizontal="true">
+        <dc:Bounds x="30" y="340" width="1340" height="210" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="head_di" bpmnElement="head" isHorizontal="true">
+        <dc:Bounds x="30" y="550" width="1340" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="request_di" bpmnElement="request">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="85" y="93" width="46" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="in-scope_di" bpmnElement="in-scope" isMarkerVisible="true">
+        <dc:Bounds x="326" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="292" y="19" width="118" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="out-of-scope_di" bpmnElement="out-of-scope">
+        <dc:Bounds x="743" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="707" y="93" width="108" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="withdrawal_di" bpmnElement="withdrawal" isExpanded="true">
+        <dc:Bounds x="90" y="160" width="340" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="withdrawn_di" bpmnElement="withdrawn">
+        <dc:Bounds x="120" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="143" y="261" width="52" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="close_di" bpmnElement="close">
+        <dc:Bounds x="206" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="closed_di" bpmnElement="closed">
+        <dc:Bounds x="356" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="343" y="263" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search_di" bpmnElement="search" isExpanded="true">
+        <dc:Bounds x="426" y="370" width="670" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search-start_di" bpmnElement="search-start">
+        <dc:Bounds x="456" y="432" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="finding-aids_di" bpmnElement="finding-aids">
+        <dc:Bounds x="542" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="found_di" bpmnElement="found" isMarkerVisible="true">
+        <dc:Bounds x="692" y="425" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="672" y="480" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="difficult_di" bpmnElement="difficult">
+        <dc:Bounds x="792" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="759" y="473" width="102" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="analyse_di" bpmnElement="analyse">
+        <dc:Bounds x="878" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search-end_di" bpmnElement="search-end">
+        <dc:Bounds x="1028" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1004" y="473" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answer_di" bpmnElement="answer">
+        <dc:Bounds x="1146" y="405" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answered_di" bpmnElement="answered">
+        <dc:Bounds x="1296" y="427" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1283" y="468" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="decide_di" bpmnElement="decide">
+        <dc:Bounds x="1146" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="decided_di" bpmnElement="decided">
+        <dc:Bounds x="1296" y="602" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1291" y="643" width="46" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="escalated_di" bpmnElement="escalated">
+        <dc:Bounds x="1048" y="502" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1087" y="540" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="m-applicant-request_di" bpmnElement="m-applicant-request">
+        <di:waypoint x="76" y="730" />
+        <di:waypoint x="76" y="78" />
+        <di:waypoint x="92" y="78" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="81" y="702" width="40" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-answered-applicant_di" bpmnElement="m-answered-applicant">
+        <di:waypoint x="1330" y="453" />
+        <di:waypoint x="1346" y="453" />
+        <di:waypoint x="1346" y="730" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1267" y="714" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-applicant-withdrawn_di" bpmnElement="m-applicant-withdrawn">
+        <di:waypoint x="138" y="730" />
+        <di:waypoint x="138" y="258" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="144" y="714" width="56" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-withdrawn-close_di" bpmnElement="f-withdrawn-close">
+        <di:waypoint x="156" y="240" />
+        <di:waypoint x="206" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-close-closed_di" bpmnElement="f-close-closed">
+        <di:waypoint x="306" y="240" />
+        <di:waypoint x="356" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-start-finding-aids_di" bpmnElement="f-search-start-finding-aids">
+        <di:waypoint x="492" y="450" />
+        <di:waypoint x="542" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-finding-aids-found_di" bpmnElement="f-finding-aids-found">
+        <di:waypoint x="642" y="450" />
+        <di:waypoint x="692" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-found-analyse_di" bpmnElement="f-found-analyse">
+        <di:waypoint x="717" y="425" />
+        <di:waypoint x="717" y="398" />
+        <di:waypoint x="928" y="398" />
+        <di:waypoint x="928" y="410" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="724" y="383" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-found-difficult_di" bpmnElement="f-found-difficult">
+        <di:waypoint x="742" y="450" />
+        <di:waypoint x="792" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="750" y="435" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-difficult-analyse_di" bpmnElement="f-difficult-analyse">
+        <di:waypoint x="828" y="458" />
+        <di:waypoint x="878" y="458" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-analyse-search-end_di" bpmnElement="f-analyse-search-end">
+        <di:waypoint x="978" y="450" />
+        <di:waypoint x="1028" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-request-register_di" bpmnElement="f-request-register">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-in-scope_di" bpmnElement="f-register-in-scope">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="326" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-in-scope-search_di" bpmnElement="f-in-scope-search">
+        <di:waypoint x="351" y="95" />
+        <di:waypoint x="351" y="140" />
+        <di:waypoint x="761" y="140" />
+        <di:waypoint x="761" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="358" y="125" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-in-scope-out-of-scope_di" bpmnElement="f-in-scope-out-of-scope">
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="743" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="384" y="55" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-answer_di" bpmnElement="f-search-answer">
+        <di:waypoint x="1096" y="445" />
+        <di:waypoint x="1146" y="445" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-answer-answered_di" bpmnElement="f-answer-answered">
+        <di:waypoint x="1246" y="445" />
+        <di:waypoint x="1296" y="445" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-escalated-decide_di" bpmnElement="f-escalated-decide">
+        <di:waypoint x="1066" y="538" />
+        <di:waypoint x="1066" y="620" />
+        <di:waypoint x="1146" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-decide-decided_di" bpmnElement="f-decide-decided">
+        <di:waypoint x="1246" y="620" />
+        <di:waypoint x="1296" y="620" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

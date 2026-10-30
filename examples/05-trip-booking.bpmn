@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Booking a study trip" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:process id="process" name="Booking a study trip" isExecutable="false">
+    <bpmn:startEvent id="requested" name="Trip requested" />
+    <bpmn:transaction id="booking" name="Book the room and the ticket">
+      <bpmn:startEvent id="booking-start" />
+      <bpmn:serviceTask id="room" name="Book a room" />
+      <bpmn:boundaryEvent id="room-compensate" attachedToRef="room">
+        <bpmn:compensateEventDefinition id="room-compensate-def" />
+      </bpmn:boundaryEvent>
+      <bpmn:serviceTask id="release-room" name="Release the room" isForCompensation="true" />
+      <bpmn:serviceTask id="ticket" name="Buy a ticket" />
+      <bpmn:boundaryEvent id="ticket-compensate" attachedToRef="ticket">
+        <bpmn:compensateEventDefinition id="ticket-compensate-def" />
+      </bpmn:boundaryEvent>
+      <bpmn:serviceTask id="refund-ticket" name="Refund the ticket" isForCompensation="true" />
+      <bpmn:exclusiveGateway id="booked" name="Was everything booked?" />
+      <bpmn:endEvent id="booked-end" name="Booked" />
+      <bpmn:endEvent id="cancel-end" name="Cancel the booking">
+        <bpmn:cancelEventDefinition id="cancel-end-def" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="f-booking-start-room" sourceRef="booking-start" targetRef="room" />
+      <bpmn:sequenceFlow id="f-room-ticket" sourceRef="room" targetRef="ticket" />
+      <bpmn:sequenceFlow id="f-ticket-booked" sourceRef="ticket" targetRef="booked" />
+      <bpmn:sequenceFlow id="f-booked-booked-end" name="yes" sourceRef="booked" targetRef="booked-end" />
+      <bpmn:sequenceFlow id="f-booked-cancel-end" name="no" sourceRef="booked" targetRef="cancel-end" />
+      <bpmn:association id="room-compensate-assoc" associationDirection="One" sourceRef="room-compensate" targetRef="release-room" />
+      <bpmn:association id="ticket-compensate-assoc" associationDirection="One" sourceRef="ticket-compensate" targetRef="refund-ticket" />
+    </bpmn:transaction>
+    <bpmn:boundaryEvent id="cancelled" name="Booking cancelled" attachedToRef="booking">
+      <bpmn:cancelEventDefinition id="cancelled-def" />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="confirm" name="Confirm the trip to the traveller" />
+    <bpmn:userTask id="inform" name="Inform the traveller of the cancellation" />
+    <bpmn:endEvent id="trip-booked" name="Trip booked" />
+    <bpmn:endEvent id="trip-cancelled" name="Trip cancelled" />
+    <bpmn:sequenceFlow id="f-requested-booking" sourceRef="requested" targetRef="booking" />
+    <bpmn:sequenceFlow id="f-booking-confirm" sourceRef="booking" targetRef="confirm" />
+    <bpmn:sequenceFlow id="f-confirm-trip-booked" sourceRef="confirm" targetRef="trip-booked" />
+    <bpmn:sequenceFlow id="f-cancelled-inform" sourceRef="cancelled" targetRef="inform" />
+    <bpmn:sequenceFlow id="f-inform-trip-cancelled" sourceRef="inform" targetRef="trip-cancelled" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="requested_di" bpmnElement="requested">
+        <dc:Bounds x="30" y="217" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="8" y="258" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="booking_di" bpmnElement="booking" isExpanded="true">
+        <dc:Bounds x="116" y="30" width="650" height="410" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="booking-start_di" bpmnElement="booking-start">
+        <dc:Bounds x="178" y="92" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="room_di" bpmnElement="room">
+        <dc:Bounds x="296" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="release-room_di" bpmnElement="release-room">
+        <dc:Bounds x="146" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ticket_di" bpmnElement="ticket">
+        <dc:Bounds x="446" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refund-ticket_di" bpmnElement="refund-ticket">
+        <dc:Bounds x="146" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="booked_di" bpmnElement="booked" isMarkerVisible="true">
+        <dc:Bounds x="596" y="85" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="626" y="60" width="80" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="booked-end_di" bpmnElement="booked-end">
+        <dc:Bounds x="696" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="697" y="133" width="34" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cancel-end_di" bpmnElement="cancel-end">
+        <dc:Bounds x="696" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="663" y="263" width="102" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="confirm_di" bpmnElement="confirm">
+        <dc:Bounds x="816" y="195" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="inform_di" bpmnElement="inform">
+        <dc:Bounds x="816" y="490" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="trip-booked_di" bpmnElement="trip-booked">
+        <dc:Bounds x="966" y="217" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="953" y="258" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="trip-cancelled_di" bpmnElement="trip-cancelled">
+        <dc:Bounds x="966" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="944" y="553" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="room-compensate_di" bpmnElement="room-compensate">
+        <dc:Bounds x="348" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ticket-compensate_di" bpmnElement="ticket-compensate">
+        <dc:Bounds x="498" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cancelled_di" bpmnElement="cancelled">
+        <dc:Bounds x="718" y="422" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635" y="461" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-booking-start-room_di" bpmnElement="f-booking-start-room">
+        <di:waypoint x="214" y="110" />
+        <di:waypoint x="296" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-room-ticket_di" bpmnElement="f-room-ticket">
+        <di:waypoint x="396" y="110" />
+        <di:waypoint x="446" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-ticket-booked_di" bpmnElement="f-ticket-booked">
+        <di:waypoint x="546" y="110" />
+        <di:waypoint x="596" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-booked-booked-end_di" bpmnElement="f-booked-booked-end">
+        <di:waypoint x="646" y="110" />
+        <di:waypoint x="696" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="653" y="95" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-booked-cancel-end_di" bpmnElement="f-booked-cancel-end">
+        <di:waypoint x="621" y="135" />
+        <di:waypoint x="621" y="240" />
+        <di:waypoint x="696" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="629" y="225" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="room-compensate-assoc_di" bpmnElement="room-compensate-assoc">
+        <di:waypoint x="348" y="160" />
+        <di:waypoint x="246" y="214" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ticket-compensate-assoc_di" bpmnElement="ticket-compensate-assoc">
+        <di:waypoint x="498" y="162" />
+        <di:waypoint x="246" y="336" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-requested-booking_di" bpmnElement="f-requested-booking">
+        <di:waypoint x="66" y="235" />
+        <di:waypoint x="116" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-booking-confirm_di" bpmnElement="f-booking-confirm">
+        <di:waypoint x="766" y="235" />
+        <di:waypoint x="816" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-confirm-trip-booked_di" bpmnElement="f-confirm-trip-booked">
+        <di:waypoint x="916" y="235" />
+        <di:waypoint x="966" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-cancelled-inform_di" bpmnElement="f-cancelled-inform">
+        <di:waypoint x="736" y="458" />
+        <di:waypoint x="736" y="530" />
+        <di:waypoint x="816" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-inform-trip-cancelled_di" bpmnElement="f-inform-trip-cancelled">
+        <di:waypoint x="916" y="530" />
+        <di:waypoint x="966" y="530" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

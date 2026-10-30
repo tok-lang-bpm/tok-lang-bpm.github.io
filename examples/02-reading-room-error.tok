@@ -1,0 +1,15 @@
+tok 1.0 "Reading room request (with errors)"
+
+start submitted "Request submitted"
+user check "Check the reference code"
+xor available "Are the records available?"
+manual issue "Issue the records"
+user inform "Inform the reader"
+end issued "Records issued"
+end issued "Reader informed"
+
+flow submitted -> check -> available
+flow available -> issue "yes"
+flow available -> inform "no"
+flow issue -> isued
+flow inform -> informed

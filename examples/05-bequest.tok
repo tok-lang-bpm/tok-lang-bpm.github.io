@@ -1,0 +1,18 @@
+tok 1.0 "Processing a bequest of papers"
+
+global identity-check "Check the donor's identity" kind=user
+
+start received "Bequest offered"
+call check-donor "Check the donor's identity" task=identity-check
+user appraise "Appraise each box" parallel
+adhoc processing "Process the papers"
+  user describe "Describe the files"
+  user digitise "Digitise the files"
+  manual conserve "Conserve damaged files"
+service publish "Publish the finding aid" loop test-before while="not(published)" loop-max=3
+user proofread "Proofread the finding aid" sequential
+call catalogue "Catalogue the collection" process=cataloguing
+end done "Bequest processed"
+
+flow describe -> digitise
+flow received -> check-donor -> appraise -> processing -> publish -> proofread -> catalogue -> done

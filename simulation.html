@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Simulation and process mining | tok: Process Models as Text</title>
+  <meta name="description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Simulation and process mining | tok: Process Models as Text" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="github-repo" content="tok-lang-bpm/tok-lang-bpm.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Simulation and process mining | tok: Process Models as Text" />
+  
+  <meta name="twitter:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  
+
+<meta name="author" content="Marek Deja" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="executable.html"/>
+<link rel="next" href="editors.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tok: Process Models as Text</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-this-book-is-for"><i class="fa fa-check"></i>Who this book is for</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-the-book-is-organised"><i class="fa fa-check"></i>How the book is organised</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#conventions"><i class="fa fa-check"></i>Conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#versions"><i class="fa fa-check"></i>Versions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#licence"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reporting-issues"><i class="fa fa-check"></i>Reporting issues</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-cite"><i class="fa fa-check"></i>How to cite</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="models-as-text.html"><a href="models-as-text.html"><i class="fa fa-check"></i><b>1</b> Models as text</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="models-as-text.html"><a href="models-as-text.html#two-layers-of-a-bpmn-file"><i class="fa fa-check"></i><b>1.1</b> Two layers of a BPMN file</a></li>
+<li class="chapter" data-level="1.2" data-path="models-as-text.html"><a href="models-as-text.html#reading-a-model-line-by-line"><i class="fa fa-check"></i><b>1.2</b> Reading a model line by line</a></li>
+<li class="chapter" data-level="1.3" data-path="models-as-text.html"><a href="models-as-text.html#the-text-is-the-model"><i class="fa fa-check"></i><b>1.3</b> The text is the model</a></li>
+<li class="chapter" data-level="1.4" data-path="models-as-text.html"><a href="models-as-text.html#why-text"><i class="fa fa-check"></i><b>1.4</b> Why text</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="models-as-text.html"><a href="models-as-text.html#version-control"><i class="fa fa-check"></i><b>1.4.1</b> Version control</a></li>
+<li class="chapter" data-level="1.4.2" data-path="models-as-text.html"><a href="models-as-text.html#review"><i class="fa fa-check"></i><b>1.4.2</b> Review</a></li>
+<li class="chapter" data-level="1.4.3" data-path="models-as-text.html"><a href="models-as-text.html#why-collaboration"><i class="fa fa-check"></i><b>1.4.3</b> Collaboration</a></li>
+<li class="chapter" data-level="1.4.4" data-path="models-as-text.html"><a href="models-as-text.html#why-agents"><i class="fa fa-check"></i><b>1.4.4</b> Agents</a></li>
+<li class="chapter" data-level="1.4.5" data-path="models-as-text.html"><a href="models-as-text.html#text-tools"><i class="fa fa-check"></i><b>1.4.5</b> Text tools</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="models-as-text.html"><a href="models-as-text.html#tok-among-other-text-notations"><i class="fa fa-check"></i><b>1.5</b> tok among other text notations</a></li>
+<li class="chapter" data-level="1.6" data-path="models-as-text.html"><a href="models-as-text.html#the-metamodel-underneath"><i class="fa fa-check"></i><b>1.6</b> The metamodel underneath</a></li>
+<li class="chapter" data-level="1.7" data-path="models-as-text.html"><a href="models-as-text.html#round-trip-from-bpmn-back-to-text"><i class="fa fa-check"></i><b>1.7</b> Round trip: from BPMN back to text</a></li>
+<li class="chapter" data-level="" data-path="models-as-text.html"><a href="models-as-text.html#exercises"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started.html"><a href="getting-started.html#ways-to-use-tok"><i class="fa fa-check"></i><b>2.1</b> Ways to use tok</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started.html"><a href="getting-started.html#installing-the-command-line"><i class="fa fa-check"></i><b>2.2</b> Installing the command line</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="getting-started.html"><a href="getting-started.html#with-python"><i class="fa fa-check"></i><b>2.2.1</b> With Python</a></li>
+<li class="chapter" data-level="2.2.2" data-path="getting-started.html"><a href="getting-started.html#with-cargo"><i class="fa fa-check"></i><b>2.2.2</b> With Cargo</a></li>
+<li class="chapter" data-level="2.2.3" data-path="getting-started.html"><a href="getting-started.html#checking-the-installation"><i class="fa fa-check"></i><b>2.2.3</b> Checking the installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="getting-started.html"><a href="getting-started.html#other-ways-to-reach-the-engine"><i class="fa fa-check"></i><b>2.3</b> Other ways to reach the engine</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="getting-started.html"><a href="getting-started.html#r"><i class="fa fa-check"></i><b>2.3.1</b> R</a></li>
+<li class="chapter" data-level="2.3.2" data-path="getting-started.html"><a href="getting-started.html#julia"><i class="fa fa-check"></i><b>2.3.2</b> Julia</a></li>
+<li class="chapter" data-level="2.3.3" data-path="getting-started.html"><a href="getting-started.html#visual-studio-code"><i class="fa fa-check"></i><b>2.3.3</b> Visual Studio Code</a></li>
+<li class="chapter" data-level="2.3.4" data-path="getting-started.html"><a href="getting-started.html#the-playground"><i class="fa fa-check"></i><b>2.3.4</b> The playground</a></li>
+<li class="chapter" data-level="2.3.5" data-path="getting-started.html"><a href="getting-started.html#the-agent-bundle"><i class="fa fa-check"></i><b>2.3.5</b> The agent bundle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="getting-started.html"><a href="getting-started.html#your-first-model"><i class="fa fa-check"></i><b>2.4</b> Your first model</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="getting-started.html"><a href="getting-started.html#step-1-write-the-text"><i class="fa fa-check"></i><b>2.4.1</b> Step 1: write the text</a></li>
+<li class="chapter" data-level="2.4.2" data-path="getting-started.html"><a href="getting-started.html#step-2-check-the-model"><i class="fa fa-check"></i><b>2.4.2</b> Step 2: check the model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="getting-started.html"><a href="getting-started.html#step-3-format-the-text"><i class="fa fa-check"></i><b>2.4.3</b> Step 3: format the text</a></li>
+<li class="chapter" data-level="2.4.4" data-path="getting-started.html"><a href="getting-started.html#step-4-export-bpmn"><i class="fa fa-check"></i><b>2.4.4</b> Step 4: export BPMN</a></li>
+<li class="chapter" data-level="2.4.5" data-path="getting-started.html"><a href="getting-started.html#step-5-draw-the-picture"><i class="fa fa-check"></i><b>2.4.5</b> Step 5: draw the picture</a></li>
+<li class="chapter" data-level="2.4.6" data-path="getting-started.html"><a href="getting-started.html#step-6-open-the-model-in-a-bpmn-tool"><i class="fa fa-check"></i><b>2.4.6</b> Step 6: open the model in a BPMN tool</a></li>
+<li class="chapter" data-level="2.4.7" data-path="getting-started.html"><a href="getting-started.html#step-7-change-and-repeat"><i class="fa fa-check"></i><b>2.4.7</b> Step 7: change and repeat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="getting-started.html"><a href="getting-started.html#setting-up-your-editor"><i class="fa fa-check"></i><b>2.5</b> Setting up your editor</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-1"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="process-basics.html"><a href="process-basics.html"><i class="fa fa-check"></i><b>3</b> Process basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="process-basics.html"><a href="process-basics.html#the-header-line"><i class="fa fa-check"></i><b>3.1</b> The header line</a></li>
+<li class="chapter" data-level="3.2" data-path="process-basics.html"><a href="process-basics.html#statements"><i class="fa fa-check"></i><b>3.2</b> Statements</a></li>
+<li class="chapter" data-level="3.3" data-path="process-basics.html"><a href="process-basics.html#identifiers-and-labels"><i class="fa fa-check"></i><b>3.3</b> Identifiers and labels</a></li>
+<li class="chapter" data-level="3.4" data-path="process-basics.html"><a href="process-basics.html#tasks"><i class="fa fa-check"></i><b>3.4</b> Tasks</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="process-basics.html"><a href="process-basics.html#markers-of-repetition"><i class="fa fa-check"></i><b>3.4.1</b> Markers of repetition</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="process-basics.html"><a href="process-basics.html#events"><i class="fa fa-check"></i><b>3.5</b> Events</a></li>
+<li class="chapter" data-level="3.6" data-path="process-basics.html"><a href="process-basics.html#gateways"><i class="fa fa-check"></i><b>3.6</b> Gateways</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="process-basics.html"><a href="process-basics.html#exclusive-parallel-and-inclusive-gateways"><i class="fa fa-check"></i><b>3.6.1</b> Exclusive, parallel and inclusive gateways</a></li>
+<li class="chapter" data-level="3.6.2" data-path="process-basics.html"><a href="process-basics.html#the-event-based-gateway"><i class="fa fa-check"></i><b>3.6.2</b> The event-based gateway</a></li>
+<li class="chapter" data-level="3.6.3" data-path="process-basics.html"><a href="process-basics.html#the-complex-gateway"><i class="fa fa-check"></i><b>3.6.3</b> The complex gateway</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="process-basics.html"><a href="process-basics.html#sequence-flows"><i class="fa fa-check"></i><b>3.7</b> Sequence flows</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="process-basics.html"><a href="process-basics.html#labels-and-attributes"><i class="fa fa-check"></i><b>3.7.1</b> Labels and attributes</a></li>
+<li class="chapter" data-level="3.7.2" data-path="process-basics.html"><a href="process-basics.html#conditions"><i class="fa fa-check"></i><b>3.7.2</b> Conditions</a></li>
+<li class="chapter" data-level="3.7.3" data-path="process-basics.html"><a href="process-basics.html#default-flows"><i class="fa fa-check"></i><b>3.7.3</b> Default flows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="process-basics.html"><a href="process-basics.html#indentation-and-blocks"><i class="fa fa-check"></i><b>3.8</b> Indentation and blocks</a></li>
+<li class="chapter" data-level="3.9" data-path="process-basics.html"><a href="process-basics.html#comments"><i class="fa fa-check"></i><b>3.9</b> Comments</a></li>
+<li class="chapter" data-level="3.10" data-path="process-basics.html"><a href="process-basics.html#levels-of-the-language"><i class="fa fa-check"></i><b>3.10</b> Levels of the language</a></li>
+<li class="chapter" data-level="3.11" data-path="process-basics.html"><a href="process-basics.html#typical-mistakes"><i class="fa fa-check"></i><b>3.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="process-basics.html"><a href="process-basics.html#exercises-2"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="collaboration.html"><a href="collaboration.html"><i class="fa fa-check"></i><b>4</b> Pools, lanes and messages</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="collaboration.html"><a href="collaboration.html#from-one-process-to-a-collaboration"><i class="fa fa-check"></i><b>4.1</b> From one process to a collaboration</a></li>
+<li class="chapter" data-level="4.2" data-path="collaboration.html"><a href="collaboration.html#pools"><i class="fa fa-check"></i><b>4.2</b> Pools</a></li>
+<li class="chapter" data-level="4.3" data-path="collaboration.html"><a href="collaboration.html#lanes-and-nested-lanes"><i class="fa fa-check"></i><b>4.3</b> Lanes and nested lanes</a></li>
+<li class="chapter" data-level="4.4" data-path="collaboration.html"><a href="collaboration.html#message-flows"><i class="fa fa-check"></i><b>4.4</b> Message flows</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="collaboration.html"><a href="collaboration.html#a-collaboration-with-a-black-box-pool"><i class="fa fa-check"></i><b>4.4.1</b> A collaboration with a black-box pool</a></li>
+<li class="chapter" data-level="4.4.2" data-path="collaboration.html"><a href="collaboration.html#two-processes-that-talk-to-each-other"><i class="fa fa-check"></i><b>4.4.2</b> Two processes that talk to each other</a></li>
+<li class="chapter" data-level="4.4.3" data-path="collaboration.html"><a href="collaboration.html#correlation-keys"><i class="fa fa-check"></i><b>4.4.3</b> Correlation keys</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="collaboration.html"><a href="collaboration.html#structural-rules"><i class="fa fa-check"></i><b>4.5</b> Structural rules</a></li>
+<li class="chapter" data-level="4.6" data-path="collaboration.html"><a href="collaboration.html#conversations"><i class="fa fa-check"></i><b>4.6</b> Conversations</a></li>
+<li class="chapter" data-level="4.7" data-path="collaboration.html"><a href="collaboration.html#choreographies"><i class="fa fa-check"></i><b>4.7</b> Choreographies</a></li>
+<li class="chapter" data-level="4.8" data-path="collaboration.html"><a href="collaboration.html#participant-multiplicity"><i class="fa fa-check"></i><b>4.8</b> Participant multiplicity</a></li>
+<li class="chapter" data-level="4.9" data-path="collaboration.html"><a href="collaboration.html#collaborations-levels-and-camunda"><i class="fa fa-check"></i><b>4.9</b> Collaborations, levels and Camunda</a></li>
+<li class="chapter" data-level="4.10" data-path="collaboration.html"><a href="collaboration.html#the-canonical-form-of-a-collaboration"><i class="fa fa-check"></i><b>4.10</b> The canonical form of a collaboration</a></li>
+<li class="chapter" data-level="" data-path="collaboration.html"><a href="collaboration.html#exercises-3"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="events-exceptions.html"><a href="events-exceptions.html"><i class="fa fa-check"></i><b>5</b> Events, sub-processes and exceptions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="events-exceptions.html"><a href="events-exceptions.html#catching-and-throwing"><i class="fa fa-check"></i><b>5.1</b> Catching and throwing</a></li>
+<li class="chapter" data-level="5.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers"><i class="fa fa-check"></i><b>5.2</b> Triggers</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="events-exceptions.html"><a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier"><i class="fa fa-check"></i><b>5.2.1</b> Events on a path: waiting for a supplier</a></li>
+<li class="chapter" data-level="5.2.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers-without-a-value"><i class="fa fa-check"></i><b>5.2.2</b> Triggers without a value</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="events-exceptions.html"><a href="events-exceptions.html#boundary-events"><i class="fa fa-check"></i><b>5.3</b> Boundary events</a></li>
+<li class="chapter" data-level="5.4" data-path="events-exceptions.html"><a href="events-exceptions.html#embedded-sub-processes"><i class="fa fa-check"></i><b>5.4</b> Embedded sub-processes</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="events-exceptions.html"><a href="events-exceptions.html#escalation-from-a-sub-process"><i class="fa fa-check"></i><b>5.4.1</b> Escalation from a sub-process</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="events-exceptions.html"><a href="events-exceptions.html#event-sub-processes"><i class="fa fa-check"></i><b>5.5</b> Event sub-processes</a></li>
+<li class="chapter" data-level="5.6" data-path="events-exceptions.html"><a href="events-exceptions.html#compensation"><i class="fa fa-check"></i><b>5.6</b> Compensation</a></li>
+<li class="chapter" data-level="5.7" data-path="events-exceptions.html"><a href="events-exceptions.html#transactions-and-cancellation"><i class="fa fa-check"></i><b>5.7</b> Transactions and cancellation</a></li>
+<li class="chapter" data-level="5.8" data-path="events-exceptions.html"><a href="events-exceptions.html#multiple-and-parallel-multiple-events"><i class="fa fa-check"></i><b>5.8</b> Multiple and parallel multiple events</a></li>
+<li class="chapter" data-level="5.9" data-path="events-exceptions.html"><a href="events-exceptions.html#ad-hoc-sub-processes"><i class="fa fa-check"></i><b>5.9</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="5.10" data-path="events-exceptions.html"><a href="events-exceptions.html#call-activities-and-global-tasks"><i class="fa fa-check"></i><b>5.10</b> Call activities and global tasks</a></li>
+<li class="chapter" data-level="5.11" data-path="events-exceptions.html"><a href="events-exceptions.html#loops-and-multi-instance"><i class="fa fa-check"></i><b>5.11</b> Loops and multi-instance</a></li>
+<li class="chapter" data-level="5.12" data-path="events-exceptions.html"><a href="events-exceptions.html#exceptions-and-process-engines"><i class="fa fa-check"></i><b>5.12</b> Exceptions and process engines</a></li>
+<li class="chapter" data-level="5.13" data-path="events-exceptions.html"><a href="events-exceptions.html#typical-mistakes-1"><i class="fa fa-check"></i><b>5.13</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="events-exceptions.html"><a href="events-exceptions.html#exercises-4"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data-artifacts.html"><a href="data-artifacts.html"><i class="fa fa-check"></i><b>6</b> Data, resources and artifacts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="data-artifacts.html"><a href="data-artifacts.html#data-objects"><i class="fa fa-check"></i><b>6.1</b> Data objects</a></li>
+<li class="chapter" data-level="6.2" data-path="data-artifacts.html"><a href="data-artifacts.html#data-stores"><i class="fa fa-check"></i><b>6.2</b> Data stores</a></li>
+<li class="chapter" data-level="6.3" data-path="data-artifacts.html"><a href="data-artifacts.html#reading-and-writing"><i class="fa fa-check"></i><b>6.3</b> Reading and writing</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="data-artifacts.html"><a href="data-artifacts.html#states-and-state-transitions"><i class="fa fa-check"></i><b>6.3.1</b> States and state transitions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="data-artifacts.html"><a href="data-artifacts.html#process-data"><i class="fa fa-check"></i><b>6.4</b> Process data</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="data-artifacts.html"><a href="data-artifacts.html#item-definitions"><i class="fa fa-check"></i><b>6.4.1</b> Item definitions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="data-artifacts.html"><a href="data-artifacts.html#inputs-outputs-and-properties"><i class="fa fa-check"></i><b>6.4.2</b> Inputs, outputs and properties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="data-artifacts.html"><a href="data-artifacts.html#resources-and-performers"><i class="fa fa-check"></i><b>6.5</b> Resources and performers</a></li>
+<li class="chapter" data-level="6.6" data-path="data-artifacts.html"><a href="data-artifacts.html#text-annotations"><i class="fa fa-check"></i><b>6.6</b> Text annotations</a></li>
+<li class="chapter" data-level="6.7" data-path="data-artifacts.html"><a href="data-artifacts.html#groups"><i class="fa fa-check"></i><b>6.7</b> Groups</a></li>
+<li class="chapter" data-level="6.8" data-path="data-artifacts.html"><a href="data-artifacts.html#documentation"><i class="fa fa-check"></i><b>6.8</b> Documentation</a></li>
+<li class="chapter" data-level="6.9" data-path="data-artifacts.html"><a href="data-artifacts.html#typical-mistakes-2"><i class="fa fa-check"></i><b>6.9</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="data-artifacts.html"><a href="data-artifacts.html#exercises-5"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking.html"><a href="checking.html"><i class="fa fa-check"></i><b>7</b> Checking models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking.html"><a href="checking.html#what-tok-check-does"><i class="fa fa-check"></i><b>7.1</b> What <code>tok check</code> does</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="checking.html"><a href="checking.html#severities"><i class="fa fa-check"></i><b>7.1.1</b> Severities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="checking.html"><a href="checking.html#layers-and-codes"><i class="fa fa-check"></i><b>7.2</b> Layers and codes</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="checking.html"><a href="checking.html#the-order-of-the-layers-and-cascades"><i class="fa fa-check"></i><b>7.2.1</b> The order of the layers and cascades</a></li>
+<li class="chapter" data-level="7.2.2" data-path="checking.html"><a href="checking.html#messages-in-polish"><i class="fa fa-check"></i><b>7.2.2</b> Messages in Polish</a></li>
+<li class="chapter" data-level="7.2.3" data-path="checking.html"><a href="checking.html#diagnostics-for-programs"><i class="fa fa-check"></i><b>7.2.3</b> Diagnostics for programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="checking.html"><a href="checking.html#the-bpmn-rules"><i class="fa fa-check"></i><b>7.3</b> The BPMN rules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="checking.html"><a href="checking.html#bpmn-files-from-other-tools"><i class="fa fa-check"></i><b>7.3.1</b> BPMN files from other tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="checking.html"><a href="checking.html#levels-of-the-language-1"><i class="fa fa-check"></i><b>7.4</b> Levels of the language</a></li>
+<li class="chapter" data-level="7.5" data-path="checking.html"><a href="checking.html#bpmn-conformance-classes"><i class="fa fa-check"></i><b>7.5</b> BPMN conformance classes</a></li>
+<li class="chapter" data-level="7.6" data-path="checking.html"><a href="checking.html#the-canonical-form"><i class="fa fa-check"></i><b>7.6</b> The canonical form</a></li>
+<li class="chapter" data-level="7.7" data-path="checking.html"><a href="checking.html#typical-errors-and-their-corrections"><i class="fa fa-check"></i><b>7.7</b> Typical errors and their corrections</a></li>
+<li class="chapter" data-level="7.8" data-path="checking.html"><a href="checking.html#what-a-clean-check-means"><i class="fa fa-check"></i><b>7.8</b> What a clean check means</a></li>
+<li class="chapter" data-level="" data-path="checking.html"><a href="checking.html#exercises-6"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="layout-import.html"><a href="layout-import.html"><i class="fa fa-check"></i><b>8</b> Layout, export and import</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="layout-import.html"><a href="layout-import.html#the-automatic-layout"><i class="fa fa-check"></i><b>8.1</b> The automatic layout</a></li>
+<li class="chapter" data-level="8.2" data-path="layout-import.html"><a href="layout-import.html#pictures-tok-svg"><i class="fa fa-check"></i><b>8.2</b> Pictures: <code>tok svg</code></a></li>
+<li class="chapter" data-level="8.3" data-path="layout-import.html"><a href="layout-import.html#bpmn-files-tok-bpmn"><i class="fa fa-check"></i><b>8.3</b> BPMN files: <code>tok bpmn</code></a></li>
+<li class="chapter" data-level="8.4" data-path="layout-import.html"><a href="layout-import.html#everything-at-once-tok-export"><i class="fa fa-check"></i><b>8.4</b> Everything at once: <code>tok export</code></a></li>
+<li class="chapter" data-level="8.5" data-path="layout-import.html"><a href="layout-import.html#opening-the-files-in-bpmn-tools"><i class="fa fa-check"></i><b>8.5</b> Opening the files in BPMN tools</a></li>
+<li class="chapter" data-level="8.6" data-path="layout-import.html"><a href="layout-import.html#importing-bpmn-files"><i class="fa fa-check"></i><b>8.6</b> Importing BPMN files</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="layout-import.html"><a href="layout-import.html#what-is-kept"><i class="fa fa-check"></i><b>8.6.1</b> What is kept</a></li>
+<li class="chapter" data-level="8.6.2" data-path="layout-import.html"><a href="layout-import.html#what-is-reported"><i class="fa fa-check"></i><b>8.6.2</b> What is reported</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="layout-import.html"><a href="layout-import.html#the-layout-sidecar"><i class="fa fa-check"></i><b>8.7</b> The layout sidecar</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="layout-import.html"><a href="layout-import.html#changing-a-model-that-has-a-sidecar"><i class="fa fa-check"></i><b>8.7.1</b> Changing a model that has a sidecar</a></li>
+<li class="chapter" data-level="8.7.2" data-path="layout-import.html"><a href="layout-import.html#the-round-trip"><i class="fa fa-check"></i><b>8.7.2</b> The round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="layout-import.html"><a href="layout-import.html#importing-dmn-files"><i class="fa fa-check"></i><b>8.8</b> Importing DMN files</a></li>
+<li class="chapter" data-level="8.9" data-path="layout-import.html"><a href="layout-import.html#models-and-sidecars-in-version-control"><i class="fa fa-check"></i><b>8.9</b> Models and sidecars in version control</a></li>
+<li class="chapter" data-level="" data-path="layout-import.html"><a href="layout-import.html#exercises-7"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="decisions.html"><a href="decisions.html"><i class="fa fa-check"></i><b>9</b> Decisions with DMN and FEEL</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="decisions.html"><a href="decisions.html#a-first-decision-table"><i class="fa fa-check"></i><b>9.1</b> A first decision table</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="decisions.html"><a href="decisions.html#testing-with-tok-eval"><i class="fa fa-check"></i><b>9.1.1</b> Testing with <code>tok eval</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="decisions.html"><a href="decisions.html#hit-policies"><i class="fa fa-check"></i><b>9.2</b> Hit policies</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="decisions.html"><a href="decisions.html#overlapping-rules"><i class="fa fa-check"></i><b>9.2.1</b> Overlapping rules</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="decisions.html"><a href="decisions.html#decision-requirements-graphs"><i class="fa fa-check"></i><b>9.3</b> Decision requirements graphs</a></li>
+<li class="chapter" data-level="9.4" data-path="decisions.html"><a href="decisions.html#boxed-expressions"><i class="fa fa-check"></i><b>9.4</b> Boxed expressions</a></li>
+<li class="chapter" data-level="9.5" data-path="decisions.html"><a href="decisions.html#dmn-types"><i class="fa fa-check"></i><b>9.5</b> Types</a></li>
+<li class="chapter" data-level="9.6" data-path="decisions.html"><a href="decisions.html#feel-in-tok"><i class="fa fa-check"></i><b>9.6</b> FEEL in tok</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="decisions.html"><a href="decisions.html#names-with-spaces"><i class="fa fa-check"></i><b>9.6.1</b> Names with spaces</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="decisions.html"><a href="decisions.html#decisions-in-a-process"><i class="fa fa-check"></i><b>9.7</b> Decisions in a process</a></li>
+<li class="chapter" data-level="9.8" data-path="decisions.html"><a href="decisions.html#dmn-export"><i class="fa fa-check"></i><b>9.8</b> DMN export</a></li>
+<li class="chapter" data-level="9.9" data-path="decisions.html"><a href="decisions.html#dmn-import"><i class="fa fa-check"></i><b>9.9</b> DMN import</a></li>
+<li class="chapter" data-level="9.10" data-path="decisions.html"><a href="decisions.html#the-dmn-tck-as-evidence"><i class="fa fa-check"></i><b>9.10</b> The DMN TCK as evidence</a></li>
+<li class="chapter" data-level="9.11" data-path="decisions.html"><a href="decisions.html#typical-mistakes-3"><i class="fa fa-check"></i><b>9.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="decisions.html"><a href="decisions.html#exercises-8"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="executable.html"><a href="executable.html"><i class="fa fa-check"></i><b>10</b> Executable models on Camunda 8</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="executable.html"><a href="executable.html#the-executable-flag"><i class="fa fa-check"></i><b>10.1</b> The executable flag</a></li>
+<li class="chapter" data-level="10.2" data-path="executable.html"><a href="executable.html#the-executable-profile"><i class="fa fa-check"></i><b>10.2</b> The executable profile</a></li>
+<li class="chapter" data-level="10.3" data-path="executable.html"><a href="executable.html#a-complete-executable-model"><i class="fa fa-check"></i><b>10.3</b> A complete executable model</a></li>
+<li class="chapter" data-level="10.4" data-path="executable.html"><a href="executable.html#static-values-and-expressions-the-rule"><i class="fa fa-check"></i><b>10.4</b> Static values and expressions: the <code>=</code> rule</a></li>
+<li class="chapter" data-level="10.5" data-path="executable.html"><a href="executable.html#feel-in-executable-models"><i class="fa fa-check"></i><b>10.5</b> FEEL in executable models</a></li>
+<li class="chapter" data-level="10.6" data-path="executable.html"><a href="executable.html#service-tasks-and-jobs"><i class="fa fa-check"></i><b>10.6</b> Service tasks and jobs</a></li>
+<li class="chapter" data-level="10.7" data-path="executable.html"><a href="executable.html#user-tasks"><i class="fa fa-check"></i><b>10.7</b> User tasks</a></li>
+<li class="chapter" data-level="10.8" data-path="executable.html"><a href="executable.html#camunda-forms"><i class="fa fa-check"></i><b>10.8</b> Camunda forms</a></li>
+<li class="chapter" data-level="10.9" data-path="executable.html"><a href="executable.html#variable-mappings"><i class="fa fa-check"></i><b>10.9</b> Variable mappings</a></li>
+<li class="chapter" data-level="10.10" data-path="executable.html"><a href="executable.html#messages-and-correlation"><i class="fa fa-check"></i><b>10.10</b> Messages and correlation</a></li>
+<li class="chapter" data-level="10.11" data-path="executable.html"><a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities"><i class="fa fa-check"></i><b>10.11</b> Multi-instance, ad-hoc sub-processes and call activities</a>
+<ul>
+<li class="chapter" data-level="10.11.1" data-path="executable.html"><a href="executable.html#multi-instance"><i class="fa fa-check"></i><b>10.11.1</b> Multi-instance</a></li>
+<li class="chapter" data-level="10.11.2" data-path="executable.html"><a href="executable.html#ad-hoc-sub-processes-1"><i class="fa fa-check"></i><b>10.11.2</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="10.11.3" data-path="executable.html"><a href="executable.html#call-activities"><i class="fa fa-check"></i><b>10.11.3</b> Call activities</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="executable.html"><a href="executable.html#compensation-errors-and-listeners"><i class="fa fa-check"></i><b>10.12</b> Compensation, errors and listeners</a></li>
+<li class="chapter" data-level="10.13" data-path="executable.html"><a href="executable.html#version-tags-and-bindings"><i class="fa fa-check"></i><b>10.13</b> Version tags and bindings</a></li>
+<li class="chapter" data-level="10.14" data-path="executable.html"><a href="executable.html#the-rest-connector"><i class="fa fa-check"></i><b>10.14</b> The REST connector</a></li>
+<li class="chapter" data-level="10.15" data-path="executable.html"><a href="executable.html#elements-camunda-8-does-not-execute"><i class="fa fa-check"></i><b>10.15</b> Elements Camunda 8 does not execute</a></li>
+<li class="chapter" data-level="10.16" data-path="executable.html"><a href="executable.html#exporting-with-tok-export"><i class="fa fa-check"></i><b>10.16</b> Exporting with <code>tok export</code></a></li>
+<li class="chapter" data-level="10.17" data-path="executable.html"><a href="executable.html#executable-run"><i class="fa fa-check"></i><b>10.17</b> Deploying and running on Camunda 8 Run</a>
+<ul>
+<li class="chapter" data-level="10.17.1" data-path="executable.html"><a href="executable.html#deploy"><i class="fa fa-check"></i><b>10.17.1</b> Deploy</a></li>
+<li class="chapter" data-level="10.17.2" data-path="executable.html"><a href="executable.html#start-an-instance"><i class="fa fa-check"></i><b>10.17.2</b> Start an instance</a></li>
+<li class="chapter" data-level="10.17.3" data-path="executable.html"><a href="executable.html#complete-a-user-task"><i class="fa fa-check"></i><b>10.17.3</b> Complete a user task</a></li>
+<li class="chapter" data-level="10.17.4" data-path="executable.html"><a href="executable.html#work-on-a-job"><i class="fa fa-check"></i><b>10.17.4</b> Work on a job</a></li>
+<li class="chapter" data-level="10.17.5" data-path="executable.html"><a href="executable.html#publish-a-message"><i class="fa fa-check"></i><b>10.17.5</b> Publish a message</a></li>
+<li class="chapter" data-level="10.17.6" data-path="executable.html"><a href="executable.html#follow-the-instance"><i class="fa fa-check"></i><b>10.17.6</b> Follow the instance</a></li>
+<li class="chapter" data-level="10.17.7" data-path="executable.html"><a href="executable.html#evaluate-a-decision"><i class="fa fa-check"></i><b>10.17.7</b> Evaluate a decision</a></li>
+<li class="chapter" data-level="10.17.8" data-path="executable.html"><a href="executable.html#the-same-run-in-python"><i class="fa fa-check"></i><b>10.17.8</b> The same run in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.18" data-path="executable.html"><a href="executable.html#camunda-8-saas-and-self-managed"><i class="fa fa-check"></i><b>10.18</b> Camunda 8 SaaS and Self-Managed</a></li>
+<li class="chapter" data-level="10.19" data-path="executable.html"><a href="executable.html#how-the-translation-is-verified"><i class="fa fa-check"></i><b>10.19</b> How the translation is verified</a></li>
+<li class="chapter" data-level="" data-path="executable.html"><a href="executable.html#exercises-9"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>11</b> Simulation and process mining</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simulation.html"><a href="simulation.html#the-simulation-layer"><i class="fa fa-check"></i><b>11.1</b> The simulation layer</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="simulation.html"><a href="simulation.html#distributions"><i class="fa fa-check"></i><b>11.1.1</b> Distributions</a></li>
+<li class="chapter" data-level="11.1.2" data-path="simulation.html"><a href="simulation.html#choosing-a-branch"><i class="fa fa-check"></i><b>11.1.2</b> Choosing a branch</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="simulation.html"><a href="simulation.html#a-simulation-model"><i class="fa fa-check"></i><b>11.2</b> A simulation model</a></li>
+<li class="chapter" data-level="11.3" data-path="simulation.html"><a href="simulation.html#running-tok-sim"><i class="fa fa-check"></i><b>11.3</b> Running <code>tok sim</code></a></li>
+<li class="chapter" data-level="11.4" data-path="simulation.html"><a href="simulation.html#reading-the-indicators"><i class="fa fa-check"></i><b>11.4</b> Reading the indicators</a></li>
+<li class="chapter" data-level="11.5" data-path="simulation.html"><a href="simulation.html#seeds-cases-and-replications"><i class="fa fa-check"></i><b>11.5</b> Seeds, cases and replications</a></li>
+<li class="chapter" data-level="11.6" data-path="simulation.html"><a href="simulation.html#comparing-scenarios"><i class="fa fa-check"></i><b>11.6</b> Comparing scenarios</a></li>
+<li class="chapter" data-level="11.7" data-path="simulation.html"><a href="simulation.html#event-logs"><i class="fa fa-check"></i><b>11.7</b> Event logs</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="simulation.html"><a href="simulation.html#xes-for-process-mining-tools"><i class="fa fa-check"></i><b>11.7.1</b> XES for process-mining tools</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="simulation.html"><a href="simulation.html#process-mining-on-simulated-logs"><i class="fa fa-check"></i><b>11.8</b> Process mining on simulated logs</a></li>
+<li class="chapter" data-level="11.9" data-path="simulation.html"><a href="simulation.html#simulation-in-r"><i class="fa fa-check"></i><b>11.9</b> Simulation in R</a></li>
+<li class="chapter" data-level="11.10" data-path="simulation.html"><a href="simulation.html#simulation-in-python"><i class="fa fa-check"></i><b>11.10</b> Simulation in Python</a></li>
+<li class="chapter" data-level="11.11" data-path="simulation.html"><a href="simulation.html#native-simulation-in-julia"><i class="fa fa-check"></i><b>11.11</b> Native simulation in Julia</a></li>
+<li class="chapter" data-level="11.12" data-path="simulation.html"><a href="simulation.html#calibration-on-an-event-log"><i class="fa fa-check"></i><b>11.12</b> Calibration on an event log</a></li>
+<li class="chapter" data-level="11.13" data-path="simulation.html"><a href="simulation.html#what-the-simulator-does-not-do"><i class="fa fa-check"></i><b>11.13</b> What the simulator does not do</a></li>
+<li class="chapter" data-level="" data-path="simulation.html"><a href="simulation.html#exercises-10"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="editors.html"><a href="editors.html"><i class="fa fa-check"></i><b>12</b> Editors and the playground</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="editors.html"><a href="editors.html#the-vs-code-extension"><i class="fa fa-check"></i><b>12.1</b> The VS Code extension</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="editors.html"><a href="editors.html#installing"><i class="fa fa-check"></i><b>12.1.1</b> Installing</a></li>
+<li class="chapter" data-level="12.1.2" data-path="editors.html"><a href="editors.html#what-you-see-while-editing"><i class="fa fa-check"></i><b>12.1.2</b> What you see while editing</a></li>
+<li class="chapter" data-level="12.1.3" data-path="editors.html"><a href="editors.html#navigation-and-rename"><i class="fa fa-check"></i><b>12.1.3</b> Navigation and rename</a></li>
+<li class="chapter" data-level="12.1.4" data-path="editors.html"><a href="editors.html#the-diagram-beside-the-text"><i class="fa fa-check"></i><b>12.1.4</b> The diagram beside the text</a></li>
+<li class="chapter" data-level="12.1.5" data-path="editors.html"><a href="editors.html#commands-and-settings"><i class="fa fa-check"></i><b>12.1.5</b> Commands and settings</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="editors.html"><a href="editors.html#the-language-server-for-other-editors"><i class="fa fa-check"></i><b>12.2</b> The language server for other editors</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="editors.html"><a href="editors.html#installing-the-server"><i class="fa fa-check"></i><b>12.2.1</b> Installing the server</a></li>
+<li class="chapter" data-level="12.2.2" data-path="editors.html"><a href="editors.html#what-an-editor-needs"><i class="fa fa-check"></i><b>12.2.2</b> What an editor needs</a></li>
+<li class="chapter" data-level="12.2.3" data-path="editors.html"><a href="editors.html#neovim"><i class="fa fa-check"></i><b>12.2.3</b> Neovim</a></li>
+<li class="chapter" data-level="12.2.4" data-path="editors.html"><a href="editors.html#helix"><i class="fa fa-check"></i><b>12.2.4</b> Helix</a></li>
+<li class="chapter" data-level="12.2.5" data-path="editors.html"><a href="editors.html#emacs"><i class="fa fa-check"></i><b>12.2.5</b> Emacs</a></li>
+<li class="chapter" data-level="12.2.6" data-path="editors.html"><a href="editors.html#other-editors"><i class="fa fa-check"></i><b>12.2.6</b> Other editors</a></li>
+<li class="chapter" data-level="12.2.7" data-path="editors.html"><a href="editors.html#requests-for-editor-extensions"><i class="fa fa-check"></i><b>12.2.7</b> Requests for editor extensions</a></li>
+<li class="chapter" data-level="12.2.8" data-path="editors.html"><a href="editors.html#limits"><i class="fa fa-check"></i><b>12.2.8</b> Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="editors.html"><a href="editors.html#the-playground-in-the-browser"><i class="fa fa-check"></i><b>12.3</b> The playground in the browser</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="editors.html"><a href="editors.html#the-page"><i class="fa fa-check"></i><b>12.3.1</b> The page</a></li>
+<li class="chapter" data-level="12.3.2" data-path="editors.html"><a href="editors.html#sharing-a-model-by-a-link"><i class="fa fa-check"></i><b>12.3.2</b> Sharing a model by a link</a></li>
+<li class="chapter" data-level="12.3.3" data-path="editors.html"><a href="editors.html#offline-and-privacy"><i class="fa fa-check"></i><b>12.3.3</b> Offline and privacy</a></li>
+<li class="chapter" data-level="12.3.4" data-path="editors.html"><a href="editors.html#limits-of-the-browser"><i class="fa fa-check"></i><b>12.3.4</b> Limits of the browser</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="editors.html"><a href="editors.html#choosing-a-tool"><i class="fa fa-check"></i><b>12.4</b> Choosing a tool</a></li>
+<li class="chapter" data-level="" data-path="editors.html"><a href="editors.html#exercises-11"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>13</b> Programming interfaces</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="programming.html"><a href="programming.html#one-engine-many-bindings"><i class="fa fa-check"></i><b>13.1</b> One engine, many bindings</a></li>
+<li class="chapter" data-level="13.2" data-path="programming.html"><a href="programming.html#python"><i class="fa fa-check"></i><b>13.2</b> Python</a></li>
+<li class="chapter" data-level="13.3" data-path="programming.html"><a href="programming.html#r-1"><i class="fa fa-check"></i><b>13.3</b> R</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="programming.html"><a href="programming.html#the-knitr-engine"><i class="fa fa-check"></i><b>13.3.1</b> The knitr engine</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="programming.html"><a href="programming.html#julia-1"><i class="fa fa-check"></i><b>13.4</b> Julia</a></li>
+<li class="chapter" data-level="13.5" data-path="programming.html"><a href="programming.html#javascript-and-webassembly"><i class="fa fa-check"></i><b>13.5</b> JavaScript and WebAssembly</a></li>
+<li class="chapter" data-level="13.6" data-path="programming.html"><a href="programming.html#the-c-interface"><i class="fa fa-check"></i><b>13.6</b> The C interface</a></li>
+<li class="chapter" data-level="13.7" data-path="programming.html"><a href="programming.html#the-rust-crates"><i class="fa fa-check"></i><b>13.7</b> The Rust crates</a></li>
+<li class="chapter" data-level="13.8" data-path="programming.html"><a href="programming.html#which-interface-to-choose"><i class="fa fa-check"></i><b>13.8</b> Which interface to choose</a></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#exercises-12"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="agents.html"><a href="agents.html"><i class="fa fa-check"></i><b>14</b> Working with AI agents</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="agents.html"><a href="agents.html#why-a-text-language-suits-agents"><i class="fa fa-check"></i><b>14.1</b> Why a text language suits agents</a></li>
+<li class="chapter" data-level="14.2" data-path="agents.html"><a href="agents.html#the-skill-tok-modelling"><i class="fa fa-check"></i><b>14.2</b> The skill <code>tok-modelling</code></a></li>
+<li class="chapter" data-level="14.3" data-path="agents.html"><a href="agents.html#the-mcp-server"><i class="fa fa-check"></i><b>14.3</b> The MCP server</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="agents.html"><a href="agents.html#starting-the-server"><i class="fa fa-check"></i><b>14.3.1</b> Starting the server</a></li>
+<li class="chapter" data-level="14.3.2" data-path="agents.html"><a href="agents.html#tools"><i class="fa fa-check"></i><b>14.3.2</b> Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="agents.html"><a href="agents.html#configuring-clients"><i class="fa fa-check"></i><b>14.4</b> Configuring clients</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="agents.html"><a href="agents.html#clients-with-an-mcpservers-configuration"><i class="fa fa-check"></i><b>14.4.1</b> Clients with an <code>mcpServers</code> configuration</a></li>
+<li class="chapter" data-level="14.4.2" data-path="agents.html"><a href="agents.html#vs-code"><i class="fa fa-check"></i><b>14.4.2</b> VS Code</a></li>
+<li class="chapter" data-level="14.4.3" data-path="agents.html"><a href="agents.html#claude-code"><i class="fa fa-check"></i><b>14.4.3</b> Claude Code</a></li>
+<li class="chapter" data-level="14.4.4" data-path="agents.html"><a href="agents.html#other-agents"><i class="fa fa-check"></i><b>14.4.4</b> Other agents</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="agents.html"><a href="agents.html#working-without-mcp"><i class="fa fa-check"></i><b>14.5</b> Working without MCP</a></li>
+<li class="chapter" data-level="14.6" data-path="agents.html"><a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file"><i class="fa fa-check"></i><b>14.6</b> A session: from a table of steps to a BPMN file</a></li>
+<li class="chapter" data-level="14.7" data-path="agents.html"><a href="agents.html#reviewing-what-an-agent-produces"><i class="fa fa-check"></i><b>14.7</b> Reviewing what an agent produces</a></li>
+<li class="chapter" data-level="" data-path="agents.html"><a href="agents.html#exercises-13"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="integrations.html"><a href="integrations.html"><i class="fa fa-check"></i><b>15</b> Integrations</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="integrations.html"><a href="integrations.html#continuous-integration-on-github"><i class="fa fa-check"></i><b>15.1</b> Continuous integration on GitHub</a></li>
+<li class="chapter" data-level="15.2" data-path="integrations.html"><a href="integrations.html#other-ci-systems"><i class="fa fa-check"></i><b>15.2</b> Other CI systems</a></li>
+<li class="chapter" data-level="15.3" data-path="integrations.html"><a href="integrations.html#a-pre-commit-hook"><i class="fa fa-check"></i><b>15.3</b> A pre-commit hook</a></li>
+<li class="chapter" data-level="15.4" data-path="integrations.html"><a href="integrations.html#models-in-documents"><i class="fa fa-check"></i><b>15.4</b> Models in documents</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="integrations.html"><a href="integrations.html#r-markdown-and-quarto"><i class="fa fa-check"></i><b>15.4.1</b> R Markdown and Quarto</a></li>
+<li class="chapter" data-level="15.4.2" data-path="integrations.html"><a href="integrations.html#jupyter"><i class="fa fa-check"></i><b>15.4.2</b> Jupyter</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="integrations.html"><a href="integrations.html#bpmn-tools"><i class="fa fa-check"></i><b>15.5</b> BPMN tools</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="integrations.html"><a href="integrations.html#how-much-survives-a-round-trip"><i class="fa fa-check"></i><b>15.5.1</b> How much survives a round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="integrations.html"><a href="integrations.html#camunda-8"><i class="fa fa-check"></i><b>15.6</b> Camunda 8</a></li>
+<li class="chapter" data-level="15.7" data-path="integrations.html"><a href="integrations.html#process-mining-tools"><i class="fa fa-check"></i><b>15.7</b> Process-mining tools</a></li>
+<li class="chapter" data-level="15.8" data-path="integrations.html"><a href="integrations.html#decisions-in-other-dmn-engines"><i class="fa fa-check"></i><b>15.8</b> Decisions in other DMN engines</a></li>
+<li class="chapter" data-level="15.9" data-path="integrations.html"><a href="integrations.html#a-version-control-workflow"><i class="fa fa-check"></i><b>15.9</b> A version-control workflow</a></li>
+<li class="chapter" data-level="" data-path="integrations.html"><a href="integrations.html#exercises-14"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="symbols.html"><a href="symbols.html"><i class="fa fa-check"></i><b>A</b> BPMN symbols</a>
+<ul>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events"><i class="fa fa-check"></i>Start events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events-of-event-sub-processes"><i class="fa fa-check"></i>Start events of event sub-processes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#intermediate-events"><i class="fa fa-check"></i>Intermediate events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#boundary-events-1"><i class="fa fa-check"></i>Boundary events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#end-events"><i class="fa fa-check"></i>End events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activities"><i class="fa fa-check"></i>Activities</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activity-markers"><i class="fa fa-check"></i>Activity markers</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#gateways-1"><i class="fa fa-check"></i>Gateways</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#connections"><i class="fa fa-check"></i>Connections</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#artifacts"><i class="fa fa-check"></i>Artifacts</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#pools-and-lanes"><i class="fa fa-check"></i>Pools and lanes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#conversations-1"><i class="fa fa-check"></i>Conversations</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#choreographies-1"><i class="fa fa-check"></i>Choreographies</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="cheatsheet.html"><a href="cheatsheet.html"><i class="fa fa-check"></i><b>B</b> Language on one page</a></li>
+<li class="chapter" data-level="C" data-path="commands.html"><a href="commands.html"><i class="fa fa-check"></i><b>C</b> Command reference</a></li>
+<li class="chapter" data-level="D" data-path="diagnostics.html"><a href="diagnostics.html"><i class="fa fa-check"></i><b>D</b> Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-1"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-2"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-3"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-4"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-5"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-6"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-7"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-8"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-9"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="E" data-path="conformance.html"><a href="conformance.html"><i class="fa fa-check"></i><b>E</b> Conformance with Camunda 8</a>
+<ul>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-10"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-11"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-12"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-13"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-14"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-15"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>F</b> Glossary</a></li>
+<li class="chapter" data-level="G" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>G</b> References</a>
+<ul>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#standards"><i class="fa fa-check"></i>Standards</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tools-and-test-suites"><i class="fa fa-check"></i>Tools and test suites</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tok"><i class="fa fa-check"></i>tok</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+<li><a href="playground/" target="_blank">Playground in the browser</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tok: Process Models as Text</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simulation" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Simulation and process mining<a href="simulation.html#simulation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="goals">
+<p><strong>In this chapter</strong> you will add durations, resources, case variables, branch probabilities and arrivals to a model · run <code>tok sim</code> and read its indicators: end events, cycle time, waiting, processing and utilization · compare scenarios with the same seed and with replications · write the event log as CSV and XES and open it in process-mining tools · simulate from R and Python, run large experiments natively in Julia with <code>Tok.Sim</code> and calibrate a model on an event log with <code>Tok.Fit</code></p>
+</div>
+<p>A process model shows what happens and who does it. It does not show how long the work takes when there are many cases and few people. A head of an archive asks questions of exactly that kind: how long do applicants wait for an answer when requests double, would a third archivist shorten the wait or sit idle, what would change if impossible requests were refused at registration? Trying the answers out in practice is expensive: hiring someone or changing a procedure is a decision for months.</p>
+<p><strong>Simulation</strong> answers such questions on the model. The simulator sends hundreds of invented cases through the process, draws working times and decisions from distributions, makes each case wait while the people it needs are busy, and measures what happens. In tok the simulation is not a separate tool with a separate model: the parameters are written into the same <code>.tok</code> file, and the same file still exports the same BPMN.</p>
+<p>Simulation does not predict the future. It shows the consequences of assumptions. If you assume that a search in the holdings takes six hours on average and in reality it takes ten, the results will be wrong. Every simulation result is therefore reported together with its assumptions, and the last section of this chapter shows how to estimate the assumptions from data.</p>
+<div id="the-simulation-layer" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> The simulation layer<a href="simulation.html#the-simulation-layer" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Three statements and six attributes make a model simulable:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statement or attribute</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>simulate cases=N seed=N arrival="DIST" start="DATETIME"</code></td>
+<td>the number of cases (default 100), the seed of the random numbers, the time between consecutive arrivals, and the simulated time of the first arrival (default <code>2027-01-04T08:00</code>)</td>
+</tr>
+<tr class="even">
+<td><code>resource ID "Label" count=N</code></td>
+<td>a pool of <code>N</code> interchangeable performers</td>
+</tr>
+<tr class="odd">
+<td><code>variable NAME "DIST"</code></td>
+<td>a case variable, drawn once per case when it starts</td>
+</tr>
+<tr class="even">
+<td>activity <code>by=ID</code></td>
+<td>the activity waits for a free performer of resource <code>ID</code> (first come, first served)</td>
+</tr>
+<tr class="odd">
+<td>activity <code>duration="DIST"</code></td>
+<td>the processing time; without it, zero</td>
+</tr>
+<tr class="even">
+<td>activity <code>assign="NAME=DIST; …"</code></td>
+<td>variables set when the activity completes, such as a decision a person takes</td>
+</tr>
+<tr class="odd">
+<td>catch event, receive task or message boundary event <code>delay="DIST"</code></td>
+<td>the time until the awaited message or signal arrives</td>
+</tr>
+<tr class="even">
+<td>flow <code>p=NUMBER</code></td>
+<td>the probability of the branch at an <code>xor</code> or <code>or</code> gateway without conditions</td>
+</tr>
+</tbody>
+</table>
+<p>None of them changes the BPMN export: the diagram in Camunda Modeler looks the same with and without them. In a document of language 0.5 or later <code>resource</code> and <code>by=</code> additionally export BPMN resources and performers (Chapter <a href="data-artifacts.html#data-artifacts">6</a>); <code>count=</code> stays a simulation setting.</p>
+<div id="distributions" class="section level3 hasAnchor" number="11.1.1">
+<h3><span class="header-section-number">11.1.1</span> Distributions<a href="simulation.html#distributions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Working times are never constant. A search in the holdings takes an hour one day and two days the next. Times are therefore written as <strong>distributions</strong>, which describe how often short and long cases occur. A distribution is a duration (<code>30m</code>), a number, or a call. Durations use the units <code>s</code>, <code>m</code> (minutes), <code>h</code> and <code>d</code>; inside <code>unif</code>, <code>tri</code>, <code>norm</code>, <code>lnorm</code> and <code>exp</code> the arguments are either all durations or all numbers.</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Call</th>
+<th>Meaning</th>
+<th>When to use it</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fixed(x)</code> or <code>x</code></td>
+<td>always <code>x</code></td>
+<td>the work always takes the same time</td>
+<td><code>fixed(15m)</code>, <code>5m</code></td>
+</tr>
+<tr class="even">
+<td><code>tri(a, mode, b)</code></td>
+<td>triangular: minimum, most likely, maximum</td>
+<td>no data, but the people who do the work can name the shortest, the usual and the longest time</td>
+<td><code>tri(5m, 10m, 20m)</code></td>
+</tr>
+<tr class="odd">
+<td><code>lnorm(mean, sd)</code></td>
+<td>log-normal, given by the <strong>mean and standard deviation of the result</strong></td>
+<td>data from a register: most cases are short, a few are very long</td>
+<td><code>lnorm(6h, 3h)</code></td>
+</tr>
+<tr class="even">
+<td><code>norm(mean, sd)</code></td>
+<td>normal; a negative duration becomes 0</td>
+<td>symmetric variation around a mean</td>
+<td><code>norm(1h, 10m)</code></td>
+</tr>
+<tr class="odd">
+<td><code>exp(mean)</code></td>
+<td>exponential with the given mean</td>
+<td>the time between independent arrivals</td>
+<td><code>exp(4h)</code></td>
+</tr>
+<tr class="even">
+<td><code>unif(a, b)</code></td>
+<td>uniform between <code>a</code> and <code>b</code></td>
+<td>every value of a range is equally likely</td>
+<td><code>unif(20, 300)</code></td>
+</tr>
+<tr class="odd">
+<td><code>bern(p)</code></td>
+<td><code>true</code> with probability <code>p</code></td>
+<td>an event happens or not</td>
+<td><code>bern(0.9)</code></td>
+</tr>
+<tr class="even">
+<td><code>cat(a=p, b=q, …)</code></td>
+<td>one of the labels with the given probabilities</td>
+<td>one of several categories</td>
+<td><code>cat(genealogical=0.6, property=0.4)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note the parameters of <code>lnorm</code>: they are the mean and standard deviation of the duration itself, not of its logarithm, so you can take them directly from a register. In <code>cat</code>, the labels <code>true</code>, <code>false</code> and numbers become booleans and numbers. <code>assign=</code> sets several variables at once, separated by semicolons: <code>assign="complete=bern(0.9); urgent=bern(0.1)"</code>.</p>
+</div>
+<div id="choosing-a-branch" class="section level3 hasAnchor" number="11.1.2">
+<h3><span class="header-section-number">11.1.2</span> Choosing a branch<a href="simulation.html#choosing-a-branch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>At a splitting gateway the simulator chooses the branch in one of two ways. If the outgoing flows have conditions (<code>when=</code>), it evaluates them on the variables of the case, exactly as an engine would; the first flow in document order whose condition holds is taken, otherwise the default flow. If the flows have probabilities (<code>p=</code>), it draws one. An <code>or</code> gateway activates every flow whose condition holds or whose probability is drawn, each independently.</p>
+<p>The check watches over both: <code>S002</code> reports probabilities of an <code>xor</code> gateway that do not sum to 1, <code>S003</code> a gateway with several outgoing flows and neither conditions nor probabilities in a document with a <code>simulate</code> statement (the simulator would always take the first flow), and <code>S001</code> an invalid distribution or probability.</p>
+</div>
+</div>
+<div id="a-simulation-model" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> A simulation model<a href="simulation.html#a-simulation-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A state archive answers genealogical queries. A registry clerk registers each request. One of two archivists assesses it; one request in ten lacks details, the archivist asks the applicant for them, and the applicant answers after three days on average. Fifteen percent of the requests cannot be answered and are refused; the rest are searched for in the holdings and answered. A request arrives every four hours on average.</p>
+<pre class="tok"><code>tok 1.0 &quot;Archive queries: workload simulation&quot;
+
+pool archive &quot;State archive&quot;
+  lane registry &quot;Registry&quot;
+    start arrived &quot;Query request received&quot;
+    user register &quot;Register the request&quot; by=clerks duration=&quot;tri(5m, 10m, 20m)&quot;
+    send refuse &quot;Send a refusal&quot; by=clerks duration=&quot;tri(5m, 10m, 15m)&quot;
+    end refused &quot;Request refused&quot;
+    send answer &quot;Send the answer&quot; by=clerks duration=&quot;tri(5m, 10m, 15m)&quot;
+    end answered &quot;Query answered&quot;
+  lane archivist &quot;Archivist&quot;
+    user assess &quot;Assess the request&quot; by=archivists duration=&quot;lnorm(30m, 10m)&quot; assign=&quot;complete=bern(0.9)&quot;
+    xor is-complete &quot;Is the request complete?&quot;
+    send ask &quot;Ask for missing details&quot; by=archivists duration=&quot;5m&quot;
+    catch details &quot;Details received&quot; message=&quot;Details&quot; delay=&quot;exp(3d)&quot;
+    xor feasible &quot;Is the query feasible?&quot;
+    user search &quot;Search the holdings&quot; by=archivists duration=&quot;lnorm(6h, 3h)&quot;
+    user write &quot;Write the answer&quot; by=archivists duration=&quot;tri(30m, 1h, 2h)&quot;
+
+flow arrived -&gt; register -&gt; assess -&gt; is-complete
+flow is-complete -&gt; feasible &quot;yes&quot; when=&quot;complete = true&quot;
+flow is-complete -&gt; ask &quot;no&quot; default
+flow ask -&gt; details -&gt; assess
+flow feasible -&gt; search &quot;yes&quot; p=0.85
+flow feasible -&gt; refuse &quot;no&quot; p=0.15
+flow refuse -&gt; refused
+flow search -&gt; write -&gt; answer -&gt; answered
+
+simulate cases=300 seed=7 arrival=&quot;exp(4h)&quot;
+resource archivists &quot;Archivists&quot; count=2
+resource clerks &quot;Registry clerks&quot; count=1</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simulation-queries-diagram"></span>
+<img src="examples/11-archive-queries.svg" alt="Archive queries: the model with its simulation parameters. The diagram is the same as without them." width="100%" />
+<p class="caption">
+Figure 11.1: Archive queries: the model with its simulation parameters. The diagram is the same as without them.
+</p>
+</div>
+<p><a class="download" href="examples/11-archive-queries.tok" download>Download the model (.tok)</a> <a class="download" href="examples/11-archive-queries.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>The model combines both ways of choosing a branch. The assessment sets the variable <code>complete</code> with <code>assign="complete=bern(0.9)"</code>, and the gateway <code>is-complete</code> tests it with a condition, as an executable model would. The gateway <code>feasible</code> has no data to decide on, so it draws with <code>p=0.85</code> and <code>p=0.15</code>. The catch event <code>details</code> waits for the applicant with <code>delay="exp(3d)"</code>, and the case then goes back to the assessment, which draws <code>complete</code> again.</p>
+</div>
+<div id="running-tok-sim" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Running <code>tok sim</code><a href="simulation.html#running-tok-sim" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>tok sim 11-archive-queries.tok</code></pre>
+<pre><code>Simulation (seed 7): 300 cases started, 300 finished
+
+End events
+  answered                          253   84.3%
+  refused                            47   15.7%
+
+Cycle time: mean 1.2 d, median 19.1 h, 90th percentile 2.3 d
+
+Activities  (count, mean wait, mean processing)
+  Register the request              300        48 s    11.7 min
+  Assess the request                343       4.5 h    29.7 min
+  Search the holdings               253       4.5 h       5.7 h
+  Write the answer                  253       4.4 h       1.2 h
+  Send the answer                   253        32 s     9.8 min
+  Send a refusal                     47        33 s     9.7 min
+  Ask for missing details            43       3.1 h     5.0 min
+
+Resources (utilization)
+  Archivists                     x2    77.5%
+  Registry clerks                x1     8.7%</code></pre>
+<p>The run uses the 300 cases and the seed 7 of the <code>simulate</code> statement. <code>--cases N</code> and <code>--seed N</code> override them for one run, <code>--lang pl</code> prints the report in Polish and <code>--json</code> prints the indicators as JSON for programs.</p>
+</div>
+<div id="reading-the-indicators" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> Reading the indicators<a href="simulation.html#reading-the-indicators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Indicator</th>
+<th>What it means</th>
+<th>In the example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>end events</strong></td>
+<td>how many cases ended at each end event</td>
+<td>84% answered, 16% refused (the model assumes 15%; the difference is the luck of the draw)</td>
+</tr>
+<tr class="even">
+<td><strong>cycle time</strong></td>
+<td>the time from the arrival of a case to its end</td>
+<td>1.2 days on average</td>
+</tr>
+<tr class="odd">
+<td><strong>median</strong></td>
+<td>half of the cases took less, half took more</td>
+<td>19.1 hours</td>
+</tr>
+<tr class="even">
+<td><strong>90th percentile</strong></td>
+<td>nine cases in ten ended within this time</td>
+<td>2.3 days</td>
+</tr>
+<tr class="odd">
+<td><strong>count</strong></td>
+<td>completed instances of the activity</td>
+<td>343 assessments for 300 requests: 43 were assessed twice</td>
+</tr>
+<tr class="even">
+<td><strong>mean wait</strong></td>
+<td>how long a case waited for a free performer before the activity</td>
+<td>about 4.5 hours before each task of the archivists</td>
+</tr>
+<tr class="odd">
+<td><strong>mean processing</strong></td>
+<td>how long the work itself took</td>
+<td>5.7 hours of search</td>
+</tr>
+<tr class="even">
+<td><strong>utilization</strong></td>
+<td>the busy time of a resource divided by its count times the simulated period</td>
+<td>archivists 77.5%, clerk 8.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The most important finding is in the waiting column. Before each of the three main tasks of the archivists a case waits about four and a half hours, more than thirteen hours in total, while the work itself takes about seven. The <strong>bottleneck</strong> of the process is the archivists, not the registry. The clerk, busy less than a tenth of the time, could take on more work.</p>
+<p>The utilization can be checked by hand, which is a good habit before you trust any simulation. Per request the archivists spend about 0.57 hours on assessments (343 assessments of 29.7 minutes for 300 requests), a little on asking for details, and for the 84% of requests that are answered about 5.7 + 1.2 hours on search and writing: roughly 6.4 hours in total. With a request every four hours and two archivists, they are busy about 6.4 / (2 × 4) ≈ 80% of the time; the simulation gives 77.5%, because its simulated period also includes the time after the last arrival, while the last cases are finished. What the arithmetic cannot tell you is how long the queues are. That is what the simulation adds: at 80% utilization, every cluster of arrivals builds a queue that takes long to clear.</p>
+<p>The gap between the median (19.1 h) and the mean (1.2 d) has a second cause, which the model makes visible: the requests that wait three days for missing details. They are few, but long, and they pull the mean and the 90th percentile up. For an applicant the predictability of the answer matters as much as its average, which is why reports give percentiles and not only the mean.</p>
+</div>
+<div id="seeds-cases-and-replications" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> Seeds, cases and replications<a href="simulation.html#seeds-cases-and-replications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The simulator draws all its random numbers from one generator seeded with <code>seed=</code>. The same document and the same seed always give the same log and the same indicators, number by number, on the command line, in Python, in R and in the playground, because all of them run the same engine. A result in a report can therefore be checked by anyone who has the file.</p>
+<p>A seed does not make two scenarios draw the same cases, however. When you change the number of performers, activities finish in another order and the following draws fall to other cases. This is why the share of refusals differs between runs although the model of refusals is the same. Compare scenarios by indicators over hundreds of cases, never by the fate of single cases, and when the differences are small, by several <strong>replications</strong>: runs with different seeds whose results you average. A short Python script (Chapter <a href="programming.html#programming">13</a>) does this for two, three and four archivists, with twenty seeds each:</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb185-1"><a href="simulation.html#cb185-1" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span>
+<span id="cb185-2"><a href="simulation.html#cb185-2" tabindex="-1"></a><span class="im">from</span> tok <span class="im">import</span> api</span>
+<span id="cb185-3"><a href="simulation.html#cb185-3" tabindex="-1"></a></span>
+<span id="cb185-4"><a href="simulation.html#cb185-4" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb185-5"><a href="simulation.html#cb185-5" tabindex="-1"></a></span>
+<span id="cb185-6"><a href="simulation.html#cb185-6" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> (<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>):</span>
+<span id="cb185-7"><a href="simulation.html#cb185-7" tabindex="-1"></a>    model <span class="op">=</span> text.replace(<span class="st">&#39;count=2&#39;</span>, <span class="st">&#39;count=</span><span class="sc">%d</span><span class="st">&#39;</span> <span class="op">%</span> n, <span class="dv">1</span>)</span>
+<span id="cb185-8"><a href="simulation.html#cb185-8" tabindex="-1"></a>    runs <span class="op">=</span> [api.simulate(model, cases<span class="op">=</span><span class="dv">300</span>, seed<span class="op">=</span>s).kpi() <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">21</span>)]</span>
+<span id="cb185-9"><a href="simulation.html#cb185-9" tabindex="-1"></a>    cycle <span class="op">=</span> mean(k[<span class="st">&quot;cycle_time&quot;</span>][<span class="st">&quot;mean_s&quot;</span>] <span class="cf">for</span> k <span class="kw">in</span> runs) <span class="op">/</span> <span class="dv">3600</span></span>
+<span id="cb185-10"><a href="simulation.html#cb185-10" tabindex="-1"></a>    p90 <span class="op">=</span> mean(k[<span class="st">&quot;cycle_time&quot;</span>][<span class="st">&quot;p90_s&quot;</span>] <span class="cf">for</span> k <span class="kw">in</span> runs) <span class="op">/</span> <span class="dv">3600</span></span>
+<span id="cb185-11"><a href="simulation.html#cb185-11" tabindex="-1"></a>    busy <span class="op">=</span> mean(k[<span class="st">&quot;resources&quot;</span>][<span class="st">&quot;archivists&quot;</span>][<span class="st">&quot;utilization&quot;</span>] <span class="cf">for</span> k <span class="kw">in</span> runs)</span>
+<span id="cb185-12"><a href="simulation.html#cb185-12" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;</span><span class="sc">%d</span><span class="st"> archivists: mean cycle </span><span class="sc">%.1f</span><span class="st"> h, p90 </span><span class="sc">%.1f</span><span class="st"> h, utilization %.0f</span><span class="sc">%%</span><span class="st">&quot;</span> <span class="op">%</span> (n, cycle, p90, <span class="dv">100</span> <span class="op">*</span> busy))</span></code></pre></div>
+<pre><code>2 archivists: mean cycle 26.4 h, p90 47.1 h, utilization 73%
+3 archivists: mean cycle 16.3 h, p90 20.9 h, utilization 49%
+4 archivists: mean cycle 14.3 h, p90 17.3 h, utilization 38%</code></pre>
+<p>The third archivist removes most of the queue: the mean cycle time falls by ten hours and the 90th percentile by more than a day. The fourth adds little, because most of the remaining time is the work itself and the applicants’ answers. Utilization falls with every new person. Low utilization is not wasted capacity: it is what lets a team absorb a sudden rush of requests and do work the model does not contain. The simulation gives the head of the archive numbers, not the decision.</p>
+</div>
+<div id="comparing-scenarios" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> Comparing scenarios<a href="simulation.html#comparing-scenarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A scenario is a copy of the model with one change. The model with three archivists differs in one line:</p>
+<pre class="tok"><code>resource archivists &quot;Archivists&quot; count=3</code></pre>
+<p><a class="download" href="examples/11-archive-queries-3.tok" download>Download the scenario with three archivists (.tok)</a></p>
+<pre><code>Simulation (seed 7): 300 cases started, 300 finished
+
+End events
+  answered                          243   81.0%
+  refused                            57   19.0%
+
+Cycle time: mean 19.3 h, median 8.8 h, 90th percentile 2.0 d
+
+Activities  (count, mean wait, mean processing)
+  Register the request              300        43 s    11.4 min
+  Assess the request                346    30.3 min    29.1 min
+  Search the holdings               243    35.2 min       6.2 h
+  Write the answer                  243    40.1 min       1.1 h
+  Send the answer                   243        31 s     9.9 min
+  Ask for missing details            46    14.0 min     5.0 min
+  Send a refusal                     57         0 s     9.5 min
+
+Resources (utilization)
+  Archivists                     x3    54.2%
+  Registry clerks                x1     8.9%</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Indicator</th>
+<th>2 archivists</th>
+<th>3 archivists</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mean cycle time</td>
+<td>1.2 d</td>
+<td>19.3 h</td>
+</tr>
+<tr class="even">
+<td>median</td>
+<td>19.1 h</td>
+<td>8.8 h</td>
+</tr>
+<tr class="odd">
+<td>90th percentile</td>
+<td>2.3 d</td>
+<td>2.0 d</td>
+</tr>
+<tr class="even">
+<td>wait before the assessment</td>
+<td>4.5 h</td>
+<td>30.3 min</td>
+</tr>
+<tr class="odd">
+<td>utilization of the archivists</td>
+<td>77.5%</td>
+<td>54.2%</td>
+</tr>
+</tbody>
+</table>
+<p>The median falls to less than half and the waits before the archivists’ tasks almost disappear. The 90th percentile barely moves in this single run, and the replications above tell why: the slowest tenth of the cases are the ones that wait days for missing details, and no archivist shortens that wait. With seed 7 the slowest tenth includes more of them than on average (the twenty seeds gave 20.9 hours for three archivists). An indicator that sits on the edge of such a group varies strongly between runs, which is one more reason to look at replications before drawing conclusions from it. A change that would shorten the tail is a different one: asking for details at registration, before the request waits for an archivist.</p>
+</div>
+<div id="event-logs" class="section level2 hasAnchor" number="11.7">
+<h2><span class="header-section-number">11.7</span> Event logs<a href="simulation.html#event-logs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The report gives averages. For a closer analysis, the simulator writes the individual events on request:</p>
+<pre><code>tok sim 11-archive-queries.tok --log log.csv --cases-csv cases.csv --xes log.xes</code></pre>
+<p>The <strong>event log</strong> (<code>--log</code>) has one row per activity instance:</p>
+<pre><code>case,activity,label,resource,enqueue,start,end,status
+1,register,Register the request,clerks,2027-01-04T08:00:00,2027-01-04T08:00:00,2027-01-04T08:09:55,completed
+1,assess,Assess the request,archivists,2027-01-04T08:09:55,2027-01-04T08:09:55,2027-01-04T08:41:05,completed
+2,register,Register the request,clerks,2027-01-04T08:39:14,2027-01-04T08:39:14,2027-01-04T08:50:54,completed
+2,assess,Assess the request,archivists,2027-01-04T08:50:54,2027-01-04T08:50:54,2027-01-04T09:13:13,completed</code></pre>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>case</code></td>
+<td>the case number, from 1</td>
+</tr>
+<tr class="even">
+<td><code>activity</code>, <code>label</code></td>
+<td>the identifier and the label of the activity</td>
+</tr>
+<tr class="odd">
+<td><code>resource</code></td>
+<td>the resource of <code>by=</code> (empty if none)</td>
+</tr>
+<tr class="even">
+<td><code>enqueue</code></td>
+<td>when the case reached the activity</td>
+</tr>
+<tr class="odd">
+<td><code>start</code></td>
+<td>when a performer started the work (empty if the activity was interrupted while waiting)</td>
+</tr>
+<tr class="even">
+<td><code>end</code></td>
+<td>when the activity completed or was interrupted</td>
+</tr>
+<tr class="odd">
+<td><code>status</code></td>
+<td><code>completed</code>, or <code>interrupted</code> by a boundary timer</td>
+</tr>
+</tbody>
+</table>
+<p>The waiting time of an instance is <code>start − enqueue</code>, its processing time <code>end − start</code>. The <strong>table of cases</strong> (<code>--cases-csv</code>) has one row per case: the case number, its start and end, the end event, the cycle time in seconds and the case variables as JSON:</p>
+<pre><code>case,start,end,end_event,cycle_time_s,variables
+1,2027-01-04T08:00:00,2027-01-04T13:31:21,answered,19881.119,&quot;{&quot;&quot;complete&quot;&quot;: true}&quot;
+2,2027-01-04T08:39:14,2027-01-04T17:11:57,answered,30762.674,&quot;{&quot;&quot;complete&quot;&quot;: true}&quot;
+3,2027-01-04T10:28:29,2027-01-04T18:09:43,answered,27674.15,&quot;{&quot;&quot;complete&quot;&quot;: true}&quot;</code></pre>
+<p>Simulated time is calendar time counted from <code>start=</code> of <code>simulate</code>, without working-hours calendars: a six-hour task started at 16:00 ends at 22:00. The results therefore describe continuous work; to translate them into working days, divide by the length of a working day and treat the result as an approximation.</p>
+<div id="xes-for-process-mining-tools" class="section level3 hasAnchor" number="11.7.1">
+<h3><span class="header-section-number">11.7.1</span> XES for process-mining tools<a href="simulation.html#xes-for-process-mining-tools" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>--xes</code> writes the same log in XES (IEEE 1849-2016, eXtensible Event Stream), the exchange format of process-mining tools such as ProM, PM4Py, bupaR, Disco and Celonis. They read it without any column mapping. The file declares the standard extensions Concept, Time, Lifecycle and Organizational, three classifiers, and one trace per case:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb192-1"><a href="simulation.html#cb192-1" tabindex="-1"></a>    &lt;<span class="kw">trace</span>&gt;</span>
+<span id="cb192-2"><a href="simulation.html#cb192-2" tabindex="-1"></a>        &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;concept:name&quot;</span> <span class="ot">value=</span><span class="st">&quot;1&quot;</span>/&gt;</span>
+<span id="cb192-3"><a href="simulation.html#cb192-3" tabindex="-1"></a>        &lt;<span class="kw">date</span> <span class="ot">key=</span><span class="st">&quot;start&quot;</span> <span class="ot">value=</span><span class="st">&quot;2027-01-04T08:00:00.000&quot;</span>/&gt;</span>
+<span id="cb192-4"><a href="simulation.html#cb192-4" tabindex="-1"></a>        &lt;<span class="kw">date</span> <span class="ot">key=</span><span class="st">&quot;end&quot;</span> <span class="ot">value=</span><span class="st">&quot;2027-01-04T13:31:21.119&quot;</span>/&gt;</span>
+<span id="cb192-5"><a href="simulation.html#cb192-5" tabindex="-1"></a>        &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;end_event&quot;</span> <span class="ot">value=</span><span class="st">&quot;answered&quot;</span>/&gt;</span>
+<span id="cb192-6"><a href="simulation.html#cb192-6" tabindex="-1"></a>        &lt;<span class="kw">float</span> <span class="ot">key=</span><span class="st">&quot;cycle_time_s&quot;</span> <span class="ot">value=</span><span class="st">&quot;19881.119&quot;</span>/&gt;</span>
+<span id="cb192-7"><a href="simulation.html#cb192-7" tabindex="-1"></a>        &lt;<span class="kw">boolean</span> <span class="ot">key=</span><span class="st">&quot;complete&quot;</span> <span class="ot">value=</span><span class="st">&quot;true&quot;</span>/&gt;</span>
+<span id="cb192-8"><a href="simulation.html#cb192-8" tabindex="-1"></a>        &lt;<span class="kw">event</span>&gt;</span>
+<span id="cb192-9"><a href="simulation.html#cb192-9" tabindex="-1"></a>            &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;concept:name&quot;</span> <span class="ot">value=</span><span class="st">&quot;Register the request&quot;</span>/&gt;</span>
+<span id="cb192-10"><a href="simulation.html#cb192-10" tabindex="-1"></a>            &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;concept:instance&quot;</span> <span class="ot">value=</span><span class="st">&quot;1&quot;</span>/&gt;</span>
+<span id="cb192-11"><a href="simulation.html#cb192-11" tabindex="-1"></a>            &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;lifecycle:transition&quot;</span> <span class="ot">value=</span><span class="st">&quot;schedule&quot;</span>/&gt;</span>
+<span id="cb192-12"><a href="simulation.html#cb192-12" tabindex="-1"></a>            &lt;<span class="kw">date</span> <span class="ot">key=</span><span class="st">&quot;time:timestamp&quot;</span> <span class="ot">value=</span><span class="st">&quot;2027-01-04T08:00:00.000&quot;</span>/&gt;</span>
+<span id="cb192-13"><a href="simulation.html#cb192-13" tabindex="-1"></a>            &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;org:resource&quot;</span> <span class="ot">value=</span><span class="st">&quot;clerks&quot;</span>/&gt;</span>
+<span id="cb192-14"><a href="simulation.html#cb192-14" tabindex="-1"></a>            &lt;<span class="kw">string</span> <span class="ot">key=</span><span class="st">&quot;activity&quot;</span> <span class="ot">value=</span><span class="st">&quot;register&quot;</span>/&gt;</span>
+<span id="cb192-15"><a href="simulation.html#cb192-15" tabindex="-1"></a>        &lt;/<span class="kw">event</span>&gt;</span></code></pre></div>
+<p>Each activity instance gives up to three events in the standard lifecycle: <code>schedule</code> when the case reached the activity, <code>start</code> when the work started, and <code>complete</code> when it ended; an instance interrupted by a boundary timer ends with <code>ati_abort</code> while running or <code>withdraw</code> while still waiting. The trace carries the end event, the cycle time and the case variables with their types. Timestamps keep the UTC offset of <code>start=</code>: write <code>start="2027-03-01T09:00+01:00"</code> to get times with <code>+01:00</code>, or leave the offset out to have them read as local time. The same document and seed give the same bytes.</p>
+</div>
+</div>
+<div id="process-mining-on-simulated-logs" class="section level2 hasAnchor" number="11.8">
+<h2><span class="header-section-number">11.8</span> Process mining on simulated logs<a href="simulation.html#process-mining-on-simulated-logs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Process mining discovers processes from event logs: it draws the process that the log contains, measures the times between activities and finds the variants cases follow. On a simulated log you can try the methods before you have real data, check that a discovered model looks like the one you simulated, and prepare the analysis that will later run on the log of a real system: the columns of <code>tok sim --log</code> have the same structure as event logs exported from workflow and records management systems.</p>
+<p>In Python, PM4Py reads the XES file directly:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb193-1"><a href="simulation.html#cb193-1" tabindex="-1"></a><span class="im">import</span> pm4py</span>
+<span id="cb193-2"><a href="simulation.html#cb193-2" tabindex="-1"></a></span>
+<span id="cb193-3"><a href="simulation.html#cb193-3" tabindex="-1"></a>log <span class="op">=</span> pm4py.read_xes(<span class="st">&quot;log.xes&quot;</span>)</span>
+<span id="cb193-4"><a href="simulation.html#cb193-4" tabindex="-1"></a>net, initial, final <span class="op">=</span> pm4py.discover_petri_net_inductive(log)</span>
+<span id="cb193-5"><a href="simulation.html#cb193-5" tabindex="-1"></a>pm4py.view_petri_net(net, initial, final)</span></code></pre></div>
+<p>or the CSV log after naming its columns:</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb194-1"><a href="simulation.html#cb194-1" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb194-2"><a href="simulation.html#cb194-2" tabindex="-1"></a><span class="im">import</span> pm4py</span>
+<span id="cb194-3"><a href="simulation.html#cb194-3" tabindex="-1"></a></span>
+<span id="cb194-4"><a href="simulation.html#cb194-4" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;log.csv&quot;</span>, parse_dates<span class="op">=</span>[<span class="st">&quot;enqueue&quot;</span>, <span class="st">&quot;start&quot;</span>, <span class="st">&quot;end&quot;</span>])</span>
+<span id="cb194-5"><a href="simulation.html#cb194-5" tabindex="-1"></a>df <span class="op">=</span> pm4py.format_dataframe(df, case_id<span class="op">=</span><span class="st">&quot;case&quot;</span>, activity_key<span class="op">=</span><span class="st">&quot;label&quot;</span>, timestamp_key<span class="op">=</span><span class="st">&quot;end&quot;</span>)</span>
+<span id="cb194-6"><a href="simulation.html#cb194-6" tabindex="-1"></a>pm4py.view_dfg(<span class="op">*</span>pm4py.discover_dfg(df))</span></code></pre></div>
+<p>ProM, Disco and other desktop tools open the XES file from their import dialogs. In R the package tokr gives the log as a data frame with the column names process-mining packages expect, so bupaR takes it without conversion:</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="simulation.html#cb195-1" tabindex="-1"></a><span class="fu">library</span>(tokr)</span>
+<span id="cb195-2"><a href="simulation.html#cb195-2" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">tok_sim</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>)</span>
+<span id="cb195-3"><a href="simulation.html#cb195-3" tabindex="-1"></a>log <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(s)</span>
+<span id="cb195-4"><a href="simulation.html#cb195-4" tabindex="-1"></a>bupaR<span class="sc">::</span><span class="fu">activitylog</span>(log, <span class="at">case_id =</span> <span class="st">&quot;case_id&quot;</span>, <span class="at">activity_id =</span> <span class="st">&quot;activity_id&quot;</span>,</span>
+<span id="cb195-5"><a href="simulation.html#cb195-5" tabindex="-1"></a>                   <span class="at">resource_id =</span> <span class="st">&quot;resource_id&quot;</span>,</span>
+<span id="cb195-6"><a href="simulation.html#cb195-6" tabindex="-1"></a>                   <span class="at">timestamps =</span> <span class="fu">c</span>(<span class="st">&quot;schedule&quot;</span>, <span class="st">&quot;start&quot;</span>, <span class="st">&quot;complete&quot;</span>))</span></code></pre></div>
+<p>The model you discover from a simulated log is a useful check of the model you wrote: if the discovered process has a path you did not intend, the simulation follows that path too.</p>
+</div>
+<div id="simulation-in-r" class="section level2 hasAnchor" number="11.9">
+<h2><span class="header-section-number">11.9</span> Simulation in R<a href="simulation.html#simulation-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The R package tokr (Chapter <a href="programming.html#programming">13</a>) runs the same simulator and returns its results as data frames, ready for tables and plots:</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="simulation.html#cb196-1" tabindex="-1"></a><span class="fu">library</span>(tokr)</span>
+<span id="cb196-2"><a href="simulation.html#cb196-2" tabindex="-1"></a></span>
+<span id="cb196-3"><a href="simulation.html#cb196-3" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">tok_sim</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>)                   <span class="co"># cases and seed of the model</span></span>
+<span id="cb196-4"><a href="simulation.html#cb196-4" tabindex="-1"></a>s                                                        <span class="co"># the report of tok sim</span></span>
+<span id="cb196-5"><a href="simulation.html#cb196-5" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">tok_sim</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>, <span class="at">cases =</span> <span class="dv">1000</span>, <span class="at">seed =</span> <span class="dv">3</span>)</span>
+<span id="cb196-6"><a href="simulation.html#cb196-6" tabindex="-1"></a>s<span class="sc">$</span>kpi<span class="sc">$</span>cycle_time<span class="sc">$</span>mean_s                                  <span class="co"># mean cycle time in seconds</span></span>
+<span id="cb196-7"><a href="simulation.html#cb196-7" tabindex="-1"></a>s<span class="sc">$</span>kpi<span class="sc">$</span>activities                                         <span class="co"># one row per activity</span></span>
+<span id="cb196-8"><a href="simulation.html#cb196-8" tabindex="-1"></a>s<span class="sc">$</span>kpi<span class="sc">$</span>resources                                          <span class="co"># one row per resource, utilization as a fraction</span></span>
+<span id="cb196-9"><a href="simulation.html#cb196-9" tabindex="-1"></a>s<span class="sc">$</span>cases                                                  <span class="co"># one row per case, one column per variable</span></span>
+<span id="cb196-10"><a href="simulation.html#cb196-10" tabindex="-1"></a><span class="fu">tok_xes</span>(s, <span class="st">&quot;queries.xes&quot;</span>)                                <span class="co"># the XES log of the same run</span></span></code></pre></div>
+<p><code>s$kpi$activities</code> has the columns <code>activity</code>, <code>label</code>, <code>count</code>, <code>mean_wait_s</code>, <code>mean_processing_s</code>, <code>mean_wait</code> and <code>mean_processing</code>; <code>s$kpi$resources</code> has <code>resource</code>, <code>label</code>, <code>count</code> and <code>utilization</code>. The table of cases has the columns <code>case</code>, <code>start</code>, <code>end</code>, <code>end_event</code> and <code>cycle_time_s</code>, then one column per case variable; the event log of <code>as.data.frame(s)</code> has the columns of <code>tok sim --log</code> and, under the names <code>case_id</code>, <code>activity_id</code>, <code>activity_instance_id</code>, <code>resource_id</code>, <code>schedule</code> and <code>complete</code>, the same data for process-mining packages. Times are <code>POSIXct</code> values in UTC.</p>
+<p>With the two scenario files, a few lines of base R compare their cycle times:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="simulation.html#cb197-1" tabindex="-1"></a>cycle_hours <span class="ot">&lt;-</span> <span class="cf">function</span>(file) <span class="fu">tok_sim</span>(file)<span class="sc">$</span>cases<span class="sc">$</span>cycle_time_s <span class="sc">/</span> <span class="dv">3600</span></span>
+<span id="cb197-2"><a href="simulation.html#cb197-2" tabindex="-1"></a>two <span class="ot">&lt;-</span> <span class="fu">cycle_hours</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>)</span>
+<span id="cb197-3"><a href="simulation.html#cb197-3" tabindex="-1"></a>three <span class="ot">&lt;-</span> <span class="fu">cycle_hours</span>(<span class="st">&quot;11-archive-queries-3.tok&quot;</span>)</span>
+<span id="cb197-4"><a href="simulation.html#cb197-4" tabindex="-1"></a><span class="fu">sapply</span>(<span class="fu">list</span>(<span class="at">two =</span> two, <span class="at">three =</span> three), quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>))</span>
+<span id="cb197-5"><a href="simulation.html#cb197-5" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">list</span>(<span class="st">&quot;2 archivists&quot;</span> <span class="ot">=</span> two, <span class="st">&quot;3 archivists&quot;</span> <span class="ot">=</span> three), <span class="at">horizontal =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb197-6"><a href="simulation.html#cb197-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;Cycle time (hours)&quot;</span>)</span></code></pre></div>
+</div>
+<div id="simulation-in-python" class="section level2 hasAnchor" number="11.10">
+<h2><span class="header-section-number">11.10</span> Simulation in Python<a href="simulation.html#simulation-in-python" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The module <code>tok.api</code> of the Python package gives the simulation to programs and notebooks:</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb198-1"><a href="simulation.html#cb198-1" tabindex="-1"></a><span class="im">from</span> tok <span class="im">import</span> api</span>
+<span id="cb198-2"><a href="simulation.html#cb198-2" tabindex="-1"></a></span>
+<span id="cb198-3"><a href="simulation.html#cb198-3" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb198-4"><a href="simulation.html#cb198-4" tabindex="-1"></a>result <span class="op">=</span> api.simulate(text, cases<span class="op">=</span><span class="dv">1000</span>, seed<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb198-5"><a href="simulation.html#cb198-5" tabindex="-1"></a>kpi <span class="op">=</span> result.kpi()                       <span class="co"># the indicators as a dict, as tok sim --json</span></span>
+<span id="cb198-6"><a href="simulation.html#cb198-6" tabindex="-1"></a><span class="bu">print</span>(api.format_kpi(kpi))               <span class="co"># the report of tok sim</span></span>
+<span id="cb198-7"><a href="simulation.html#cb198-7" tabindex="-1"></a>result.log[:<span class="dv">3</span>]                           <span class="co"># the event log: one dict per activity instance</span></span>
+<span id="cb198-8"><a href="simulation.html#cb198-8" tabindex="-1"></a>result.cases[:<span class="dv">3</span>]                         <span class="co"># one dict per case</span></span>
+<span id="cb198-9"><a href="simulation.html#cb198-9" tabindex="-1"></a>result.write_csv(<span class="st">&quot;log.csv&quot;</span>, <span class="st">&quot;cases.csv&quot;</span>) <span class="co"># the files of --log and --cases-csv</span></span>
+<span id="cb198-10"><a href="simulation.html#cb198-10" tabindex="-1"></a>result.write_xes(<span class="st">&quot;log.xes&quot;</span>)              <span class="co"># the file of --xes</span></span></code></pre></div>
+<p>The indicators have the structure of <code>tok sim --json</code>: <code>kpi["cases"]</code> with <code>started</code>, <code>finished</code> and <code>by_end_event</code>; <code>kpi["cycle_time"]</code> with <code>mean_s</code>, <code>median_s</code> and <code>p90_s</code> in seconds and the same as short texts; <code>kpi["activities"][ID]</code> with <code>count</code>, <code>mean_wait_s</code> and <code>mean_processing_s</code>; <code>kpi["resources"][ID]["utilization"]</code>; <code>kpi["horizon_s"]</code>, the simulated period; and <code>kpi["warnings"]</code>, conditions or expressions the simulator could not evaluate. With pandas, <code>pd.DataFrame(result.log)</code> turns the log into a data frame.</p>
+</div>
+<div id="native-simulation-in-julia" class="section level2 hasAnchor" number="11.11">
+<h2><span class="header-section-number">11.11</span> Native simulation in Julia<a href="simulation.html#native-simulation-in-julia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Experiments with many scenarios and hundreds of replications are faster in the native simulator of the Julia package, <code>Tok.Sim</code>. It reads the model through the engine, so the document is parsed and checked exactly as <code>tok check</code> does, and it asks the engine to evaluate the conditions of flows, so conditions mean exactly what they mean in <code>tok sim</code>. Everything else runs in compiled Julia, in parallel on the threads you give Julia (<code>julia -t auto</code>).</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb199-1"><a href="simulation.html#cb199-1" tabindex="-1"></a><span class="im">using</span> <span class="bu">Tok</span></span>
+<span id="cb199-2"><a href="simulation.html#cb199-2" tabindex="-1"></a><span class="kw">const</span> S <span class="op">=</span> Tok.Sim</span>
+<span id="cb199-3"><a href="simulation.html#cb199-3" tabindex="-1"></a></span>
+<span id="cb199-4"><a href="simulation.html#cb199-4" tabindex="-1"></a>text <span class="op">=</span> <span class="fu">read</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>, <span class="dt">String</span>)</span>
+<span id="cb199-5"><a href="simulation.html#cb199-5" tabindex="-1"></a>m <span class="op">=</span> S.<span class="fu">model</span>(text)</span>
+<span id="cb199-6"><a href="simulation.html#cb199-6" tabindex="-1"></a>three <span class="op">=</span> S.<span class="fu">scenario</span>(m; name<span class="op">=</span><span class="st">&quot;three archivists&quot;</span>, resources<span class="op">=</span><span class="fu">Dict</span>(<span class="st">&quot;archivists&quot;</span> <span class="op">=&gt;</span> <span class="fl">3</span>))</span>
+<span id="cb199-7"><a href="simulation.html#cb199-7" tabindex="-1"></a>busier <span class="op">=</span> S.<span class="fu">scenario</span>(m; name<span class="op">=</span><span class="st">&quot;busier&quot;</span>, arrival<span class="op">=</span><span class="st">&quot;exp(3h)&quot;</span>)</span>
+<span id="cb199-8"><a href="simulation.html#cb199-8" tabindex="-1"></a><span class="cn">e</span> <span class="op">=</span> S.<span class="fu">experiment</span>([m, three, busier]; replications<span class="op">=</span><span class="fl">200</span>, seed<span class="op">=</span><span class="fl">1</span>)</span>
+<span id="cb199-9"><a href="simulation.html#cb199-9" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> S.<span class="fu">summarize</span>(<span class="cn">e</span>)</span>
+<span id="cb199-10"><a href="simulation.html#cb199-10" tabindex="-1"></a>    r.indicator <span class="kw">in</span> (<span class="st">&quot;cycle_time_mean_s&quot;</span>, <span class="st">&quot;cycle_time_p90_s&quot;</span>, <span class="st">&quot;utilization:archivists&quot;</span>) <span class="op">||</span> <span class="cf">continue</span></span>
+<span id="cb199-11"><a href="simulation.html#cb199-11" tabindex="-1"></a>    <span class="fu">println</span>(<span class="fu">rpad</span>(r.scenario, <span class="fl">18</span>), <span class="fu">rpad</span>(r.indicator, <span class="fl">24</span>), <span class="fu">round</span>(r.mean; sigdigits<span class="op">=</span><span class="fl">4</span>),</span>
+<span id="cb199-12"><a href="simulation.html#cb199-12" tabindex="-1"></a>            <span class="st">&quot; ± &quot;</span>, <span class="fu">round</span>(r.half_width; sigdigits<span class="op">=</span><span class="fl">2</span>))</span>
+<span id="cb199-13"><a href="simulation.html#cb199-13" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<pre><code>model             cycle_time_mean_s       96000.0 ± 3000.0
+model             cycle_time_p90_s        172500.0 ± 6800.0
+model             utilization:archivists  0.7556 ± 0.0089
+three archivists  cycle_time_mean_s       59890.0 ± 1100.0
+three archivists  cycle_time_p90_s        80580.0 ± 3100.0
+three archivists  utilization:archivists  0.5132 ± 0.0066
+busier            cycle_time_mean_s       340100.0 ± 17000.0
+busier            cycle_time_p90_s        580700.0 ± 29000.0
+busier            utilization:archivists  0.8872 ± 0.011</code></pre>
+<p>Each line gives the mean of an indicator over 200 replications and the half-width of its 95% interval; times are in seconds. With 200 replications the comparison is clear: three archivists cut the mean cycle time from about 26.7 to 16.6 hours. The scenario <code>busier</code>, with a request every three hours and two archivists, shows what happens when the work exceeds the capacity: the archivists would need about 6.4 hours per request every 3 hours, more than two people can give, the queue grows for as long as requests keep arriving, and the mean cycle time rises to almost four days. Such a result says less about the exact number than about the fact that the process cannot keep up.</p>
+<p><code>S.scenario</code> changes the number of performers (<code>resources=</code>), the durations of activities (<code>durations=Dict("search" =&gt; "lnorm(5h, 2h)")</code>), the probabilities and the arrivals. <code>S.summarize(e)</code> gives, per scenario and indicator, the mean, the standard deviation, the half-width of the 95% interval and the number of runs; <code>S.indicators(e)</code> every indicator of every run in long form, for DataFrames. One run on its own is <code>S.simulate(m; seed=7)</code>, with <code>S.cycle_time(run)</code> and <code>S.utilization(run, "archivists")</code>.</p>
+<p>Each replication has its own random stream, derived from the seed and the number of the replication, so the results do not depend on the number of threads, and a single replication can be repeated (<code>S.simulate(m; seed=1, replication=17)</code>). By default all scenarios use the same streams (common random numbers), which makes the differences between scenarios more precise than the scenarios themselves.</p>
+<p>The native simulator agrees with the engine in distribution, not number by number: it has its own generator. The tests of the package compare the two on 44 models with the Kolmogorov–Smirnov test. Some elements are not run natively: decisions of business rule tasks, script expressions, multi-instance activities with a collection, ad-hoc sub-processes, compensation, transactions, complex gateways, standard loops with conditions, multiple events and instantiating elements. <code>S.unsupported(m)</code> lists them before any run; a model that has them runs in the engine instead, with <code>Tok.Engine.simulate(text; cases=…, seed=…)</code>.</p>
+</div>
+<div id="calibration-on-an-event-log" class="section level2 hasAnchor" number="11.12">
+<h2><span class="header-section-number">11.12</span> Calibration on an event log<a href="simulation.html#calibration-on-an-event-log" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The parameters of a simulation are assumptions, and the best source of assumptions is a log of the real process. <code>Tok.Fit</code> estimates them from an event log and writes them back into the document, so that the model simulates the process that produced the log:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Statement</th>
+<th>Observations in the log</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>processing time of an activity</td>
+<td><code>duration=</code></td>
+<td><code>end − start</code> of every completed instance; an instance interrupted after it started counts as a censored observation</td>
+</tr>
+<tr class="even">
+<td>time between arrivals</td>
+<td><code>arrival=</code> of <code>simulate</code></td>
+<td>the differences between consecutive arrivals of cases</td>
+</tr>
+<tr class="odd">
+<td>branch probabilities</td>
+<td><code>p=</code> of the flows of <code>xor</code> and <code>or</code> gateways</td>
+<td>how often each branch was taken, recognised by the activities that follow it</td>
+</tr>
+</tbody>
+</table>
+<p>Each duration is fitted in the family the model declares for it (<code>exp</code>, <code>norm</code>, <code>lnorm</code>, <code>unif</code>, <code>tri</code> or a fixed value), or in another family given with <code>families=</code>. The number of performers, the distributions of case variables and the waiting times of events are not fitted, because an event log does not record them. Waiting times are not parameters either: they follow from the arrivals, the durations and the number of performers.</p>
+<p>The logs are read by <code>F.read_xes</code> (XES from <code>tok sim --xes</code> or from process-mining tools) and <code>F.read_csv_log</code> (the CSV log of <code>tok sim --log</code>, optionally with the table of cases). A test of the method is to fit a log whose true parameters you know. Here the log comes from 3000 simulated cases of the archive model:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb201-1"><a href="simulation.html#cb201-1" tabindex="-1"></a><span class="im">using</span> <span class="bu">Tok</span></span>
+<span id="cb201-2"><a href="simulation.html#cb201-2" tabindex="-1"></a><span class="kw">const</span> F <span class="op">=</span> Tok.Fit</span>
+<span id="cb201-3"><a href="simulation.html#cb201-3" tabindex="-1"></a></span>
+<span id="cb201-4"><a href="simulation.html#cb201-4" tabindex="-1"></a>text <span class="op">=</span> <span class="fu">read</span>(<span class="st">&quot;11-archive-queries.tok&quot;</span>, <span class="dt">String</span>)</span>
+<span id="cb201-5"><a href="simulation.html#cb201-5" tabindex="-1"></a>log <span class="op">=</span> F.<span class="fu">read_xes</span>(Tok.Engine.<span class="fu">sim_xes</span>(text; cases<span class="op">=</span><span class="fl">3000</span>, seed<span class="op">=</span><span class="fl">11</span>))</span>
+<span id="cb201-6"><a href="simulation.html#cb201-6" tabindex="-1"></a>f <span class="op">=</span> F.<span class="fu">fit</span>(text, log)</span>
+<span id="cb201-7"><a href="simulation.html#cb201-7" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> F.<span class="fu">table</span>(f)</span>
+<span id="cb201-8"><a href="simulation.html#cb201-8" tabindex="-1"></a>    <span class="fu">println</span>(<span class="fu">rpad</span>(r.element, <span class="fl">24</span>), <span class="fu">rpad</span>(<span class="st">&quot;</span><span class="sc">$</span>(r.family)<span class="st"> </span><span class="sc">$</span>(r.name)<span class="st">&quot;</span>, <span class="fl">12</span>), <span class="fu">round</span>(r.estimate; sigdigits<span class="op">=</span><span class="fl">4</span>),</span>
+<span id="cb201-9"><a href="simulation.html#cb201-9" tabindex="-1"></a>            <span class="st">&quot;  [&quot;</span>, <span class="fu">round</span>(r.lower; sigdigits<span class="op">=</span><span class="fl">4</span>), <span class="st">&quot;, &quot;</span>, <span class="fu">round</span>(r.upper; sigdigits<span class="op">=</span><span class="fl">4</span>), <span class="st">&quot;]&quot;</span>)</span>
+<span id="cb201-10"><a href="simulation.html#cb201-10" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<pre><code>register                tri a       297.6  [292.5, 304.5]
+register                tri mode    584.1  [568.4, 602.3]
+register                tri b       1204.0  [1194.0, 1212.0]
+refuse                  tri a       312.4  [301.1, 333.8]
+refuse                  tri mode    602.6  [569.7, 637.4]
+refuse                  tri b       908.7  [889.5, 920.8]
+answer                  tri a       298.5  [294.1, 306.3]
+answer                  tri mode    600.0  [587.0, 613.8]
+answer                  tri b       897.0  [890.5, 902.3]
+assess                  lnorm mean  1810.0  [1789.0, 1832.0]
+assess                  lnorm sd    627.3  [608.5, 646.6]
+ask                     fixed x     300.0  [300.0, 300.0]
+search                  lnorm mean  21600.0  [21180.0, 22020.0]
+search                  lnorm sd    10990.0  [10550.0, 11460.0]
+write                   tri a       1832.0  [1797.0, 1890.0]
+write                   tri mode    3612.0  [3496.0, 3703.0]
+write                   tri b       7210.0  [7134.0, 7254.0]
+arrival                 exp mean    14700.0  [14180.0, 15240.0]
+feasible -&gt; search      p p         0.8563  [0.8433, 0.8684]
+feasible -&gt; refuse      p p         0.1437  [0.1316, 0.1567]</code></pre>
+<p>Durations are in seconds. The estimates recover the parameters of the model: the assessment <code>lnorm(30m, 10m)</code> is 1810 and 627 seconds, the search <code>lnorm(6h, 3h)</code> is 21,600 and 10,990 seconds, the arrivals <code>exp(4h)</code> 14,700 seconds, and the branch to the search 0.856 against the 0.85 of the model. The intervals are maximum-likelihood intervals at 95%: Wald intervals for <code>exp</code>, <code>norm</code> and <code>lnorm</code>, a parametric bootstrap for <code>unif</code> and <code>tri</code>, Wilson score intervals for probabilities. <code>f.notes</code> lists what could not be estimated and why.</p>
+<p><code>F.apply(text, f)</code> returns the document with the estimates written in, <code>duration=</code> of the activities, <code>arrival=</code> and <code>p=</code>, rounded to four significant digits by default and in the largest unit that keeps the number at least 1, with comments kept:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb203-1"><a href="simulation.html#cb203-1" tabindex="-1"></a><span class="fu">write</span>(<span class="st">&quot;11-archive-queries-fitted.tok&quot;</span>, F.<span class="fu">apply</span>(text, f))</span></code></pre></div>
+<p>For a Bayesian estimate, load Turing.jl in the same session: <code>fit_bayes</code> then samples the posterior of every parameter with the No-U-Turn sampler, with weakly informative priors on the scale of the data, and returns posterior means with credible intervals in the same table:</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb204-1"><a href="simulation.html#cb204-1" tabindex="-1"></a><span class="im">using</span> <span class="bu">Turing</span></span>
+<span id="cb204-2"><a href="simulation.html#cb204-2" tabindex="-1"></a>b <span class="op">=</span> F.<span class="fu">fit_bayes</span>(text, log; samples<span class="op">=</span><span class="fl">1000</span>)</span>
+<span id="cb204-3"><a href="simulation.html#cb204-3" tabindex="-1"></a>F.<span class="fu">table</span>(b)</span></code></pre></div>
+<p>Turing is not a dependency of Tok.jl; the function becomes available when Turing is loaded. With logs of a few hundred cases the posterior means differ from the maximum-likelihood estimates by a fraction of their uncertainty; the Bayesian intervals are worth having when the log is small.</p>
+<p>The cycle closes here: a model is written from a description, its parameters are estimated from the log of the real process, the calibrated model is simulated in scenarios, and the scenario that is chosen becomes the next version of the model.</p>
+</div>
+<div id="what-the-simulator-does-not-do" class="section level2 hasAnchor" number="11.13">
+<h2><span class="header-section-number">11.13</span> What the simulator does not do<a href="simulation.html#what-the-simulator-does-not-do" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Calendars.</strong> Time runs without breaks for nights, weekends or holidays.</li>
+<li><strong>One process.</strong> The simulator runs the process of the first pool that has one, or the process of a document without pools. Message flows to other pools are not simulated; a reply from outside is modelled with <code>delay=</code> on the event that waits for it. Throw events and event sub-processes are not simulated.</li>
+<li><strong>Interchangeable performers.</strong> A resource is a group of equal people. Different skills are modelled as separate resources.</li>
+<li><strong>Loops of activities.</strong> Multi-instance collections are simulated from language 0.3 and standard loops with <code>while=</code> or <code>loop-max=</code> from language 0.5; a case that passes more than 10,000 elements is stopped and reported with the end event <code>loop-limit</code>.</li>
+</ul>
+</div>
+<div id="exercises-10" class="section level2 unnumbered hasAnchor">
+<h2>Exercises<a href="simulation.html#exercises-10" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-12" class="exercise"><strong>Exercise 11.1  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><strong>Your own parameters.</strong> Take a model you wrote in an earlier chapter and add <code>simulate</code>, two resources and <code>duration=</code> on every activity. Ask yourself, or someone who does the work, for the shortest, usual and longest time of each step and use <code>tri</code>. Give every splitting gateway either conditions or probabilities until the check reports no <code>S</code> codes.</li>
+<li><strong>Reading the report.</strong> Run <code>tok sim</code> on <code>11-archive-queries.tok</code> with <code>--cases 1000</code> and three different seeds. Which indicators change by less than 5%, and which change more? Explain the difference with what you know about the requests that wait for details.</li>
+<li><strong>Earlier refusal.</strong> Change the model so that the clerk checks feasibility at registration (<code>tri(10m, 20m, 30m)</code>) and refuses impossible requests with <code>p=0.15</code> there; the archivist’s assessment then takes <code>tri(10m, 15m, 30m)</code> and refuses nothing. Compare the scenario with the original by replications in Python or Julia. Does the registry become a new bottleneck?</li>
+<li><strong>More requests.</strong> Set <code>arrival="exp(3h)"</code> with two and with three archivists and run both. What happens to the waiting times with two archivists as you increase <code>--cases</code> from 300 to 1000? What does that tell you about the process?</li>
+<li><strong>Process mining.</strong> Write the XES log of the model and open it in a process-mining tool (PM4Py, bupaR, ProM or Disco). Discover the process from the log and compare it with the diagram. Where does the loop through the missing details appear, and how often is it taken?</li>
+<li><strong>Calibration.</strong> In Julia, simulate 500 cases of the model, fit the log with <code>Tok.Fit.fit</code> and compare the intervals with those of 3000 cases. Then change the model to <code>duration="exp(6h)"</code> for the search, fit the same log again, and compare the estimates of the two families. Which family does the log support, and how can you tell?</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="executable.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="editors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

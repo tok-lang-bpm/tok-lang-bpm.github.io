@@ -1,0 +1,15 @@
+tok 1.0 "Routing an incoming letter"
+
+pool university "University" process=letter-routing
+  lane registry "Central registry"
+    start received "Letter received"
+    user register "Register the letter in the records system"
+  lane faculty "Faculty"
+    lane office "Dean's office"
+      user assign "Assign the letter to a unit"
+      user reply "Draft the reply"
+    lane dean "Dean"
+      user sign "Sign the reply"
+      end replied "Reply sent"
+
+flow received -> register -> assign -> reply -> sign -> replied

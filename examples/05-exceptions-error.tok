@@ -1,0 +1,18 @@
+tok 1.0 "Returning a damaged book"
+
+start returned "Book returned"
+user inspect "Inspect the book"
+boundary too-long "2 days passed" timer=P2D
+service charge "Charge the reader" compensate=refund
+service refund "Refund the charge"
+eventsub dispute "Reader disputes the charge"
+  start disputed "Dispute received"
+  user review "Review the dispute"
+  end reviewed "Dispute reviewed"
+end done "Return closed"
+end cancelled "Return cancelled" cancel
+
+flow returned -> inspect -> charge -> done
+flow too-long -> cancelled
+flow charge -> refund
+flow disputed -> review -> reviewed

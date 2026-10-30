@@ -1,0 +1,32 @@
+tok 1.0 "Registering incoming letters"
+
+pool university "University"
+  lane registry "Registry office"
+    start received "Letter received" message="Letter"
+    user register "Register the letter"
+    rule assign "Assign the responsible unit" decision=responsible-unit
+    xor urgent "Is the letter urgent?"
+  lane unit "Responsible unit"
+    user file "File the letter for later"
+    user handle "Handle the case"
+    boundary deadline "14 days passed" on=handle timer=P14D
+    user reply "Prepare the reply"
+    end done "Reply sent" message="Reply"
+
+pool sender "Sender"
+
+flow received -> register -> assign -> urgent
+flow urgent -> handle "yes" when="urgency = \"high\""
+flow urgent -> file "no" default
+flow file -> handle -> reply -> done
+flow deadline -> reply
+
+message sender -> received "Letter"
+message done -> sender "Reply"
+
+inputdata kind "Kind of letter" type=string
+
+decision responsible-unit "Responsible unit" requires="kind" hit=unique
+  | kind: string  || unit: string      |
+  | "complaint"   || "Rector's office" |
+  | "application" || "Student affairs" |

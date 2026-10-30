@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Executable models on Camunda 8 | tok: Process Models as Text</title>
+  <meta name="description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Executable models on Camunda 8 | tok: Process Models as Text" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="github-repo" content="tok-lang-bpm/tok-lang-bpm.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Executable models on Camunda 8 | tok: Process Models as Text" />
+  
+  <meta name="twitter:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  
+
+<meta name="author" content="Marek Deja" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="decisions.html"/>
+<link rel="next" href="simulation.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tok: Process Models as Text</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-this-book-is-for"><i class="fa fa-check"></i>Who this book is for</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-the-book-is-organised"><i class="fa fa-check"></i>How the book is organised</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#conventions"><i class="fa fa-check"></i>Conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#versions"><i class="fa fa-check"></i>Versions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#licence"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reporting-issues"><i class="fa fa-check"></i>Reporting issues</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-cite"><i class="fa fa-check"></i>How to cite</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="models-as-text.html"><a href="models-as-text.html"><i class="fa fa-check"></i><b>1</b> Models as text</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="models-as-text.html"><a href="models-as-text.html#two-layers-of-a-bpmn-file"><i class="fa fa-check"></i><b>1.1</b> Two layers of a BPMN file</a></li>
+<li class="chapter" data-level="1.2" data-path="models-as-text.html"><a href="models-as-text.html#reading-a-model-line-by-line"><i class="fa fa-check"></i><b>1.2</b> Reading a model line by line</a></li>
+<li class="chapter" data-level="1.3" data-path="models-as-text.html"><a href="models-as-text.html#the-text-is-the-model"><i class="fa fa-check"></i><b>1.3</b> The text is the model</a></li>
+<li class="chapter" data-level="1.4" data-path="models-as-text.html"><a href="models-as-text.html#why-text"><i class="fa fa-check"></i><b>1.4</b> Why text</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="models-as-text.html"><a href="models-as-text.html#version-control"><i class="fa fa-check"></i><b>1.4.1</b> Version control</a></li>
+<li class="chapter" data-level="1.4.2" data-path="models-as-text.html"><a href="models-as-text.html#review"><i class="fa fa-check"></i><b>1.4.2</b> Review</a></li>
+<li class="chapter" data-level="1.4.3" data-path="models-as-text.html"><a href="models-as-text.html#why-collaboration"><i class="fa fa-check"></i><b>1.4.3</b> Collaboration</a></li>
+<li class="chapter" data-level="1.4.4" data-path="models-as-text.html"><a href="models-as-text.html#why-agents"><i class="fa fa-check"></i><b>1.4.4</b> Agents</a></li>
+<li class="chapter" data-level="1.4.5" data-path="models-as-text.html"><a href="models-as-text.html#text-tools"><i class="fa fa-check"></i><b>1.4.5</b> Text tools</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="models-as-text.html"><a href="models-as-text.html#tok-among-other-text-notations"><i class="fa fa-check"></i><b>1.5</b> tok among other text notations</a></li>
+<li class="chapter" data-level="1.6" data-path="models-as-text.html"><a href="models-as-text.html#the-metamodel-underneath"><i class="fa fa-check"></i><b>1.6</b> The metamodel underneath</a></li>
+<li class="chapter" data-level="1.7" data-path="models-as-text.html"><a href="models-as-text.html#round-trip-from-bpmn-back-to-text"><i class="fa fa-check"></i><b>1.7</b> Round trip: from BPMN back to text</a></li>
+<li class="chapter" data-level="" data-path="models-as-text.html"><a href="models-as-text.html#exercises"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started.html"><a href="getting-started.html#ways-to-use-tok"><i class="fa fa-check"></i><b>2.1</b> Ways to use tok</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started.html"><a href="getting-started.html#installing-the-command-line"><i class="fa fa-check"></i><b>2.2</b> Installing the command line</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="getting-started.html"><a href="getting-started.html#with-python"><i class="fa fa-check"></i><b>2.2.1</b> With Python</a></li>
+<li class="chapter" data-level="2.2.2" data-path="getting-started.html"><a href="getting-started.html#with-cargo"><i class="fa fa-check"></i><b>2.2.2</b> With Cargo</a></li>
+<li class="chapter" data-level="2.2.3" data-path="getting-started.html"><a href="getting-started.html#checking-the-installation"><i class="fa fa-check"></i><b>2.2.3</b> Checking the installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="getting-started.html"><a href="getting-started.html#other-ways-to-reach-the-engine"><i class="fa fa-check"></i><b>2.3</b> Other ways to reach the engine</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="getting-started.html"><a href="getting-started.html#r"><i class="fa fa-check"></i><b>2.3.1</b> R</a></li>
+<li class="chapter" data-level="2.3.2" data-path="getting-started.html"><a href="getting-started.html#julia"><i class="fa fa-check"></i><b>2.3.2</b> Julia</a></li>
+<li class="chapter" data-level="2.3.3" data-path="getting-started.html"><a href="getting-started.html#visual-studio-code"><i class="fa fa-check"></i><b>2.3.3</b> Visual Studio Code</a></li>
+<li class="chapter" data-level="2.3.4" data-path="getting-started.html"><a href="getting-started.html#the-playground"><i class="fa fa-check"></i><b>2.3.4</b> The playground</a></li>
+<li class="chapter" data-level="2.3.5" data-path="getting-started.html"><a href="getting-started.html#the-agent-bundle"><i class="fa fa-check"></i><b>2.3.5</b> The agent bundle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="getting-started.html"><a href="getting-started.html#your-first-model"><i class="fa fa-check"></i><b>2.4</b> Your first model</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="getting-started.html"><a href="getting-started.html#step-1-write-the-text"><i class="fa fa-check"></i><b>2.4.1</b> Step 1: write the text</a></li>
+<li class="chapter" data-level="2.4.2" data-path="getting-started.html"><a href="getting-started.html#step-2-check-the-model"><i class="fa fa-check"></i><b>2.4.2</b> Step 2: check the model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="getting-started.html"><a href="getting-started.html#step-3-format-the-text"><i class="fa fa-check"></i><b>2.4.3</b> Step 3: format the text</a></li>
+<li class="chapter" data-level="2.4.4" data-path="getting-started.html"><a href="getting-started.html#step-4-export-bpmn"><i class="fa fa-check"></i><b>2.4.4</b> Step 4: export BPMN</a></li>
+<li class="chapter" data-level="2.4.5" data-path="getting-started.html"><a href="getting-started.html#step-5-draw-the-picture"><i class="fa fa-check"></i><b>2.4.5</b> Step 5: draw the picture</a></li>
+<li class="chapter" data-level="2.4.6" data-path="getting-started.html"><a href="getting-started.html#step-6-open-the-model-in-a-bpmn-tool"><i class="fa fa-check"></i><b>2.4.6</b> Step 6: open the model in a BPMN tool</a></li>
+<li class="chapter" data-level="2.4.7" data-path="getting-started.html"><a href="getting-started.html#step-7-change-and-repeat"><i class="fa fa-check"></i><b>2.4.7</b> Step 7: change and repeat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="getting-started.html"><a href="getting-started.html#setting-up-your-editor"><i class="fa fa-check"></i><b>2.5</b> Setting up your editor</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-1"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="process-basics.html"><a href="process-basics.html"><i class="fa fa-check"></i><b>3</b> Process basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="process-basics.html"><a href="process-basics.html#the-header-line"><i class="fa fa-check"></i><b>3.1</b> The header line</a></li>
+<li class="chapter" data-level="3.2" data-path="process-basics.html"><a href="process-basics.html#statements"><i class="fa fa-check"></i><b>3.2</b> Statements</a></li>
+<li class="chapter" data-level="3.3" data-path="process-basics.html"><a href="process-basics.html#identifiers-and-labels"><i class="fa fa-check"></i><b>3.3</b> Identifiers and labels</a></li>
+<li class="chapter" data-level="3.4" data-path="process-basics.html"><a href="process-basics.html#tasks"><i class="fa fa-check"></i><b>3.4</b> Tasks</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="process-basics.html"><a href="process-basics.html#markers-of-repetition"><i class="fa fa-check"></i><b>3.4.1</b> Markers of repetition</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="process-basics.html"><a href="process-basics.html#events"><i class="fa fa-check"></i><b>3.5</b> Events</a></li>
+<li class="chapter" data-level="3.6" data-path="process-basics.html"><a href="process-basics.html#gateways"><i class="fa fa-check"></i><b>3.6</b> Gateways</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="process-basics.html"><a href="process-basics.html#exclusive-parallel-and-inclusive-gateways"><i class="fa fa-check"></i><b>3.6.1</b> Exclusive, parallel and inclusive gateways</a></li>
+<li class="chapter" data-level="3.6.2" data-path="process-basics.html"><a href="process-basics.html#the-event-based-gateway"><i class="fa fa-check"></i><b>3.6.2</b> The event-based gateway</a></li>
+<li class="chapter" data-level="3.6.3" data-path="process-basics.html"><a href="process-basics.html#the-complex-gateway"><i class="fa fa-check"></i><b>3.6.3</b> The complex gateway</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="process-basics.html"><a href="process-basics.html#sequence-flows"><i class="fa fa-check"></i><b>3.7</b> Sequence flows</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="process-basics.html"><a href="process-basics.html#labels-and-attributes"><i class="fa fa-check"></i><b>3.7.1</b> Labels and attributes</a></li>
+<li class="chapter" data-level="3.7.2" data-path="process-basics.html"><a href="process-basics.html#conditions"><i class="fa fa-check"></i><b>3.7.2</b> Conditions</a></li>
+<li class="chapter" data-level="3.7.3" data-path="process-basics.html"><a href="process-basics.html#default-flows"><i class="fa fa-check"></i><b>3.7.3</b> Default flows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="process-basics.html"><a href="process-basics.html#indentation-and-blocks"><i class="fa fa-check"></i><b>3.8</b> Indentation and blocks</a></li>
+<li class="chapter" data-level="3.9" data-path="process-basics.html"><a href="process-basics.html#comments"><i class="fa fa-check"></i><b>3.9</b> Comments</a></li>
+<li class="chapter" data-level="3.10" data-path="process-basics.html"><a href="process-basics.html#levels-of-the-language"><i class="fa fa-check"></i><b>3.10</b> Levels of the language</a></li>
+<li class="chapter" data-level="3.11" data-path="process-basics.html"><a href="process-basics.html#typical-mistakes"><i class="fa fa-check"></i><b>3.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="process-basics.html"><a href="process-basics.html#exercises-2"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="collaboration.html"><a href="collaboration.html"><i class="fa fa-check"></i><b>4</b> Pools, lanes and messages</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="collaboration.html"><a href="collaboration.html#from-one-process-to-a-collaboration"><i class="fa fa-check"></i><b>4.1</b> From one process to a collaboration</a></li>
+<li class="chapter" data-level="4.2" data-path="collaboration.html"><a href="collaboration.html#pools"><i class="fa fa-check"></i><b>4.2</b> Pools</a></li>
+<li class="chapter" data-level="4.3" data-path="collaboration.html"><a href="collaboration.html#lanes-and-nested-lanes"><i class="fa fa-check"></i><b>4.3</b> Lanes and nested lanes</a></li>
+<li class="chapter" data-level="4.4" data-path="collaboration.html"><a href="collaboration.html#message-flows"><i class="fa fa-check"></i><b>4.4</b> Message flows</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="collaboration.html"><a href="collaboration.html#a-collaboration-with-a-black-box-pool"><i class="fa fa-check"></i><b>4.4.1</b> A collaboration with a black-box pool</a></li>
+<li class="chapter" data-level="4.4.2" data-path="collaboration.html"><a href="collaboration.html#two-processes-that-talk-to-each-other"><i class="fa fa-check"></i><b>4.4.2</b> Two processes that talk to each other</a></li>
+<li class="chapter" data-level="4.4.3" data-path="collaboration.html"><a href="collaboration.html#correlation-keys"><i class="fa fa-check"></i><b>4.4.3</b> Correlation keys</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="collaboration.html"><a href="collaboration.html#structural-rules"><i class="fa fa-check"></i><b>4.5</b> Structural rules</a></li>
+<li class="chapter" data-level="4.6" data-path="collaboration.html"><a href="collaboration.html#conversations"><i class="fa fa-check"></i><b>4.6</b> Conversations</a></li>
+<li class="chapter" data-level="4.7" data-path="collaboration.html"><a href="collaboration.html#choreographies"><i class="fa fa-check"></i><b>4.7</b> Choreographies</a></li>
+<li class="chapter" data-level="4.8" data-path="collaboration.html"><a href="collaboration.html#participant-multiplicity"><i class="fa fa-check"></i><b>4.8</b> Participant multiplicity</a></li>
+<li class="chapter" data-level="4.9" data-path="collaboration.html"><a href="collaboration.html#collaborations-levels-and-camunda"><i class="fa fa-check"></i><b>4.9</b> Collaborations, levels and Camunda</a></li>
+<li class="chapter" data-level="4.10" data-path="collaboration.html"><a href="collaboration.html#the-canonical-form-of-a-collaboration"><i class="fa fa-check"></i><b>4.10</b> The canonical form of a collaboration</a></li>
+<li class="chapter" data-level="" data-path="collaboration.html"><a href="collaboration.html#exercises-3"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="events-exceptions.html"><a href="events-exceptions.html"><i class="fa fa-check"></i><b>5</b> Events, sub-processes and exceptions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="events-exceptions.html"><a href="events-exceptions.html#catching-and-throwing"><i class="fa fa-check"></i><b>5.1</b> Catching and throwing</a></li>
+<li class="chapter" data-level="5.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers"><i class="fa fa-check"></i><b>5.2</b> Triggers</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="events-exceptions.html"><a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier"><i class="fa fa-check"></i><b>5.2.1</b> Events on a path: waiting for a supplier</a></li>
+<li class="chapter" data-level="5.2.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers-without-a-value"><i class="fa fa-check"></i><b>5.2.2</b> Triggers without a value</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="events-exceptions.html"><a href="events-exceptions.html#boundary-events"><i class="fa fa-check"></i><b>5.3</b> Boundary events</a></li>
+<li class="chapter" data-level="5.4" data-path="events-exceptions.html"><a href="events-exceptions.html#embedded-sub-processes"><i class="fa fa-check"></i><b>5.4</b> Embedded sub-processes</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="events-exceptions.html"><a href="events-exceptions.html#escalation-from-a-sub-process"><i class="fa fa-check"></i><b>5.4.1</b> Escalation from a sub-process</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="events-exceptions.html"><a href="events-exceptions.html#event-sub-processes"><i class="fa fa-check"></i><b>5.5</b> Event sub-processes</a></li>
+<li class="chapter" data-level="5.6" data-path="events-exceptions.html"><a href="events-exceptions.html#compensation"><i class="fa fa-check"></i><b>5.6</b> Compensation</a></li>
+<li class="chapter" data-level="5.7" data-path="events-exceptions.html"><a href="events-exceptions.html#transactions-and-cancellation"><i class="fa fa-check"></i><b>5.7</b> Transactions and cancellation</a></li>
+<li class="chapter" data-level="5.8" data-path="events-exceptions.html"><a href="events-exceptions.html#multiple-and-parallel-multiple-events"><i class="fa fa-check"></i><b>5.8</b> Multiple and parallel multiple events</a></li>
+<li class="chapter" data-level="5.9" data-path="events-exceptions.html"><a href="events-exceptions.html#ad-hoc-sub-processes"><i class="fa fa-check"></i><b>5.9</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="5.10" data-path="events-exceptions.html"><a href="events-exceptions.html#call-activities-and-global-tasks"><i class="fa fa-check"></i><b>5.10</b> Call activities and global tasks</a></li>
+<li class="chapter" data-level="5.11" data-path="events-exceptions.html"><a href="events-exceptions.html#loops-and-multi-instance"><i class="fa fa-check"></i><b>5.11</b> Loops and multi-instance</a></li>
+<li class="chapter" data-level="5.12" data-path="events-exceptions.html"><a href="events-exceptions.html#exceptions-and-process-engines"><i class="fa fa-check"></i><b>5.12</b> Exceptions and process engines</a></li>
+<li class="chapter" data-level="5.13" data-path="events-exceptions.html"><a href="events-exceptions.html#typical-mistakes-1"><i class="fa fa-check"></i><b>5.13</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="events-exceptions.html"><a href="events-exceptions.html#exercises-4"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data-artifacts.html"><a href="data-artifacts.html"><i class="fa fa-check"></i><b>6</b> Data, resources and artifacts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="data-artifacts.html"><a href="data-artifacts.html#data-objects"><i class="fa fa-check"></i><b>6.1</b> Data objects</a></li>
+<li class="chapter" data-level="6.2" data-path="data-artifacts.html"><a href="data-artifacts.html#data-stores"><i class="fa fa-check"></i><b>6.2</b> Data stores</a></li>
+<li class="chapter" data-level="6.3" data-path="data-artifacts.html"><a href="data-artifacts.html#reading-and-writing"><i class="fa fa-check"></i><b>6.3</b> Reading and writing</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="data-artifacts.html"><a href="data-artifacts.html#states-and-state-transitions"><i class="fa fa-check"></i><b>6.3.1</b> States and state transitions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="data-artifacts.html"><a href="data-artifacts.html#process-data"><i class="fa fa-check"></i><b>6.4</b> Process data</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="data-artifacts.html"><a href="data-artifacts.html#item-definitions"><i class="fa fa-check"></i><b>6.4.1</b> Item definitions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="data-artifacts.html"><a href="data-artifacts.html#inputs-outputs-and-properties"><i class="fa fa-check"></i><b>6.4.2</b> Inputs, outputs and properties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="data-artifacts.html"><a href="data-artifacts.html#resources-and-performers"><i class="fa fa-check"></i><b>6.5</b> Resources and performers</a></li>
+<li class="chapter" data-level="6.6" data-path="data-artifacts.html"><a href="data-artifacts.html#text-annotations"><i class="fa fa-check"></i><b>6.6</b> Text annotations</a></li>
+<li class="chapter" data-level="6.7" data-path="data-artifacts.html"><a href="data-artifacts.html#groups"><i class="fa fa-check"></i><b>6.7</b> Groups</a></li>
+<li class="chapter" data-level="6.8" data-path="data-artifacts.html"><a href="data-artifacts.html#documentation"><i class="fa fa-check"></i><b>6.8</b> Documentation</a></li>
+<li class="chapter" data-level="6.9" data-path="data-artifacts.html"><a href="data-artifacts.html#typical-mistakes-2"><i class="fa fa-check"></i><b>6.9</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="data-artifacts.html"><a href="data-artifacts.html#exercises-5"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking.html"><a href="checking.html"><i class="fa fa-check"></i><b>7</b> Checking models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking.html"><a href="checking.html#what-tok-check-does"><i class="fa fa-check"></i><b>7.1</b> What <code>tok check</code> does</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="checking.html"><a href="checking.html#severities"><i class="fa fa-check"></i><b>7.1.1</b> Severities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="checking.html"><a href="checking.html#layers-and-codes"><i class="fa fa-check"></i><b>7.2</b> Layers and codes</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="checking.html"><a href="checking.html#the-order-of-the-layers-and-cascades"><i class="fa fa-check"></i><b>7.2.1</b> The order of the layers and cascades</a></li>
+<li class="chapter" data-level="7.2.2" data-path="checking.html"><a href="checking.html#messages-in-polish"><i class="fa fa-check"></i><b>7.2.2</b> Messages in Polish</a></li>
+<li class="chapter" data-level="7.2.3" data-path="checking.html"><a href="checking.html#diagnostics-for-programs"><i class="fa fa-check"></i><b>7.2.3</b> Diagnostics for programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="checking.html"><a href="checking.html#the-bpmn-rules"><i class="fa fa-check"></i><b>7.3</b> The BPMN rules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="checking.html"><a href="checking.html#bpmn-files-from-other-tools"><i class="fa fa-check"></i><b>7.3.1</b> BPMN files from other tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="checking.html"><a href="checking.html#levels-of-the-language-1"><i class="fa fa-check"></i><b>7.4</b> Levels of the language</a></li>
+<li class="chapter" data-level="7.5" data-path="checking.html"><a href="checking.html#bpmn-conformance-classes"><i class="fa fa-check"></i><b>7.5</b> BPMN conformance classes</a></li>
+<li class="chapter" data-level="7.6" data-path="checking.html"><a href="checking.html#the-canonical-form"><i class="fa fa-check"></i><b>7.6</b> The canonical form</a></li>
+<li class="chapter" data-level="7.7" data-path="checking.html"><a href="checking.html#typical-errors-and-their-corrections"><i class="fa fa-check"></i><b>7.7</b> Typical errors and their corrections</a></li>
+<li class="chapter" data-level="7.8" data-path="checking.html"><a href="checking.html#what-a-clean-check-means"><i class="fa fa-check"></i><b>7.8</b> What a clean check means</a></li>
+<li class="chapter" data-level="" data-path="checking.html"><a href="checking.html#exercises-6"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="layout-import.html"><a href="layout-import.html"><i class="fa fa-check"></i><b>8</b> Layout, export and import</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="layout-import.html"><a href="layout-import.html#the-automatic-layout"><i class="fa fa-check"></i><b>8.1</b> The automatic layout</a></li>
+<li class="chapter" data-level="8.2" data-path="layout-import.html"><a href="layout-import.html#pictures-tok-svg"><i class="fa fa-check"></i><b>8.2</b> Pictures: <code>tok svg</code></a></li>
+<li class="chapter" data-level="8.3" data-path="layout-import.html"><a href="layout-import.html#bpmn-files-tok-bpmn"><i class="fa fa-check"></i><b>8.3</b> BPMN files: <code>tok bpmn</code></a></li>
+<li class="chapter" data-level="8.4" data-path="layout-import.html"><a href="layout-import.html#everything-at-once-tok-export"><i class="fa fa-check"></i><b>8.4</b> Everything at once: <code>tok export</code></a></li>
+<li class="chapter" data-level="8.5" data-path="layout-import.html"><a href="layout-import.html#opening-the-files-in-bpmn-tools"><i class="fa fa-check"></i><b>8.5</b> Opening the files in BPMN tools</a></li>
+<li class="chapter" data-level="8.6" data-path="layout-import.html"><a href="layout-import.html#importing-bpmn-files"><i class="fa fa-check"></i><b>8.6</b> Importing BPMN files</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="layout-import.html"><a href="layout-import.html#what-is-kept"><i class="fa fa-check"></i><b>8.6.1</b> What is kept</a></li>
+<li class="chapter" data-level="8.6.2" data-path="layout-import.html"><a href="layout-import.html#what-is-reported"><i class="fa fa-check"></i><b>8.6.2</b> What is reported</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="layout-import.html"><a href="layout-import.html#the-layout-sidecar"><i class="fa fa-check"></i><b>8.7</b> The layout sidecar</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="layout-import.html"><a href="layout-import.html#changing-a-model-that-has-a-sidecar"><i class="fa fa-check"></i><b>8.7.1</b> Changing a model that has a sidecar</a></li>
+<li class="chapter" data-level="8.7.2" data-path="layout-import.html"><a href="layout-import.html#the-round-trip"><i class="fa fa-check"></i><b>8.7.2</b> The round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="layout-import.html"><a href="layout-import.html#importing-dmn-files"><i class="fa fa-check"></i><b>8.8</b> Importing DMN files</a></li>
+<li class="chapter" data-level="8.9" data-path="layout-import.html"><a href="layout-import.html#models-and-sidecars-in-version-control"><i class="fa fa-check"></i><b>8.9</b> Models and sidecars in version control</a></li>
+<li class="chapter" data-level="" data-path="layout-import.html"><a href="layout-import.html#exercises-7"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="decisions.html"><a href="decisions.html"><i class="fa fa-check"></i><b>9</b> Decisions with DMN and FEEL</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="decisions.html"><a href="decisions.html#a-first-decision-table"><i class="fa fa-check"></i><b>9.1</b> A first decision table</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="decisions.html"><a href="decisions.html#testing-with-tok-eval"><i class="fa fa-check"></i><b>9.1.1</b> Testing with <code>tok eval</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="decisions.html"><a href="decisions.html#hit-policies"><i class="fa fa-check"></i><b>9.2</b> Hit policies</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="decisions.html"><a href="decisions.html#overlapping-rules"><i class="fa fa-check"></i><b>9.2.1</b> Overlapping rules</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="decisions.html"><a href="decisions.html#decision-requirements-graphs"><i class="fa fa-check"></i><b>9.3</b> Decision requirements graphs</a></li>
+<li class="chapter" data-level="9.4" data-path="decisions.html"><a href="decisions.html#boxed-expressions"><i class="fa fa-check"></i><b>9.4</b> Boxed expressions</a></li>
+<li class="chapter" data-level="9.5" data-path="decisions.html"><a href="decisions.html#dmn-types"><i class="fa fa-check"></i><b>9.5</b> Types</a></li>
+<li class="chapter" data-level="9.6" data-path="decisions.html"><a href="decisions.html#feel-in-tok"><i class="fa fa-check"></i><b>9.6</b> FEEL in tok</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="decisions.html"><a href="decisions.html#names-with-spaces"><i class="fa fa-check"></i><b>9.6.1</b> Names with spaces</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="decisions.html"><a href="decisions.html#decisions-in-a-process"><i class="fa fa-check"></i><b>9.7</b> Decisions in a process</a></li>
+<li class="chapter" data-level="9.8" data-path="decisions.html"><a href="decisions.html#dmn-export"><i class="fa fa-check"></i><b>9.8</b> DMN export</a></li>
+<li class="chapter" data-level="9.9" data-path="decisions.html"><a href="decisions.html#dmn-import"><i class="fa fa-check"></i><b>9.9</b> DMN import</a></li>
+<li class="chapter" data-level="9.10" data-path="decisions.html"><a href="decisions.html#the-dmn-tck-as-evidence"><i class="fa fa-check"></i><b>9.10</b> The DMN TCK as evidence</a></li>
+<li class="chapter" data-level="9.11" data-path="decisions.html"><a href="decisions.html#typical-mistakes-3"><i class="fa fa-check"></i><b>9.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="decisions.html"><a href="decisions.html#exercises-8"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="executable.html"><a href="executable.html"><i class="fa fa-check"></i><b>10</b> Executable models on Camunda 8</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="executable.html"><a href="executable.html#the-executable-flag"><i class="fa fa-check"></i><b>10.1</b> The executable flag</a></li>
+<li class="chapter" data-level="10.2" data-path="executable.html"><a href="executable.html#the-executable-profile"><i class="fa fa-check"></i><b>10.2</b> The executable profile</a></li>
+<li class="chapter" data-level="10.3" data-path="executable.html"><a href="executable.html#a-complete-executable-model"><i class="fa fa-check"></i><b>10.3</b> A complete executable model</a></li>
+<li class="chapter" data-level="10.4" data-path="executable.html"><a href="executable.html#static-values-and-expressions-the-rule"><i class="fa fa-check"></i><b>10.4</b> Static values and expressions: the <code>=</code> rule</a></li>
+<li class="chapter" data-level="10.5" data-path="executable.html"><a href="executable.html#feel-in-executable-models"><i class="fa fa-check"></i><b>10.5</b> FEEL in executable models</a></li>
+<li class="chapter" data-level="10.6" data-path="executable.html"><a href="executable.html#service-tasks-and-jobs"><i class="fa fa-check"></i><b>10.6</b> Service tasks and jobs</a></li>
+<li class="chapter" data-level="10.7" data-path="executable.html"><a href="executable.html#user-tasks"><i class="fa fa-check"></i><b>10.7</b> User tasks</a></li>
+<li class="chapter" data-level="10.8" data-path="executable.html"><a href="executable.html#camunda-forms"><i class="fa fa-check"></i><b>10.8</b> Camunda forms</a></li>
+<li class="chapter" data-level="10.9" data-path="executable.html"><a href="executable.html#variable-mappings"><i class="fa fa-check"></i><b>10.9</b> Variable mappings</a></li>
+<li class="chapter" data-level="10.10" data-path="executable.html"><a href="executable.html#messages-and-correlation"><i class="fa fa-check"></i><b>10.10</b> Messages and correlation</a></li>
+<li class="chapter" data-level="10.11" data-path="executable.html"><a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities"><i class="fa fa-check"></i><b>10.11</b> Multi-instance, ad-hoc sub-processes and call activities</a>
+<ul>
+<li class="chapter" data-level="10.11.1" data-path="executable.html"><a href="executable.html#multi-instance"><i class="fa fa-check"></i><b>10.11.1</b> Multi-instance</a></li>
+<li class="chapter" data-level="10.11.2" data-path="executable.html"><a href="executable.html#ad-hoc-sub-processes-1"><i class="fa fa-check"></i><b>10.11.2</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="10.11.3" data-path="executable.html"><a href="executable.html#call-activities"><i class="fa fa-check"></i><b>10.11.3</b> Call activities</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="executable.html"><a href="executable.html#compensation-errors-and-listeners"><i class="fa fa-check"></i><b>10.12</b> Compensation, errors and listeners</a></li>
+<li class="chapter" data-level="10.13" data-path="executable.html"><a href="executable.html#version-tags-and-bindings"><i class="fa fa-check"></i><b>10.13</b> Version tags and bindings</a></li>
+<li class="chapter" data-level="10.14" data-path="executable.html"><a href="executable.html#the-rest-connector"><i class="fa fa-check"></i><b>10.14</b> The REST connector</a></li>
+<li class="chapter" data-level="10.15" data-path="executable.html"><a href="executable.html#elements-camunda-8-does-not-execute"><i class="fa fa-check"></i><b>10.15</b> Elements Camunda 8 does not execute</a></li>
+<li class="chapter" data-level="10.16" data-path="executable.html"><a href="executable.html#exporting-with-tok-export"><i class="fa fa-check"></i><b>10.16</b> Exporting with <code>tok export</code></a></li>
+<li class="chapter" data-level="10.17" data-path="executable.html"><a href="executable.html#executable-run"><i class="fa fa-check"></i><b>10.17</b> Deploying and running on Camunda 8 Run</a>
+<ul>
+<li class="chapter" data-level="10.17.1" data-path="executable.html"><a href="executable.html#deploy"><i class="fa fa-check"></i><b>10.17.1</b> Deploy</a></li>
+<li class="chapter" data-level="10.17.2" data-path="executable.html"><a href="executable.html#start-an-instance"><i class="fa fa-check"></i><b>10.17.2</b> Start an instance</a></li>
+<li class="chapter" data-level="10.17.3" data-path="executable.html"><a href="executable.html#complete-a-user-task"><i class="fa fa-check"></i><b>10.17.3</b> Complete a user task</a></li>
+<li class="chapter" data-level="10.17.4" data-path="executable.html"><a href="executable.html#work-on-a-job"><i class="fa fa-check"></i><b>10.17.4</b> Work on a job</a></li>
+<li class="chapter" data-level="10.17.5" data-path="executable.html"><a href="executable.html#publish-a-message"><i class="fa fa-check"></i><b>10.17.5</b> Publish a message</a></li>
+<li class="chapter" data-level="10.17.6" data-path="executable.html"><a href="executable.html#follow-the-instance"><i class="fa fa-check"></i><b>10.17.6</b> Follow the instance</a></li>
+<li class="chapter" data-level="10.17.7" data-path="executable.html"><a href="executable.html#evaluate-a-decision"><i class="fa fa-check"></i><b>10.17.7</b> Evaluate a decision</a></li>
+<li class="chapter" data-level="10.17.8" data-path="executable.html"><a href="executable.html#the-same-run-in-python"><i class="fa fa-check"></i><b>10.17.8</b> The same run in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.18" data-path="executable.html"><a href="executable.html#camunda-8-saas-and-self-managed"><i class="fa fa-check"></i><b>10.18</b> Camunda 8 SaaS and Self-Managed</a></li>
+<li class="chapter" data-level="10.19" data-path="executable.html"><a href="executable.html#how-the-translation-is-verified"><i class="fa fa-check"></i><b>10.19</b> How the translation is verified</a></li>
+<li class="chapter" data-level="" data-path="executable.html"><a href="executable.html#exercises-9"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>11</b> Simulation and process mining</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simulation.html"><a href="simulation.html#the-simulation-layer"><i class="fa fa-check"></i><b>11.1</b> The simulation layer</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="simulation.html"><a href="simulation.html#distributions"><i class="fa fa-check"></i><b>11.1.1</b> Distributions</a></li>
+<li class="chapter" data-level="11.1.2" data-path="simulation.html"><a href="simulation.html#choosing-a-branch"><i class="fa fa-check"></i><b>11.1.2</b> Choosing a branch</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="simulation.html"><a href="simulation.html#a-simulation-model"><i class="fa fa-check"></i><b>11.2</b> A simulation model</a></li>
+<li class="chapter" data-level="11.3" data-path="simulation.html"><a href="simulation.html#running-tok-sim"><i class="fa fa-check"></i><b>11.3</b> Running <code>tok sim</code></a></li>
+<li class="chapter" data-level="11.4" data-path="simulation.html"><a href="simulation.html#reading-the-indicators"><i class="fa fa-check"></i><b>11.4</b> Reading the indicators</a></li>
+<li class="chapter" data-level="11.5" data-path="simulation.html"><a href="simulation.html#seeds-cases-and-replications"><i class="fa fa-check"></i><b>11.5</b> Seeds, cases and replications</a></li>
+<li class="chapter" data-level="11.6" data-path="simulation.html"><a href="simulation.html#comparing-scenarios"><i class="fa fa-check"></i><b>11.6</b> Comparing scenarios</a></li>
+<li class="chapter" data-level="11.7" data-path="simulation.html"><a href="simulation.html#event-logs"><i class="fa fa-check"></i><b>11.7</b> Event logs</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="simulation.html"><a href="simulation.html#xes-for-process-mining-tools"><i class="fa fa-check"></i><b>11.7.1</b> XES for process-mining tools</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="simulation.html"><a href="simulation.html#process-mining-on-simulated-logs"><i class="fa fa-check"></i><b>11.8</b> Process mining on simulated logs</a></li>
+<li class="chapter" data-level="11.9" data-path="simulation.html"><a href="simulation.html#simulation-in-r"><i class="fa fa-check"></i><b>11.9</b> Simulation in R</a></li>
+<li class="chapter" data-level="11.10" data-path="simulation.html"><a href="simulation.html#simulation-in-python"><i class="fa fa-check"></i><b>11.10</b> Simulation in Python</a></li>
+<li class="chapter" data-level="11.11" data-path="simulation.html"><a href="simulation.html#native-simulation-in-julia"><i class="fa fa-check"></i><b>11.11</b> Native simulation in Julia</a></li>
+<li class="chapter" data-level="11.12" data-path="simulation.html"><a href="simulation.html#calibration-on-an-event-log"><i class="fa fa-check"></i><b>11.12</b> Calibration on an event log</a></li>
+<li class="chapter" data-level="11.13" data-path="simulation.html"><a href="simulation.html#what-the-simulator-does-not-do"><i class="fa fa-check"></i><b>11.13</b> What the simulator does not do</a></li>
+<li class="chapter" data-level="" data-path="simulation.html"><a href="simulation.html#exercises-10"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="editors.html"><a href="editors.html"><i class="fa fa-check"></i><b>12</b> Editors and the playground</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="editors.html"><a href="editors.html#the-vs-code-extension"><i class="fa fa-check"></i><b>12.1</b> The VS Code extension</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="editors.html"><a href="editors.html#installing"><i class="fa fa-check"></i><b>12.1.1</b> Installing</a></li>
+<li class="chapter" data-level="12.1.2" data-path="editors.html"><a href="editors.html#what-you-see-while-editing"><i class="fa fa-check"></i><b>12.1.2</b> What you see while editing</a></li>
+<li class="chapter" data-level="12.1.3" data-path="editors.html"><a href="editors.html#navigation-and-rename"><i class="fa fa-check"></i><b>12.1.3</b> Navigation and rename</a></li>
+<li class="chapter" data-level="12.1.4" data-path="editors.html"><a href="editors.html#the-diagram-beside-the-text"><i class="fa fa-check"></i><b>12.1.4</b> The diagram beside the text</a></li>
+<li class="chapter" data-level="12.1.5" data-path="editors.html"><a href="editors.html#commands-and-settings"><i class="fa fa-check"></i><b>12.1.5</b> Commands and settings</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="editors.html"><a href="editors.html#the-language-server-for-other-editors"><i class="fa fa-check"></i><b>12.2</b> The language server for other editors</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="editors.html"><a href="editors.html#installing-the-server"><i class="fa fa-check"></i><b>12.2.1</b> Installing the server</a></li>
+<li class="chapter" data-level="12.2.2" data-path="editors.html"><a href="editors.html#what-an-editor-needs"><i class="fa fa-check"></i><b>12.2.2</b> What an editor needs</a></li>
+<li class="chapter" data-level="12.2.3" data-path="editors.html"><a href="editors.html#neovim"><i class="fa fa-check"></i><b>12.2.3</b> Neovim</a></li>
+<li class="chapter" data-level="12.2.4" data-path="editors.html"><a href="editors.html#helix"><i class="fa fa-check"></i><b>12.2.4</b> Helix</a></li>
+<li class="chapter" data-level="12.2.5" data-path="editors.html"><a href="editors.html#emacs"><i class="fa fa-check"></i><b>12.2.5</b> Emacs</a></li>
+<li class="chapter" data-level="12.2.6" data-path="editors.html"><a href="editors.html#other-editors"><i class="fa fa-check"></i><b>12.2.6</b> Other editors</a></li>
+<li class="chapter" data-level="12.2.7" data-path="editors.html"><a href="editors.html#requests-for-editor-extensions"><i class="fa fa-check"></i><b>12.2.7</b> Requests for editor extensions</a></li>
+<li class="chapter" data-level="12.2.8" data-path="editors.html"><a href="editors.html#limits"><i class="fa fa-check"></i><b>12.2.8</b> Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="editors.html"><a href="editors.html#the-playground-in-the-browser"><i class="fa fa-check"></i><b>12.3</b> The playground in the browser</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="editors.html"><a href="editors.html#the-page"><i class="fa fa-check"></i><b>12.3.1</b> The page</a></li>
+<li class="chapter" data-level="12.3.2" data-path="editors.html"><a href="editors.html#sharing-a-model-by-a-link"><i class="fa fa-check"></i><b>12.3.2</b> Sharing a model by a link</a></li>
+<li class="chapter" data-level="12.3.3" data-path="editors.html"><a href="editors.html#offline-and-privacy"><i class="fa fa-check"></i><b>12.3.3</b> Offline and privacy</a></li>
+<li class="chapter" data-level="12.3.4" data-path="editors.html"><a href="editors.html#limits-of-the-browser"><i class="fa fa-check"></i><b>12.3.4</b> Limits of the browser</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="editors.html"><a href="editors.html#choosing-a-tool"><i class="fa fa-check"></i><b>12.4</b> Choosing a tool</a></li>
+<li class="chapter" data-level="" data-path="editors.html"><a href="editors.html#exercises-11"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>13</b> Programming interfaces</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="programming.html"><a href="programming.html#one-engine-many-bindings"><i class="fa fa-check"></i><b>13.1</b> One engine, many bindings</a></li>
+<li class="chapter" data-level="13.2" data-path="programming.html"><a href="programming.html#python"><i class="fa fa-check"></i><b>13.2</b> Python</a></li>
+<li class="chapter" data-level="13.3" data-path="programming.html"><a href="programming.html#r-1"><i class="fa fa-check"></i><b>13.3</b> R</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="programming.html"><a href="programming.html#the-knitr-engine"><i class="fa fa-check"></i><b>13.3.1</b> The knitr engine</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="programming.html"><a href="programming.html#julia-1"><i class="fa fa-check"></i><b>13.4</b> Julia</a></li>
+<li class="chapter" data-level="13.5" data-path="programming.html"><a href="programming.html#javascript-and-webassembly"><i class="fa fa-check"></i><b>13.5</b> JavaScript and WebAssembly</a></li>
+<li class="chapter" data-level="13.6" data-path="programming.html"><a href="programming.html#the-c-interface"><i class="fa fa-check"></i><b>13.6</b> The C interface</a></li>
+<li class="chapter" data-level="13.7" data-path="programming.html"><a href="programming.html#the-rust-crates"><i class="fa fa-check"></i><b>13.7</b> The Rust crates</a></li>
+<li class="chapter" data-level="13.8" data-path="programming.html"><a href="programming.html#which-interface-to-choose"><i class="fa fa-check"></i><b>13.8</b> Which interface to choose</a></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#exercises-12"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="agents.html"><a href="agents.html"><i class="fa fa-check"></i><b>14</b> Working with AI agents</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="agents.html"><a href="agents.html#why-a-text-language-suits-agents"><i class="fa fa-check"></i><b>14.1</b> Why a text language suits agents</a></li>
+<li class="chapter" data-level="14.2" data-path="agents.html"><a href="agents.html#the-skill-tok-modelling"><i class="fa fa-check"></i><b>14.2</b> The skill <code>tok-modelling</code></a></li>
+<li class="chapter" data-level="14.3" data-path="agents.html"><a href="agents.html#the-mcp-server"><i class="fa fa-check"></i><b>14.3</b> The MCP server</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="agents.html"><a href="agents.html#starting-the-server"><i class="fa fa-check"></i><b>14.3.1</b> Starting the server</a></li>
+<li class="chapter" data-level="14.3.2" data-path="agents.html"><a href="agents.html#tools"><i class="fa fa-check"></i><b>14.3.2</b> Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="agents.html"><a href="agents.html#configuring-clients"><i class="fa fa-check"></i><b>14.4</b> Configuring clients</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="agents.html"><a href="agents.html#clients-with-an-mcpservers-configuration"><i class="fa fa-check"></i><b>14.4.1</b> Clients with an <code>mcpServers</code> configuration</a></li>
+<li class="chapter" data-level="14.4.2" data-path="agents.html"><a href="agents.html#vs-code"><i class="fa fa-check"></i><b>14.4.2</b> VS Code</a></li>
+<li class="chapter" data-level="14.4.3" data-path="agents.html"><a href="agents.html#claude-code"><i class="fa fa-check"></i><b>14.4.3</b> Claude Code</a></li>
+<li class="chapter" data-level="14.4.4" data-path="agents.html"><a href="agents.html#other-agents"><i class="fa fa-check"></i><b>14.4.4</b> Other agents</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="agents.html"><a href="agents.html#working-without-mcp"><i class="fa fa-check"></i><b>14.5</b> Working without MCP</a></li>
+<li class="chapter" data-level="14.6" data-path="agents.html"><a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file"><i class="fa fa-check"></i><b>14.6</b> A session: from a table of steps to a BPMN file</a></li>
+<li class="chapter" data-level="14.7" data-path="agents.html"><a href="agents.html#reviewing-what-an-agent-produces"><i class="fa fa-check"></i><b>14.7</b> Reviewing what an agent produces</a></li>
+<li class="chapter" data-level="" data-path="agents.html"><a href="agents.html#exercises-13"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="integrations.html"><a href="integrations.html"><i class="fa fa-check"></i><b>15</b> Integrations</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="integrations.html"><a href="integrations.html#continuous-integration-on-github"><i class="fa fa-check"></i><b>15.1</b> Continuous integration on GitHub</a></li>
+<li class="chapter" data-level="15.2" data-path="integrations.html"><a href="integrations.html#other-ci-systems"><i class="fa fa-check"></i><b>15.2</b> Other CI systems</a></li>
+<li class="chapter" data-level="15.3" data-path="integrations.html"><a href="integrations.html#a-pre-commit-hook"><i class="fa fa-check"></i><b>15.3</b> A pre-commit hook</a></li>
+<li class="chapter" data-level="15.4" data-path="integrations.html"><a href="integrations.html#models-in-documents"><i class="fa fa-check"></i><b>15.4</b> Models in documents</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="integrations.html"><a href="integrations.html#r-markdown-and-quarto"><i class="fa fa-check"></i><b>15.4.1</b> R Markdown and Quarto</a></li>
+<li class="chapter" data-level="15.4.2" data-path="integrations.html"><a href="integrations.html#jupyter"><i class="fa fa-check"></i><b>15.4.2</b> Jupyter</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="integrations.html"><a href="integrations.html#bpmn-tools"><i class="fa fa-check"></i><b>15.5</b> BPMN tools</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="integrations.html"><a href="integrations.html#how-much-survives-a-round-trip"><i class="fa fa-check"></i><b>15.5.1</b> How much survives a round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="integrations.html"><a href="integrations.html#camunda-8"><i class="fa fa-check"></i><b>15.6</b> Camunda 8</a></li>
+<li class="chapter" data-level="15.7" data-path="integrations.html"><a href="integrations.html#process-mining-tools"><i class="fa fa-check"></i><b>15.7</b> Process-mining tools</a></li>
+<li class="chapter" data-level="15.8" data-path="integrations.html"><a href="integrations.html#decisions-in-other-dmn-engines"><i class="fa fa-check"></i><b>15.8</b> Decisions in other DMN engines</a></li>
+<li class="chapter" data-level="15.9" data-path="integrations.html"><a href="integrations.html#a-version-control-workflow"><i class="fa fa-check"></i><b>15.9</b> A version-control workflow</a></li>
+<li class="chapter" data-level="" data-path="integrations.html"><a href="integrations.html#exercises-14"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="symbols.html"><a href="symbols.html"><i class="fa fa-check"></i><b>A</b> BPMN symbols</a>
+<ul>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events"><i class="fa fa-check"></i>Start events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events-of-event-sub-processes"><i class="fa fa-check"></i>Start events of event sub-processes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#intermediate-events"><i class="fa fa-check"></i>Intermediate events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#boundary-events-1"><i class="fa fa-check"></i>Boundary events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#end-events"><i class="fa fa-check"></i>End events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activities"><i class="fa fa-check"></i>Activities</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activity-markers"><i class="fa fa-check"></i>Activity markers</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#gateways-1"><i class="fa fa-check"></i>Gateways</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#connections"><i class="fa fa-check"></i>Connections</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#artifacts"><i class="fa fa-check"></i>Artifacts</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#pools-and-lanes"><i class="fa fa-check"></i>Pools and lanes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#conversations-1"><i class="fa fa-check"></i>Conversations</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#choreographies-1"><i class="fa fa-check"></i>Choreographies</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="cheatsheet.html"><a href="cheatsheet.html"><i class="fa fa-check"></i><b>B</b> Language on one page</a></li>
+<li class="chapter" data-level="C" data-path="commands.html"><a href="commands.html"><i class="fa fa-check"></i><b>C</b> Command reference</a></li>
+<li class="chapter" data-level="D" data-path="diagnostics.html"><a href="diagnostics.html"><i class="fa fa-check"></i><b>D</b> Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-1"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-2"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-3"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-4"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-5"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-6"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-7"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-8"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-9"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="E" data-path="conformance.html"><a href="conformance.html"><i class="fa fa-check"></i><b>E</b> Conformance with Camunda 8</a>
+<ul>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-10"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-11"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-12"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-13"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-14"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-15"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>F</b> Glossary</a></li>
+<li class="chapter" data-level="G" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>G</b> References</a>
+<ul>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#standards"><i class="fa fa-check"></i>Standards</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tools-and-test-suites"><i class="fa fa-check"></i>Tools and test suites</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tok"><i class="fa fa-check"></i>tok</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+<li><a href="playground/" target="_blank">Playground in the browser</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tok: Process Models as Text</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="executable" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Executable models on Camunda 8<a href="executable.html#executable" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="goals">
+<p><strong>In this chapter</strong> you will make a model executable with the header flag <code>executable</code> and see what the check adds for it · give service tasks their jobs and user tasks their forms, assignees and deadlines · write Camunda forms, variable mappings and FEEL expressions, and apply the <code>=</code> rule for attributes that take a value or an expression · correlate messages, run activities as multi-instance, ad-hoc and call activities, compensate, listen and version · recognise the elements Camunda 8 does not execute · export everything with <code>tok export</code>, deploy it to Camunda 8 Run and drive an instance through the REST API with <code>curl</code> and with a short Python script</p>
+</div>
+<p>The models of the previous chapters describe processes for people: they document a procedure, explain who does what and serve as a basis for analysis. A process engine needs more than that. It must know which form to show in a user task, which program performs an automatic step, which variable decides a gateway and which message continues a waiting instance. This chapter adds that layer. The engine in question is <strong>Camunda 8</strong>, the platform tok exports executable models for; its process engine is called Zeebe.</p>
+<p>The executable layer is optional and stays apart from the rest of the language. A model without it is a complete BPMN model; a model with it is the same model plus the details that the engine reads. You can add the layer to any model when the time comes, and a tool that does not need it can ignore it.</p>
+<div id="the-executable-flag" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> The executable flag<a href="executable.html#the-executable-flag" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A document becomes executable with the flag <code>executable</code> in the header:</p>
+<pre class="tok"><code>tok 1.0 &quot;Book purchase proposal&quot; executable process=book-purchase version-tag=&quot;1.0&quot;</code></pre>
+<p>In a document with pools the flag can also stand on a pool (<code>pool library "Library" executable</code>), which makes only that pool’s process executable. The flag has three effects:</p>
+<ol style="list-style-type: decimal">
+<li>The BPMN export marks the process with <code>isExecutable="true"</code> and writes the Camunda extensions (elements in the namespace <code>zeebe:</code>) that the engine reads, together with the attributes that tell Camunda Modeler the file is a Camunda 8 model.</li>
+<li><code>tok check</code> applies the <strong>executable profile</strong>: a set of rules with codes starting with <code>C</code> that report what the engine would reject or could not run.</li>
+<li>The attributes of the executable layer (assignees, job types, mappings and the others in this chapter) take effect. In a document without the flag they are kept in the text but ignored, and the check reports each of them with the warning <code>R055</code>.</li>
+</ol>
+<p>The header attribute <code>target=camunda</code> names the execution platform. It is the default, so you rarely write it. <code>process=</code> sets the identifier of the process in a document without pools, which is the identifier you use to start instances in the engine; a pool sets it with its own <code>process=</code>. Without it the identifier is <code>process</code>, which is a poor name for a process definition that lives next to others in one engine.</p>
+<p>Here is what happens when the executable attributes are written into a document without the flag:</p>
+<pre><code>nonexec.tok:4: warning R055: &#39;assignee&#39; belongs to the executable layer and is ignored because the document is not executable
+nonexec.tok:4: warning R055: &#39;priority&#39; belongs to the executable layer and is ignored because the document is not executable
+nonexec.tok: 0 error(s), 2 warning(s), 0 note(s)</code></pre>
+<p>The warning protects you from a common mistake: you add an assignee, export the model, and wonder why the engine does not assign the task. The teaching levels <code>basic</code> and <code>analytic</code> of <code>tok check --level</code> reject the executable layer altogether (Chapter <a href="checking.html#checking">7</a>).</p>
+</div>
+<div id="the-executable-profile" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> The executable profile<a href="executable.html#the-executable-profile" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In an executable document the check asks whether the engine has everything it needs. The most frequent findings are these:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Severity</th>
+<th>Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C011</code></td>
+<td>note</td>
+<td>a user task without <code>form=</code>: in Tasklist it can only be completed, without entering data</td>
+</tr>
+<tr class="even">
+<td><code>C020</code></td>
+<td>error</td>
+<td>a service or send task without <code>type=</code>, the job type a worker program takes</td>
+</tr>
+<tr class="odd">
+<td><code>C022</code></td>
+<td>error</td>
+<td>a message throw or end event without <code>type=</code>; Camunda executes it as a job</td>
+</tr>
+<tr class="even">
+<td><code>C030</code></td>
+<td>error</td>
+<td>a business rule task without <code>decision=</code></td>
+</tr>
+<tr class="odd">
+<td><code>C040</code></td>
+<td>error</td>
+<td>a script task without <code>expr=</code></td>
+</tr>
+<tr class="even">
+<td><code>C052</code></td>
+<td>error</td>
+<td>a message catch event, message boundary event or receive task without <code>correlation=</code></td>
+</tr>
+<tr class="odd">
+<td><code>C070</code></td>
+<td>error</td>
+<td>a flow leaving an <code>xor</code> or <code>or</code> gateway with several outgoing flows has neither <code>when=</code> nor <code>default</code></td>
+</tr>
+<tr class="even">
+<td><code>C090</code></td>
+<td>error</td>
+<td>a static due or follow-up date without a time zone</td>
+</tr>
+<tr class="odd">
+<td><code>C091</code></td>
+<td>error</td>
+<td>a priority outside 0–100</td>
+</tr>
+</tbody>
+</table>
+<p>A small leave request, written quickly, shows four of them at once:</p>
+<pre class="tok"><code>tok 1.0 &quot;Leave request&quot; executable
+
+start s &quot;Request submitted&quot;
+user review &quot;Review the request&quot;
+rule rules &quot;Apply the leave rules&quot;
+xor ok &quot;Approved?&quot;
+catch answer &quot;Answer from HR&quot; message=&quot;HR answer&quot;
+end yes &quot;Leave granted&quot;
+end no &quot;Leave refused&quot;
+
+flow s -&gt; review -&gt; rules -&gt; ok
+flow ok -&gt; answer &quot;yes&quot;
+flow ok -&gt; no &quot;no&quot; default
+flow answer -&gt; yes</code></pre>
+<pre><code>request.tok:4: note C011: user task &#39;review&#39; has no form (form=)
+request.tok:5: error C030: rule task &#39;rules&#39; needs decision=ID
+request.tok:7: error C052: &#39;answer&#39; waits for a message and needs correlation=&quot;…&quot;
+request.tok:12: error C070: flow ok -&gt; answer leaving gateway &#39;ok&#39; needs when=&quot;…&quot; or the default flag
+request.tok: 3 error(s), 0 warning(s), 1 note(s)</code></pre>
+<p>Each finding names the line and the attribute that is missing. The same document without <code>executable</code> checks clean: as a descriptive model it is correct, and only the engine needs the details.</p>
+</div>
+<div id="a-complete-executable-model" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> A complete executable model<a href="executable.html#a-complete-executable-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The model below is the purchase proposal of a university library, written for Camunda 8. A reader proposes a book in a start form. A decision table sets the approval mode. If the manager has to approve, a user task with a form goes to the acquisitions group, with a deadline; after seven days without a decision the proposal lapses. An approved or automatically accepted proposal gets its cost computed by a script, is ordered from the supplier by a worker program, and waits for the delivery message.</p>
+<pre class="tok"><code>tok 1.0 &quot;Book purchase proposal&quot; executable process=book-purchase version-tag=&quot;1.0&quot;
+
+# an executable process for Camunda 8: a start form, a decision, a user task with a form
+# and an assignment, a timer, a script, a job for a worker and a message with correlation
+start proposed &quot;Proposal submitted&quot; form=f-proposal
+rule mode &quot;Determine approval mode&quot; decision=approval-mode result=mode
+xor needs &quot;Manager approval needed?&quot;
+user approve &quot;Approve proposal&quot; form=f-approval candidate-groups=&quot;acquisitions&quot; due=&quot;=now() + duration(\&quot;P7D\&quot;)&quot; priority=70
+boundary expired &quot;7 days passed&quot; on=approve timer=P7D
+xor agreed &quot;Approved?&quot;
+xor merge
+script cost &quot;Compute cost&quot; expr=&quot;price + 12.5&quot; result=cost
+service order &quot;Order from supplier&quot; type=&quot;order-book&quot; retries=3 headers=&quot;channel: api; supplier: central&quot; inputs=&quot;title = title; amount = cost&quot; outputs=&quot;orderNumber = order.number&quot;
+catch delivered &quot;Book delivered&quot; message=&quot;Delivery&quot; correlation=&quot;orderNumber&quot;
+end done &quot;Purchase completed&quot;
+end rejected &quot;Proposal rejected&quot;
+end lapsed &quot;Proposal lapsed&quot;
+
+flow proposed -&gt; mode -&gt; needs
+flow needs -&gt; approve &quot;yes&quot; when=&quot;mode = \&quot;manager\&quot;&quot;
+flow needs -&gt; merge &quot;no&quot; default
+flow approve -&gt; agreed
+flow agreed -&gt; merge &quot;yes&quot; when=&quot;approved = true&quot;
+flow agreed -&gt; rejected &quot;no&quot; default
+flow expired -&gt; lapsed
+flow merge -&gt; cost -&gt; order -&gt; delivered -&gt; done
+
+inputdata kind &quot;Kind of publication&quot; type=string
+inputdata price &quot;Estimated price&quot; type=number
+
+decision approval-mode &quot;Approval mode&quot; type=string requires=&quot;kind price&quot; hit=first
+  | kind: string | price: number || mode: string ||                 |
+  | &quot;e-book&quot;     | -             || &quot;manager&quot;    || licences        |
+  | &quot;print&quot;      | &lt;= 150        || &quot;automatic&quot;  || cheap books     |
+  | -            | -             || &quot;manager&quot;    || everything else |
+
+form f-proposal &quot;Purchase proposal&quot;
+  text &quot;## Propose a book for the library&quot;
+  field title &quot;Title&quot; required type=textfield
+  field author &quot;Author&quot; type=textfield
+  field kind &quot;Kind of publication&quot; required type=select options=&quot;print:printed book, e-book:e-book&quot;
+  field price &quot;Estimated price&quot; required type=number min=0
+  field reason &quot;Reason&quot; type=textarea
+
+form f-approval &quot;Approval&quot;
+  text &quot;## Proposal: {{title}} ({{price}})&quot;
+  field approved &quot;Decision&quot; required type=radio options=&quot;true:approve, false:reject&quot;
+  field comment &quot;Comment for the reader&quot; type=textarea</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:executable-purchase-diagram"></span>
+<img src="examples/10-book-purchase.svg" alt="The executable purchase proposal. The diagram is the same as for a descriptive model: the executable layer adds no shapes." width="100%" />
+<p class="caption">
+Figure 10.1: The executable purchase proposal. The diagram is the same as for a descriptive model: the executable layer adds no shapes.
+</p>
+</div>
+<p><a class="download" href="examples/10-book-purchase.tok" download>Download the model (.tok)</a> <a class="download" href="examples/10-book-purchase.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>The model has four layers in one file: the process, a decision model of DMN 1.5 (Chapter <a href="decisions.html#decisions">9</a>), two forms and the attributes the engine reads. What each attribute becomes in the BPMN file is summarised here:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>Camunda 8 export</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>start … form=f-proposal</code></td>
+<td>start form: <code>zeebe:formDefinition formId="f-proposal"</code></td>
+</tr>
+<tr class="even">
+<td><code>rule … decision=approval-mode result=mode</code></td>
+<td><code>zeebe:calledDecision decisionId="approval-mode" resultVariable="mode"</code></td>
+</tr>
+<tr class="odd">
+<td><code>user … form=f-approval</code></td>
+<td><code>zeebe:userTask</code>, <code>zeebe:formDefinition formId="f-approval"</code></td>
+</tr>
+<tr class="even">
+<td><code>candidate-groups="acquisitions"</code></td>
+<td><code>zeebe:assignmentDefinition candidateGroups="acquisitions"</code></td>
+</tr>
+<tr class="odd">
+<td><code>due="=now() + duration(\"P7D\")"</code></td>
+<td><code>zeebe:taskSchedule dueDate="=now() + duration(&amp;quot;P7D&amp;quot;)"</code></td>
+</tr>
+<tr class="even">
+<td><code>priority=70</code></td>
+<td><code>zeebe:priorityDefinition priority="70"</code></td>
+</tr>
+<tr class="odd">
+<td><code>script … expr="price + 12.5" result=cost</code></td>
+<td><code>zeebe:script expression="=price + 12.5" resultVariable="cost"</code></td>
+</tr>
+<tr class="even">
+<td><code>service … type="order-book" retries=3</code></td>
+<td><code>zeebe:taskDefinition type="order-book" retries="3"</code></td>
+</tr>
+<tr class="odd">
+<td><code>headers="channel: api; supplier: central"</code></td>
+<td><code>zeebe:taskHeaders</code> with two <code>zeebe:header</code> elements</td>
+</tr>
+<tr class="even">
+<td><code>inputs=…</code>, <code>outputs=…</code></td>
+<td><code>zeebe:ioMapping</code> with <code>zeebe:input</code> and <code>zeebe:output</code></td>
+</tr>
+<tr class="odd">
+<td><code>catch … message="Delivery" correlation="orderNumber"</code></td>
+<td>the message <code>Delivery</code> with <code>zeebe:subscription correlationKey="=orderNumber"</code></td>
+</tr>
+<tr class="even">
+<td><code>flow … when="mode = \"manager\""</code></td>
+<td><code>conditionExpression</code> with the body <code>=mode = "manager"</code></td>
+</tr>
+<tr class="odd">
+<td><code>version-tag="1.0"</code></td>
+<td><code>zeebe:versionTag value="1.0"</code></td>
+</tr>
+</tbody>
+</table>
+<p>The rest of the chapter explains these attributes one group at a time.</p>
+</div>
+<div id="static-values-and-expressions-the-rule" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Static values and expressions: the <code>=</code> rule<a href="executable.html#static-values-and-expressions-the-rule" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Camunda evaluates expressions in FEEL, the expression language of DMN. In the BPMN file every expression starts with <code>=</code>, which is how Camunda tells an expression from a plain value. tok distinguishes two kinds of attributes, so that you write the <code>=</code> only where it carries meaning:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kind</th>
+<th>Attributes</th>
+<th>How you write the value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>always an expression</td>
+<td><code>when</code>, <code>expr</code>, <code>condition</code>, <code>correlation</code>, <code>collection</code>, <code>output-item</code>, <code>until</code>, <code>active</code>, the right-hand sides in <code>inputs</code> and <code>outputs</code></td>
+<td>FEEL <strong>without</strong> <code>=</code>: <code>when="approved = true"</code>; the exporter adds the <code>=</code></td>
+</tr>
+<tr class="even">
+<td>a static value or an expression</td>
+<td><code>assignee</code>, <code>candidate-users</code>, <code>candidate-groups</code>, <code>due</code>, <code>follow-up</code>, <code>priority</code>, <code>process</code>, <code>type</code>, <code>timer</code>, <code>business-id</code>, <code>version</code></td>
+<td>a static value as it is (<code>assignee="manager"</code>); a value computed at run time starts with <code>=</code> (<code>assignee="=request.supervisor"</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The second kind follows the convention of Camunda Modeler, where the same fields accept both. A useful way to remember the rule: if the attribute could only ever be an expression, the <code>=</code> would add nothing, so tok leaves it out; if the attribute can be a constant, the <code>=</code> says that this time it is not. A document that is not executable never contains <code>=</code> at the start of a value.</p>
+<p>The model above uses both kinds. <code>due="=now() + duration(\"P7D\")"</code> computes the due date when the task is created. A static date would be written without <code>=</code> and, as Camunda requires, with a time zone: <code>due="2027-01-15T12:00:00+01:00"</code>. Leave the zone out, or give a priority Camunda does not accept, and the check says so:</p>
+<pre><code>dates.tok:4: error C090: due=&quot;2027-01-15T12:00&quot; must be an ISO 8601 date-time with a zone (e.g. 2027-01-15T12:00:00+01:00) or an expression starting with =
+dates.tok:4: error C091: priority must be an integer from 0 to 100 or an expression starting with =, not &#39;120&#39;
+dates.tok: 2 error(s), 0 warning(s), 0 note(s)</code></pre>
+<p>Quotation marks inside a value are escaped with a backslash, as in any tok string: <code>when="mode = \"manager\""</code> is the FEEL condition <code>mode = "manager"</code>.</p>
+</div>
+<div id="feel-in-executable-models" class="section level2 hasAnchor" number="10.5">
+<h2><span class="header-section-number">10.5</span> FEEL in executable models<a href="executable.html#feel-in-executable-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>FEEL appears in conditions of flows, script expressions, correlation keys, mappings, multi-instance collections and completion conditions, ad-hoc collections, timers and assignments given as expressions, and in every decision. The version of FEEL tok checks depends on the header. In a document of language 0.7 or 1.0 every expression is FEEL at DMN conformance level 3: dates and durations, lists and contexts, <code>for</code>, <code>some</code> and <code>every</code>, filters and the standard functions. Camunda 8 evaluates the same FEEL with its own engine. Conformance case 63 runs the script <code>sum(for d in dni return d * 0.5)</code> on Camunda 8 Run as part of its executable test.</p>
+<p>Two differences between Camunda’s FEEL and standard FEEL matter in practice, and tok handles the first of them for you:</p>
+<ul>
+<li><strong>Names with spaces.</strong> DMN allows names such as <code>Outstanding fees</code>; Camunda’s FEEL reads such a name only in backticks. When a document is executable for Camunda, <code>tok export</code> writes every FEEL name in its DMN files that is not a plain name (a letter or <code>_</code>, then letters, digits and <code>_</code>) in backticks, and a key of a context literal with such characters as a string. Documents that are not executable are exported in standard FEEL.</li>
+<li><strong>Numbers as text.</strong> tok writes a number without trailing zeros (<code>string(4 * 0.5)</code> is <code>"2"</code>); Camunda keeps the scale of the decimal it computed (<code>"2.0"</code>). The numbers themselves compare equal.</li>
+</ul>
+<p>Before you deploy a decision, test it with <code>tok eval</code>. For the approval mode of the purchase proposal:</p>
+<pre><code>tok eval 10-book-purchase.tok approval-mode kind=print price=120
+&quot;automatic&quot;
+tok eval 10-book-purchase.tok approval-mode kind=e-book price=30
+&quot;manager&quot;
+tok eval 10-book-purchase.tok approval-mode kind=print price=200
+&quot;manager&quot;</code></pre>
+</div>
+<div id="service-tasks-and-jobs" class="section level2 hasAnchor" number="10.6">
+<h2><span class="header-section-number">10.6</span> Service tasks and jobs<a href="executable.html#service-tasks-and-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A service task in Camunda 8 is a <strong>job</strong>: the engine creates it and waits until a separate program, a <strong>job worker</strong>, activates it, does the work and reports completion or failure. The worker finds its jobs by their type. In tok:</p>
+<pre class="tok"><code>service order &quot;Order from supplier&quot; type=&quot;order-book&quot; retries=3 headers=&quot;channel: api; supplier: central&quot;</code></pre>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribute</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>type="…"</code></td>
+<td>the job type; static, or an expression starting with <code>=</code></td>
+</tr>
+<tr class="even">
+<td><code>retries=N</code></td>
+<td>how many times a failed job is offered again before Camunda raises an incident</td>
+</tr>
+<tr class="odd">
+<td><code>headers="key: value; …"</code></td>
+<td>custom headers: static configuration the worker reads with the job, such as a template name or a channel</td>
+</tr>
+</tbody>
+</table>
+<p>Job types are names you agree on with the people who write the workers. A worker written in any language subscribes to <code>order-book</code> jobs, reads the job’s variables and headers, and completes the job with new variables. Without a running worker the instance waits at the task, which is correct behaviour, not an error.</p>
+<p>The same attributes apply to send tasks and to message throw and end events. Camunda executes a message throw or end event as a job too, so in an executable document such an event needs <code>type=</code>:</p>
+<pre class="tok"><code>throw notify &quot;Notify the reader&quot; message=&quot;Notice&quot;</code></pre>
+<pre><code>notice.tok:4: error C022: message throw event &#39;notify&#39; needs type=&quot;…&quot; (Camunda executes it as a job)
+notice.tok: 1 error(s), 0 warning(s), 0 note(s)</code></pre>
+<p>If you do not have workers yet, model the automatic steps as script tasks (<code>script … expr="…" result=…</code>), which the engine evaluates itself, or as business rule tasks. The models used for teaching often do exactly that.</p>
+</div>
+<div id="user-tasks" class="section level2 hasAnchor" number="10.7">
+<h2><span class="header-section-number">10.7</span> User tasks<a href="executable.html#user-tasks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A user task is work for a person in a task list. In an executable document tok exports every <code>user</code> task as a Camunda user task (<code>zeebe:userTask</code>), and the attributes below describe who should do it, by when and how urgently:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribute</th>
+<th>Camunda 8</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>form=ID</code></td>
+<td>the form shown in the task (<code>zeebe:formDefinition</code>)</td>
+<td><code>form=f-approval</code></td>
+</tr>
+<tr class="even">
+<td><code>assignee="…"</code></td>
+<td>the assignee</td>
+<td><code>assignee="librarian"</code>, <code>assignee="=request.supervisor"</code></td>
+</tr>
+<tr class="odd">
+<td><code>candidate-users="…"</code></td>
+<td>users who may claim the task, separated by commas when static</td>
+<td><code>candidate-users="ola, jan"</code></td>
+</tr>
+<tr class="even">
+<td><code>candidate-groups="…"</code></td>
+<td>groups who may claim the task</td>
+<td><code>candidate-groups="acquisitions, management"</code></td>
+</tr>
+<tr class="odd">
+<td><code>due="…"</code></td>
+<td>the due date: ISO 8601 with a zone, or an expression</td>
+<td><code>due="=now() + duration(\"P3D\")"</code></td>
+</tr>
+<tr class="even">
+<td><code>follow-up="…"</code></td>
+<td>the follow-up date, the same way</td>
+<td><code>follow-up="2027-01-20T09:00:00Z"</code></td>
+</tr>
+<tr class="odd">
+<td><code>priority=N</code></td>
+<td>the priority, 0 to 100, or an expression</td>
+<td><code>priority=70</code></td>
+</tr>
+</tbody>
+</table>
+<p>The assignment, schedule and priority become <code>zeebe:assignmentDefinition</code>, <code>zeebe:taskSchedule</code> and <code>zeebe:priorityDefinition</code>. In the conformance run on Camunda 8 Run, the case <code>user-task</code> checks that the created task carries its assignee, priority, due date, follow-up date and candidate groups, and case 63 checks the assignee and priority of a task in a language 1.0 document.</p>
+<p>A start event can have a form too (<code>start … form=F</code>): in Tasklist it is the form with which a person starts the process.</p>
+</div>
+<div id="camunda-forms" class="section level2 hasAnchor" number="10.8">
+<h2><span class="header-section-number">10.8</span> Camunda forms<a href="executable.html#camunda-forms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Forms are written in the same file as the process, as <code>form</code> blocks:</p>
+<pre class="tok"><code>form f-approval &quot;Approval&quot;
+  text &quot;## Proposal: {{title}} ({{price}})&quot;
+  field approved &quot;Decision&quot; required type=radio options=&quot;true:approve, false:reject&quot;
+  field comment &quot;Comment for the reader&quot; type=textarea</code></pre>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>form ID "Title"</code></td>
+<td>a form; it is exported as the Camunda form file <code>ID.form</code>, and its identifier is the <code>formId</code> a task refers to</td>
+</tr>
+<tr class="even">
+<td><code>text "…"</code></td>
+<td>a text block in Markdown; <code>\n</code> is a line break and <code>{{name}}</code> inserts the value of a process variable</td>
+</tr>
+<tr class="odd">
+<td><code>field KEY "Label" type=… [required] [options="…"] [min=…] [max=…]</code></td>
+<td>an input field</td>
+</tr>
+</tbody>
+</table>
+<p>The field types are <code>textfield</code>, <code>textarea</code>, <code>number</code>, <code>checkbox</code>, <code>select</code>, <code>radio</code> and <code>datetime</code>. For <code>select</code> and <code>radio</code>, <code>options</code> lists <code>value:Label</code> pairs separated by commas; the values <code>true</code> and <code>false</code> become booleans and numbers become numbers, so <code>options="true:approve, false:reject"</code> sets the variable <code>approved</code> to a boolean, which the condition <code>approved = true</code> can test. <code>default=</code> gives a field its initial value.</p>
+<p>The most important rule of forms is about names: <strong>the key of a field becomes a process variable</strong>. The field <code>kind</code> of the start form feeds the input <code>kind</code> of the decision table; the field <code>approved</code> of the approval form feeds the condition on the gateway <code>agreed</code>. If the names differ, the decision receives an empty value and the condition never holds. Reading the model as text makes such mismatches easy to find: search for the name and you see every place it is used.</p>
+<p>A form exports to JSON in the format Camunda Modeler writes. The components of the approval form above are:</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb163-1"><a href="executable.html#cb163-1" tabindex="-1"></a>  <span class="st">&quot;components&quot;</span><span class="er">:</span> <span class="ot">[</span></span>
+<span id="cb163-2"><a href="executable.html#cb163-2" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb163-3"><a href="executable.html#cb163-3" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;text&quot;</span><span class="fu">,</span></span>
+<span id="cb163-4"><a href="executable.html#cb163-4" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;Text_1&quot;</span><span class="fu">,</span></span>
+<span id="cb163-5"><a href="executable.html#cb163-5" tabindex="-1"></a>      <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;## Proposal: {{title}} ({{price}})&quot;</span></span>
+<span id="cb163-6"><a href="executable.html#cb163-6" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb163-7"><a href="executable.html#cb163-7" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb163-8"><a href="executable.html#cb163-8" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;radio&quot;</span><span class="fu">,</span></span>
+<span id="cb163-9"><a href="executable.html#cb163-9" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;Field_approved&quot;</span><span class="fu">,</span></span>
+<span id="cb163-10"><a href="executable.html#cb163-10" tabindex="-1"></a>      <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;approved&quot;</span><span class="fu">,</span></span>
+<span id="cb163-11"><a href="executable.html#cb163-11" tabindex="-1"></a>      <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;Decision&quot;</span><span class="fu">,</span></span>
+<span id="cb163-12"><a href="executable.html#cb163-12" tabindex="-1"></a>      <span class="dt">&quot;values&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb163-13"><a href="executable.html#cb163-13" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb163-14"><a href="executable.html#cb163-14" tabindex="-1"></a>          <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;approve&quot;</span><span class="fu">,</span></span>
+<span id="cb163-15"><a href="executable.html#cb163-15" tabindex="-1"></a>          <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb163-16"><a href="executable.html#cb163-16" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb163-17"><a href="executable.html#cb163-17" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb163-18"><a href="executable.html#cb163-18" tabindex="-1"></a>          <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;reject&quot;</span><span class="fu">,</span></span>
+<span id="cb163-19"><a href="executable.html#cb163-19" tabindex="-1"></a>          <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb163-20"><a href="executable.html#cb163-20" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb163-21"><a href="executable.html#cb163-21" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb163-22"><a href="executable.html#cb163-22" tabindex="-1"></a>      <span class="dt">&quot;validate&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb163-23"><a href="executable.html#cb163-23" tabindex="-1"></a>        <span class="dt">&quot;required&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb163-24"><a href="executable.html#cb163-24" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb163-25"><a href="executable.html#cb163-25" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb163-26"><a href="executable.html#cb163-26" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb163-27"><a href="executable.html#cb163-27" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;textarea&quot;</span><span class="fu">,</span></span>
+<span id="cb163-28"><a href="executable.html#cb163-28" tabindex="-1"></a>      <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;Field_comment&quot;</span><span class="fu">,</span></span>
+<span id="cb163-29"><a href="executable.html#cb163-29" tabindex="-1"></a>      <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;comment&quot;</span><span class="fu">,</span></span>
+<span id="cb163-30"><a href="executable.html#cb163-30" tabindex="-1"></a>      <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;Comment for the reader&quot;</span></span>
+<span id="cb163-31"><a href="executable.html#cb163-31" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb163-32"><a href="executable.html#cb163-32" tabindex="-1"></a>  <span class="ot">]</span><span class="er">,</span></span></code></pre></div>
+</div>
+<div id="variable-mappings" class="section level2 hasAnchor" number="10.9">
+<h2><span class="header-section-number">10.9</span> Variable mappings<a href="executable.html#variable-mappings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A process instance has variables. An activity often needs them under other names, or only a part of a larger structure, and its results should land in the process under names of the process. Variable mappings do this:</p>
+<pre class="tok"><code>service order &quot;Order from supplier&quot; type=&quot;order-book&quot; inputs=&quot;title = title; amount = cost&quot; outputs=&quot;orderNumber = order.number&quot;</code></pre>
+<p><code>inputs</code> and <code>outputs</code> are lists of <code>target = expression</code> pairs separated by semicolons. The target is a variable or a nested property (<code>sender.iban</code>); the expression is FEEL without <code>=</code>. Input mappings create local variables of the activity before it starts: the worker of <code>order-book</code> sees <code>amount</code>, computed from <code>cost</code>. Output mappings copy results into the process when the activity completes: the worker returns a structure <code>order</code>, and the process keeps only <code>order.number</code> as <code>orderNumber</code>. The pairs export to <code>zeebe:ioMapping</code>.</p>
+<p>Mappings are allowed on activities, sub-processes and call activities; <code>outputs</code> also on catch, boundary and start events. On an error boundary event they are the only way to receive data from the error. Camunda passes to the catching event the variables sent together with the error, and <code>outputs="reason = reason"</code> merges them into the process. The code and message of the error are not available as variables. A pair that is not of the form <code>target = expression</code> is the error <code>R053</code>.</p>
+</div>
+<div id="messages-and-correlation" class="section level2 hasAnchor" number="10.10">
+<h2><span class="header-section-number">10.10</span> Messages and correlation<a href="executable.html#messages-and-correlation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A process instance that waits for a message must know which message is meant for it. Camunda does this by <strong>correlation</strong>: a message carries a name and a correlation key, and it is delivered to the instance that waits for a message of that name with the same key. In tok the waiting event names the message and gives the key as an expression:</p>
+<pre class="tok"><code>catch delivered &quot;Book delivered&quot; message=&quot;Delivery&quot; correlation=&quot;orderNumber&quot;</code></pre>
+<p>When the instance reaches the event, Camunda evaluates <code>orderNumber</code> (here <code>PO-17</code>, set by the output mapping of the job) and opens a subscription for messages named <code>Delivery</code> with the key <code>PO-17</code>. The export declares the message once, with <code>zeebe:subscription correlationKey="=orderNumber"</code>. <code>correlation=</code> belongs to message catch events, message boundary events and receive tasks; without it the check reports <code>C052</code>. A message start event needs no key, because it starts a new instance rather than continuing one.</p>
+<p>The correlation keys of BPMN 2.0.2 (<code>key</code> blocks with <code>prop</code> lines, Chapter <a href="collaboration.html#collaboration">4</a>) are a different construct for describing collaborations. Camunda ignores them and correlates by <code>correlation=</code>; in an executable document the check reports a <code>key</code> with the warning <code>C110</code>.</p>
+<p>Messages reach Camunda from outside: from a worker, from another system or, for testing, from the REST API, as <a href="executable.html#executable-run">the last part of this chapter</a> shows.</p>
+</div>
+<div id="multi-instance-ad-hoc-sub-processes-and-call-activities" class="section level2 hasAnchor" number="10.11">
+<h2><span class="header-section-number">10.11</span> Multi-instance, ad-hoc sub-processes and call activities<a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The second example is a digitisation workshop. An order lists several volumes; each volume is scanned by a separate process, called once per volume, all in parallel. Before scanning, scanner time is reserved; if scanning fails, the reservation is undone by compensation. The result is published in a repository through a REST call, and a person checks it.</p>
+<pre class="tok"><code>tok 1.0 &quot;Digitisation order&quot; executable
+
+# multi-instance call activity, ad-hoc sub-process, compensation, an error boundary event,
+# the REST connector, listeners and a user task with an expression as its assignee
+pool library &quot;Digitisation workshop&quot; process=digitisation version-tag=&quot;2.1&quot;
+  start received &quot;Order received&quot;
+  service reserve &quot;Reserve scanner time&quot; type=&quot;reserve-scanner&quot; compensate=release
+  service release &quot;Release scanner time&quot; compensation type=&quot;release-scanner&quot;
+  call scan &quot;Scan volume&quot; parallel process=scan-volume binding=deployment child-vars=none collection=&quot;volumes&quot; item=volume output=files output-item=&quot;file&quot; inputs=&quot;volume = volume&quot; outputs=&quot;file = file&quot;
+  boundary failed &quot;Scanner fault&quot; on=scan error=&quot;Scanner fault&quot; code=&quot;SCAN-FAULT&quot; outputs=&quot;reason = reason&quot;
+  throw undo &quot;Undo the reservation&quot; compensate activity=reserve
+  end cancelled &quot;Order cancelled&quot;
+  service publish &quot;Publish in the repository&quot; result=publication connector=rest method=POST url=&quot;https://repository.example.org/api/items&quot; body=&quot;={title: title, files: files}&quot;
+  user check &quot;Check the publication&quot; form=f-check assignee=&quot;=requester&quot; priority=50 listeners=&quot;creating: notify-requester&quot;
+  end done &quot;Order completed&quot;
+
+pool volume &quot;Scanning of one volume&quot; process=scan-volume
+  start vol &quot;Volume to scan&quot;
+  service pages &quot;Scan pages&quot; type=&quot;scan-pages&quot; retries=2 headers=&quot;resolution: 600&quot;
+  adhoc extras &quot;Optional treatments&quot; wait active=&quot;treatments&quot;
+    service ocr &quot;Recognise text&quot; type=&quot;ocr&quot;
+    service mark &quot;Add a watermark&quot; type=&quot;watermark&quot;
+  script name &quot;Name the file&quot; expr=&quot;\&quot;vol-\&quot; + string(volume)&quot; result=file
+  end scanned &quot;Volume scanned&quot;
+
+flow received -&gt; reserve -&gt; scan -&gt; publish -&gt; check -&gt; done
+flow failed -&gt; undo -&gt; cancelled
+flow vol -&gt; pages -&gt; extras -&gt; name -&gt; scanned
+
+form f-check &quot;Check the publication&quot;
+  text &quot;## {{title}}\nPublished as {{publication.body.id}}&quot;
+  field ok &quot;Publication is correct&quot; type=checkbox</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:executable-digitisation-diagram"></span>
+<img src="examples/10-digitisation.svg" alt="The digitisation order: a multi-instance call activity, compensation, an error boundary event, the REST connector and an ad-hoc sub-process in the called process." width="100%" />
+<p class="caption">
+Figure 10.2: The digitisation order: a multi-instance call activity, compensation, an error boundary event, the REST connector and an ad-hoc sub-process in the called process.
+</p>
+</div>
+<p><a class="download" href="examples/10-digitisation.tok" download>Download the model (.tok)</a> <a class="download" href="examples/10-digitisation.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<div id="multi-instance" class="section level3 hasAnchor" number="10.11.1">
+<h3><span class="header-section-number">10.11.1</span> Multi-instance<a href="executable.html#multi-instance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The flag <code>parallel</code> or <code>sequential</code> makes an activity multi-instance; in an executable document the attributes below say what it iterates over:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>Camunda 8</th>
+<th>In the example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>parallel</code> / <code>sequential</code></td>
+<td><code>multiInstanceLoopCharacteristics isSequential</code></td>
+<td><code>parallel</code>: all volumes at once</td>
+</tr>
+<tr class="even">
+<td><code>collection="expr"</code></td>
+<td><code>inputCollection</code></td>
+<td><code>volumes</code>, a list from the order</td>
+</tr>
+<tr class="odd">
+<td><code>item=name</code></td>
+<td><code>inputElement</code>, the variable of one instance</td>
+<td><code>volume</code></td>
+</tr>
+<tr class="even">
+<td><code>output=name</code>, <code>output-item="expr"</code></td>
+<td><code>outputCollection</code>, <code>outputElement</code></td>
+<td>the list <code>files</code> collects the <code>file</code> of every instance</td>
+</tr>
+<tr class="odd">
+<td><code>until="expr"</code></td>
+<td><code>completionCondition</code></td>
+<td>not used here</td>
+</tr>
+</tbody>
+</table>
+<p><code>output</code> and <code>output-item</code> come together or not at all, and <code>collection</code> requires <code>parallel</code> or <code>sequential</code>; otherwise the check reports <code>R054</code>. A completion condition ends the activity early, for example after two of three reviews: <code>until="numberOfCompletedInstances &gt;= 2"</code>. The conformance run on Camunda 8 Run covers both forms: a parallel script that doubles every element of a list into <code>wyniki</code> (results), and a parallel user task that completes after two of three instances.</p>
+</div>
+<div id="ad-hoc-sub-processes-1" class="section level3 hasAnchor" number="10.11.2">
+<h3><span class="header-section-number">10.11.2</span> Ad-hoc sub-processes<a href="executable.html#ad-hoc-sub-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An ad-hoc sub-process holds activities that may run in any order, as often as needed, without sequence flows from a start event. In an executable document three attributes control it:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>Camunda 8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>active="expr"</code></td>
+<td><code>zeebe:adHoc activeElementsCollection</code>: a list of the identifiers of the inner elements to activate</td>
+</tr>
+<tr class="even">
+<td><code>until="expr"</code></td>
+<td><code>completionCondition</code></td>
+</tr>
+<tr class="odd">
+<td><code>wait</code></td>
+<td><code>cancelRemainingInstances="false"</code>: when the condition holds, running elements are allowed to finish (by default they are cancelled)</td>
+</tr>
+</tbody>
+</table>
+<p>In the example the variable <code>treatments</code> lists what a volume needs, for instance <code>["ocr"]</code> or <code>["ocr", "mark"]</code>, and only those treatments run.</p>
+</div>
+<div id="call-activities" class="section level3 hasAnchor" number="10.11.3">
+<h3><span class="header-section-number">10.11.3</span> Call activities<a href="executable.html#call-activities" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A call activity starts another process and waits for it:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>Camunda 8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>process=ID</code> (or <code>="expr"</code>)</td>
+<td><code>zeebe:calledElement processId</code></td>
+</tr>
+<tr class="even">
+<td><code>binding=latest\|deployment\|version-tag</code></td>
+<td><code>bindingType</code>: the latest version, the version deployed together with the caller, or the version with a tag</td>
+</tr>
+<tr class="odd">
+<td><code>version="tag"</code></td>
+<td><code>versionTag</code>, for <code>binding=version-tag</code></td>
+</tr>
+<tr class="even">
+<td><code>child-vars=all\|none</code></td>
+<td><code>propagateAllChildVariables</code>: whether all variables of the called process come back (default <code>all</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>parent-vars=all\|none</code></td>
+<td><code>propagateAllParentVariables</code>: whether the called process sees all variables of the caller (default <code>all</code>)</td>
+</tr>
+<tr class="even">
+<td><code>business-id="…"</code></td>
+<td><code>businessId</code> of the called instance</td>
+</tr>
+</tbody>
+</table>
+<p>The example calls <code>scan-volume</code> with <code>binding=deployment</code>, so each order uses the scanning process deployed with it, and <code>child-vars=none</code>, so only the mapped <code>file</code> comes back. Both processes are in one document, as two pools, and <code>tok export</code> writes one BPMN file with both; deploying that file deploys both processes. <code>binding=</code> and <code>version=</code> are also accepted on business rule tasks, to bind the called decision, and on elements with <code>form=</code>, to bind the form.</p>
+</div>
+</div>
+<div id="compensation-errors-and-listeners" class="section level2 hasAnchor" number="10.12">
+<h2><span class="header-section-number">10.12</span> Compensation, errors and listeners<a href="executable.html#compensation-errors-and-listeners" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Compensation</strong> undoes work that has already completed. <code>compensate=release</code> on the reservation attaches a compensation boundary event to it, associated with the handler <code>release</code>; the handler carries the flag <code>compensation</code> and has no sequence flows (<code>R051</code> otherwise). A throw or end event with the flag <code>compensate</code> triggers compensation, of every completed activity or, with <code>activity=ID</code>, of one of them. In the example an error during scanning leads to <code>undo</code>, which compensates the reservation, so the worker of <code>release-scanner</code> frees the scanner time. The conformance case <code>compensation</code> runs exactly this on Camunda 8 Run: the reservation job completes, the throw event triggers compensation, and the release job runs.</p>
+<p><strong>Errors</strong> are thrown by workers: a worker that cannot do its job reports a BPMN error with a code instead of completing the job. An error boundary event with <code>error="Name" code="CODE"</code> catches errors with that code; the flag <code>error</code> without a name catches every error. An error end event with <code>error="Name"</code> throws one. Escalations work the same way with <code>escalation=</code>.</p>
+<p><strong>Conditional events</strong> wait until a condition over the variables holds: <code>catch ready "Data complete" condition="complete = true" events="create, update"</code>. <code>events=</code> limits the variable events that make Camunda evaluate the condition (<code>zeebe:conditionalFilter variableEvents</code>); it is allowed on intermediate, boundary and event sub-process start events but not on start events of a process (<code>R052</code>).</p>
+<p><strong>Listeners</strong> run a job when something happens to an element: <code>listeners="start: job-type; end: job-type"</code> defines execution listeners on any element. On user tasks the events <code>creating</code>, <code>assigning</code>, <code>updating</code>, <code>completing</code> and <code>canceling</code> define task listeners, such as <code>notify-requester</code> in the example, which a worker can use to send an e-mail when the task is created. An entry may give its retries in parentheses: <code>start: before-calculation (5)</code>.</p>
+</div>
+<div id="version-tags-and-bindings" class="section level2 hasAnchor" number="10.13">
+<h2><span class="header-section-number">10.13</span> Version tags and bindings<a href="executable.html#version-tags-and-bindings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A deployed process definition gets a version number from the engine. A <strong>version tag</strong> is a name you give it yourself, such as <code>1.0</code> or <code>2025-spring</code>. It is set with <code>version-tag="…"</code> on the header of a document without pools, or on a pool:</p>
+<pre class="tok"><code>pool library &quot;Digitisation workshop&quot; process=digitisation version-tag=&quot;2.1&quot;</code></pre>
+<p>The tag is exported as <code>zeebe:versionTag</code> and shown with the process definition. A call activity, a business rule task or an element with a form can then bind to a tagged version with <code>binding=version-tag version="2.1"</code> instead of the latest one. The conformance runs check that the process definitions of the cases <code>version-tag</code> and 63 carry their tags <code>v1</code> and <code>1.0</code>.</p>
+</div>
+<div id="the-rest-connector" class="section level2 hasAnchor" number="10.14">
+<h2><span class="header-section-number">10.14</span> The REST connector<a href="executable.html#the-rest-connector" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Camunda’s connectors are ready-made job workers that come with the platform. The REST outbound connector calls an HTTP endpoint. tok expands it from a few attributes:</p>
+<pre class="tok"><code>service publish &quot;Publish in the repository&quot; result=publication connector=rest method=POST url=&quot;https://repository.example.org/api/items&quot; body=&quot;={title: title, files: files}&quot;</code></pre>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribute</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>connector=rest</code></td>
+<td>the REST outbound connector</td>
+</tr>
+<tr class="even">
+<td><code>method=</code></td>
+<td>the HTTP method: <code>GET</code>, <code>POST</code>, …</td>
+</tr>
+<tr class="odd">
+<td><code>url=</code></td>
+<td>the address, static or an expression</td>
+</tr>
+<tr class="even">
+<td><code>result=</code></td>
+<td>the variable that receives the response</td>
+</tr>
+<tr class="odd">
+<td><code>body=</code>, <code>query=</code>, <code>headers-in=</code></td>
+<td>optional request body, query parameters and request headers, usually as FEEL contexts starting with <code>=</code></td>
+</tr>
+</tbody>
+</table>
+<p>The export writes the job type of the connector (<code>io.camunda:http-json:1</code>), its input mappings (the method, the URL, the body and an authentication of type <code>noAuth</code>) and the header <code>resultVariable</code>. Other connectors are used through their job types, input mappings and headers with <code>type=</code>, <code>inputs=</code> and <code>headers=</code>. The conformance case <code>connector</code> calls the topology endpoint of the local engine and checks that the response arrives in the result variable.</p>
+</div>
+<div id="elements-camunda-8-does-not-execute" class="section level2 hasAnchor" number="10.15">
+<h2><span class="header-section-number">10.15</span> Elements Camunda 8 does not execute<a href="executable.html#elements-camunda-8-does-not-execute" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>BPMN 2.0.2 contains elements that Camunda Modeler can draw but the engine does not execute. tok knows them all: in an executable document for Camunda every such element is reported with a code that names it. A descriptive or analytic model may use them freely.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Severity</th>
+<th>Element</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>C100</code>, <code>C101</code></td>
+<td>error</td>
+<td>transaction; cancel end or boundary event</td>
+</tr>
+<tr class="even">
+<td><code>C102</code></td>
+<td>error</td>
+<td>complex gateway</td>
+</tr>
+<tr class="odd">
+<td><code>C103</code></td>
+<td>error</td>
+<td>standard loop with <code>while=</code>, <code>test-before</code> or <code>loop-max=</code> (use multi-instance)</td>
+</tr>
+<tr class="even">
+<td><code>C104</code>, <code>C105</code></td>
+<td>error</td>
+<td>multiple and parallel multiple events (several triggers)</td>
+</tr>
+<tr class="odd">
+<td><code>C106</code>, <code>C107</code></td>
+<td>error</td>
+<td>instantiating receive task (use a message start event); instantiating event-based gateway</td>
+</tr>
+<tr class="even">
+<td><code>C108</code></td>
+<td>error</td>
+<td>call activity of a global task (<code>task=</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>C109</code>, <code>C110</code></td>
+<td>warning</td>
+<td><code>operation=</code> and correlation keys: ignored, because workers take jobs by <code>type=</code> and messages are correlated by <code>correlation=</code></td>
+</tr>
+<tr class="even">
+<td><code>C120</code>, <code>C121</code>, <code>C123</code></td>
+<td>warning</td>
+<td>conversations, call conversations, participant multiplicity of a pool: ignored</td>
+</tr>
+<tr class="odd">
+<td><code>C122</code></td>
+<td>error</td>
+<td>choreography</td>
+</tr>
+<tr class="even">
+<td><code>C130</code>–<code>C132</code></td>
+<td>error</td>
+<td>a business knowledge model whose logic is an invocation; a function definition whose body is not a literal expression; a decision without logic</td>
+</tr>
+</tbody>
+</table>
+<p>The model below books a room and a ticket inside a transaction. It is a correct BPMN model, and it is not a model Camunda 8 can run:</p>
+<pre class="tok"><code>tok 1.0 &quot;Room and ticket booking&quot; executable
+
+# elements of BPMN 2.0.2 that Camunda 8 does not execute, and a service task without a job type
+start s &quot;Trip requested&quot;
+transaction booking &quot;Book room and ticket&quot;
+  start bs
+  service room &quot;Book the room&quot; type=&quot;book-room&quot; compensate=free-room
+  service free-room &quot;Free the room&quot; compensation type=&quot;free-room&quot;
+  end booked
+  end abort &quot;Booking aborted&quot; cancel
+  xor ok &quot;Both booked?&quot;
+boundary cancelled &quot;Booking cancelled&quot; cancel on=booking
+complex enough &quot;Enough offers?&quot; activation=&quot;_activationCount &gt;= 2&quot;
+service notify &quot;Notify the traveller&quot;
+end e &quot;Trip booked&quot;
+end e2 &quot;Trip cancelled&quot;
+
+flow bs -&gt; room -&gt; ok
+flow ok -&gt; booked &quot;yes&quot; when=&quot;ok = true&quot;
+flow ok -&gt; abort &quot;no&quot; default
+flow s -&gt; booking -&gt; enough -&gt; notify -&gt; e
+flow cancelled -&gt; e2</code></pre>
+<p><a class="download" href="examples/10-not-executed-error.tok" download>Download the model (.tok)</a></p>
+<pre><code>10-not-executed-error.tok:5: error C100: transaction &#39;booking&#39; is not executed by Camunda 8.10
+10-not-executed-error.tok:10: error C101: cancel event &#39;abort&#39; is not executed by Camunda 8.10
+10-not-executed-error.tok:12: error C101: cancel event &#39;cancelled&#39; is not executed by Camunda 8.10
+10-not-executed-error.tok:13: error C102: complex gateway &#39;enough&#39; is not executed by Camunda 8.10
+10-not-executed-error.tok:14: error C020: service task &#39;notify&#39; needs type=&quot;…&quot; (job type for a worker)
+10-not-executed-error.tok: 5 error(s), 0 warning(s), 0 note(s)</code></pre>
+<p>Remove the flag <code>executable</code> and only the reasoning of the model remains; the same text then checks without errors. To run the booking on Camunda you would replace the transaction by an embedded sub-process with compensation handlers and an error end event, and the complex gateway by an inclusive or parallel join. The <a href="conformance.html#conformance">appendix on conformance</a> lists the codes with their conformance cases.</p>
+</div>
+<div id="exporting-with-tok-export" class="section level2 hasAnchor" number="10.16">
+<h2><span class="header-section-number">10.16</span> Exporting with <code>tok export</code><a href="executable.html#exporting-with-tok-export" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>tok bpmn</code> writes only the BPMN file. An executable model also needs its decisions and forms, so for Camunda use <code>tok export</code>, which writes everything into a folder:</p>
+<pre><code>tok export 10-book-purchase.tok -o out
+out\10-book-purchase.bpmn
+out\10-book-purchase.svg
+out\approval-mode.dmn
+out\approval-mode.drd.svg
+out\f-proposal.form
+out\f-approval.form</code></pre>
+<p>The command prints the files it writes (with the path separator of the system):</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Content</th>
+<th>Deployed?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NAME.bpmn</code></td>
+<td>the process with the Camunda extensions and a diagram layout</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td><code>NAME.svg</code></td>
+<td>the picture of the diagram</td>
+<td>no</td>
+</tr>
+<tr class="odd">
+<td><code>GRAPH.dmn</code></td>
+<td>the decision model: in a document of language 0.7 or 1.0 one DMN 1.5 file per connected decision requirements graph, named after its first decision, with a DMNDI diagram</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td><code>GRAPH.drd.svg</code></td>
+<td>the picture of the decision requirements graph</td>
+<td>no</td>
+</tr>
+<tr class="odd">
+<td><code>ID.form</code></td>
+<td>one Camunda form per <code>form</code> block</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>The BPMN file opens in Camunda Modeler as a Camunda 8 diagram, with every property in its panel, so you can inspect what tok wrote or deploy it from there. When a layout sidecar <code>FILE.tok.layout</code> lies next to the model (Chapter <a href="layout-import.html#layout-import">8</a>), <code>tok export</code> keeps its drawing, as <code>tok bpmn</code> does.</p>
+</div>
+<div id="executable-run" class="section level2 hasAnchor" number="10.17">
+<h2><span class="header-section-number">10.17</span> Deploying and running on Camunda 8 Run<a href="executable.html#executable-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Camunda 8 Run</strong> is the distribution of Camunda 8 for one computer: the engine, the web applications Operate (instances, variables and incidents on the diagram) and Tasklist (user tasks and forms), and the connectors, started together. Camunda provides it for local development and learning, not for running real cases. You download it from the Camunda website, unpack it and start it with <code>./c8run start</code> on Linux and macOS or <code>.\c8run.exe start</code> on Windows; <code>./c8run stop</code> or <code>.\c8run.exe stop</code> stops it. The applications are then available at <code>http://localhost:8080</code> (user <code>demo</code>, password <code>demo</code>), and the <strong>Orchestration Cluster REST API</strong> at <code>http://localhost:8080/v2</code>.</p>
+<p>You can deploy the exported files from Camunda Modeler and start instances in Tasklist, as you would with any model drawn by hand. This section uses the REST API instead, because it can be scripted and shows exactly what happens. The examples use <code>curl</code> in a POSIX shell (Linux, macOS, Git Bash on Windows). In Windows PowerShell type <code>curl.exe</code> instead of <code>curl</code>, because <code>curl</code> there is an alias of another command, and write the JSON bodies into files (<code>-d @body.json</code>) to avoid quoting problems.</p>
+<div id="deploy" class="section level3 hasAnchor" number="10.17.1">
+<h3><span class="header-section-number">10.17.1</span> Deploy<a href="executable.html#deploy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One request deploys every file that <code>tok export</code> wrote, except the pictures. Deploy the process, the decision and the forms together, so that the process finds them:</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb172-1"><a href="executable.html#cb172-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/deployments <span class="dt">\</span></span>
+<span id="cb172-2"><a href="executable.html#cb172-2" tabindex="-1"></a>  <span class="at">-F</span> resources=@out/10-book-purchase.bpmn <span class="dt">\</span></span>
+<span id="cb172-3"><a href="executable.html#cb172-3" tabindex="-1"></a>  <span class="at">-F</span> resources=@out/approval-mode.dmn <span class="dt">\</span></span>
+<span id="cb172-4"><a href="executable.html#cb172-4" tabindex="-1"></a>  <span class="at">-F</span> resources=@out/f-proposal.form <span class="dt">\</span></span>
+<span id="cb172-5"><a href="executable.html#cb172-5" tabindex="-1"></a>  <span class="at">-F</span> resources=@out/f-approval.form</span></code></pre></div>
+<p>The response lists the deployed process definition <code>book-purchase</code>, the decision <code>approval-mode</code> and the two forms, each with its key and version. Deploying a changed model again creates a new version; instances already running continue under the version they started with.</p>
+</div>
+<div id="start-an-instance" class="section level3 hasAnchor" number="10.17.2">
+<h3><span class="header-section-number">10.17.2</span> Start an instance<a href="executable.html#start-an-instance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An instance is started by the identifier of its process definition, with the variables the start form would give:</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb173-1"><a href="executable.html#cb173-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/process-instances <span class="dt">\</span></span>
+<span id="cb173-2"><a href="executable.html#cb173-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb173-3"><a href="executable.html#cb173-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;processDefinitionId&quot;: &quot;book-purchase&quot;,</span></span>
+<span id="cb173-4"><a href="executable.html#cb173-4" tabindex="-1"></a><span class="st">       &quot;variables&quot;: {&quot;title&quot;: &quot;Process Mining&quot;, &quot;kind&quot;: &quot;e-book&quot;, &quot;price&quot;: 60}}&#39;</span></span></code></pre></div>
+<p>The response contains the <code>processInstanceKey</code>, which identifies the instance in every later request. The engine immediately evaluates the decision (an e-book needs the manager) and creates the user task.</p>
+</div>
+<div id="complete-a-user-task" class="section level3 hasAnchor" number="10.17.3">
+<h3><span class="header-section-number">10.17.3</span> Complete a user task<a href="executable.html#complete-a-user-task" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The searches of the API find the user tasks of the instance. Searches are eventually consistent: a task created a moment ago can take a second or two to appear, so repeat the search if the list is empty.</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb174-1"><a href="executable.html#cb174-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/user-tasks/search <span class="dt">\</span></span>
+<span id="cb174-2"><a href="executable.html#cb174-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb174-3"><a href="executable.html#cb174-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;filter&quot;: {&quot;processInstanceKey&quot;: &quot;2251799813685249&quot;, &quot;state&quot;: &quot;CREATED&quot;}}&#39;</span></span></code></pre></div>
+<p>Each item has a <code>userTaskKey</code> and the properties tok exported: <code>candidateGroups</code>, <code>dueDate</code>, <code>priority</code>. Completing the task with variables is what the form does when the manager submits it:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb175-1"><a href="executable.html#cb175-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/user-tasks/2251799813685262/completion <span class="dt">\</span></span>
+<span id="cb175-2"><a href="executable.html#cb175-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb175-3"><a href="executable.html#cb175-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;variables&quot;: {&quot;approved&quot;: true}}&#39;</span></span></code></pre></div>
+<p>(The keys in these commands only show their form; take the keys from the responses you receive. The API returns keys as strings of digits, and the filters accept them in the same form.)</p>
+</div>
+<div id="work-on-a-job" class="section level3 hasAnchor" number="10.17.4">
+<h3><span class="header-section-number">10.17.4</span> Work on a job<a href="executable.html#work-on-a-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The script computes the cost, and the instance reaches the job of type <code>order-book</code>. A worker activates jobs of its type, does the work and completes them. With the API you can play the worker by hand:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb176-1"><a href="executable.html#cb176-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/jobs/activation <span class="dt">\</span></span>
+<span id="cb176-2"><a href="executable.html#cb176-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb176-3"><a href="executable.html#cb176-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;type&quot;: &quot;order-book&quot;, &quot;timeout&quot;: 60000, &quot;maxJobsToActivate&quot;: 1, &quot;worker&quot;: &quot;by-hand&quot;}&#39;</span></span></code></pre></div>
+<p>The response holds a list <code>jobs</code>. Each job has a <code>jobKey</code>, its <code>variables</code> (with <code>amount</code> from the input mapping), its <code>customHeaders</code> (<code>channel</code> and <code>supplier</code>) and its <code>retries</code> (3). Complete it with the result the supplier’s system would give:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb177-1"><a href="executable.html#cb177-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/jobs/2251799813685281/completion <span class="dt">\</span></span>
+<span id="cb177-2"><a href="executable.html#cb177-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb177-3"><a href="executable.html#cb177-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;variables&quot;: {&quot;order&quot;: {&quot;number&quot;: &quot;PO-17&quot;}}}&#39;</span></span></code></pre></div>
+<p>A worker that fails reports a BPMN error instead (<code>POST /v2/jobs/KEY/error</code> with <code>errorCode</code>, <code>errorMessage</code> and optionally <code>variables</code>), which an error boundary event with that code catches.</p>
+</div>
+<div id="publish-a-message" class="section level3 hasAnchor" number="10.17.5">
+<h3><span class="header-section-number">10.17.5</span> Publish a message<a href="executable.html#publish-a-message" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The output mapping has set <code>orderNumber</code> to <code>PO-17</code>, and the instance waits at the event <code>delivered</code>. The delivery message is published with its name and correlation key:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb178-1"><a href="executable.html#cb178-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/messages/publication <span class="dt">\</span></span>
+<span id="cb178-2"><a href="executable.html#cb178-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb178-3"><a href="executable.html#cb178-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;name&quot;: &quot;Delivery&quot;, &quot;correlationKey&quot;: &quot;PO-17&quot;, &quot;timeToLive&quot;: 60000}&#39;</span></span></code></pre></div>
+<p>The time to live (in milliseconds) keeps the message for a minute, so it is still delivered if the instance reaches the event a moment after it was published.</p>
+</div>
+<div id="follow-the-instance" class="section level3 hasAnchor" number="10.17.6">
+<h3><span class="header-section-number">10.17.6</span> Follow the instance<a href="executable.html#follow-the-instance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The instance has now reached the end event <code>done</code>. Three searches show its state, the path it took and its variables:</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb179-1"><a href="executable.html#cb179-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/process-instances/search <span class="dt">\</span></span>
+<span id="cb179-2"><a href="executable.html#cb179-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb179-3"><a href="executable.html#cb179-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;filter&quot;: {&quot;processInstanceKey&quot;: &quot;2251799813685249&quot;}}&#39;</span></span>
+<span id="cb179-4"><a href="executable.html#cb179-4" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/element-instances/search <span class="dt">\</span></span>
+<span id="cb179-5"><a href="executable.html#cb179-5" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb179-6"><a href="executable.html#cb179-6" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;filter&quot;: {&quot;processInstanceKey&quot;: &quot;2251799813685249&quot;}}&#39;</span></span>
+<span id="cb179-7"><a href="executable.html#cb179-7" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/variables/search <span class="dt">\</span></span>
+<span id="cb179-8"><a href="executable.html#cb179-8" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb179-9"><a href="executable.html#cb179-9" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;filter&quot;: {&quot;processInstanceKey&quot;: &quot;2251799813685249&quot;}, &quot;page&quot;: {&quot;limit&quot;: 1000}}&#39;</span></span></code></pre></div>
+<p>The instance has the <code>state</code> <code>COMPLETED</code>; the element instances list every element it passed, each with its <code>elementId</code> (the tok identifier) and its <code>state</code>; the variables are returned as JSON text in <code>value</code>. Operate shows the same instance on the diagram. Variables of an instance can also be set from outside with <code>PUT /v2/element-instances/KEY/variables</code>, which is how the conformance case <code>conditional</code> makes its conditional event fire.</p>
+</div>
+<div id="evaluate-a-decision" class="section level3 hasAnchor" number="10.17.7">
+<h3><span class="header-section-number">10.17.7</span> Evaluate a decision<a href="executable.html#evaluate-a-decision" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A deployed decision can be evaluated on its own, without a process:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb180-1"><a href="executable.html#cb180-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:8080/v2/decision-definitions/evaluation <span class="dt">\</span></span>
+<span id="cb180-2"><a href="executable.html#cb180-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb180-3"><a href="executable.html#cb180-3" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{&quot;decisionDefinitionId&quot;: &quot;approval-mode&quot;, &quot;variables&quot;: {&quot;kind&quot;: &quot;print&quot;, &quot;price&quot;: 120}}&#39;</span></span></code></pre></div>
+<p>The field <code>output</code> of the response holds the value of the decision as JSON text, here <code>"automatic"</code>, the value <code>tok eval</code> gave earlier. Comparing the two is a quick test that the decision means in Camunda what it means in tok.</p>
+</div>
+<div id="the-same-run-in-python" class="section level3 hasAnchor" number="10.17.8">
+<h3><span class="header-section-number">10.17.8</span> The same run in Python<a href="executable.html#the-same-run-in-python" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The script below performs the whole run: it exports the model, deploys it, starts an instance, completes the user task, plays the worker, publishes the message, checks the end event and the variables, and compares one evaluation of the decision with <code>tok eval</code>. It uses only the Python standard library and the <code>tok</code> command. Its functions are those of the runner that tests tok against Camunda 8 Run 8.10 for the conformance tables.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb181-1"><a href="executable.html#cb181-1" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Deploy the book purchase model to Camunda 8 Run and drive one instance to its end.</span></span>
+<span id="cb181-2"><a href="executable.html#cb181-2" tabindex="-1"></a><span class="co">Run it in the folder of 10-book-purchase.tok, with Camunda 8 Run started and tok on the PATH.&quot;&quot;&quot;</span></span>
+<span id="cb181-3"><a href="executable.html#cb181-3" tabindex="-1"></a></span>
+<span id="cb181-4"><a href="executable.html#cb181-4" tabindex="-1"></a><span class="im">import</span> glob</span>
+<span id="cb181-5"><a href="executable.html#cb181-5" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb181-6"><a href="executable.html#cb181-6" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb181-7"><a href="executable.html#cb181-7" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb181-8"><a href="executable.html#cb181-8" tabindex="-1"></a><span class="im">import</span> tempfile</span>
+<span id="cb181-9"><a href="executable.html#cb181-9" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb181-10"><a href="executable.html#cb181-10" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
+<span id="cb181-11"><a href="executable.html#cb181-11" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb181-12"><a href="executable.html#cb181-12" tabindex="-1"></a><span class="im">import</span> uuid</span>
+<span id="cb181-13"><a href="executable.html#cb181-13" tabindex="-1"></a></span>
+<span id="cb181-14"><a href="executable.html#cb181-14" tabindex="-1"></a>API <span class="op">=</span> os.environ.get(<span class="st">&quot;CAMUNDA_API&quot;</span>, <span class="st">&quot;http://localhost:8080/v2&quot;</span>)</span>
+<span id="cb181-15"><a href="executable.html#cb181-15" tabindex="-1"></a></span>
+<span id="cb181-16"><a href="executable.html#cb181-16" tabindex="-1"></a></span>
+<span id="cb181-17"><a href="executable.html#cb181-17" tabindex="-1"></a><span class="kw">def</span> call(method, path, body<span class="op">=</span><span class="va">None</span>, files<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb181-18"><a href="executable.html#cb181-18" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;One request to the REST API: JSON in and out, or a multipart upload of files.&quot;&quot;&quot;</span></span>
+<span id="cb181-19"><a href="executable.html#cb181-19" tabindex="-1"></a>    url <span class="op">=</span> API <span class="op">+</span> path</span>
+<span id="cb181-20"><a href="executable.html#cb181-20" tabindex="-1"></a>    <span class="cf">if</span> files <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb181-21"><a href="executable.html#cb181-21" tabindex="-1"></a>        boundary <span class="op">=</span> uuid.uuid4().<span class="bu">hex</span></span>
+<span id="cb181-22"><a href="executable.html#cb181-22" tabindex="-1"></a>        parts <span class="op">=</span> []</span>
+<span id="cb181-23"><a href="executable.html#cb181-23" tabindex="-1"></a>        <span class="cf">for</span> name <span class="kw">in</span> files:</span>
+<span id="cb181-24"><a href="executable.html#cb181-24" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(name, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb181-25"><a href="executable.html#cb181-25" tabindex="-1"></a>                data <span class="op">=</span> f.read()</span>
+<span id="cb181-26"><a href="executable.html#cb181-26" tabindex="-1"></a>            parts.append((<span class="st">&quot;--</span><span class="sc">%s</span><span class="ch">\r\n</span><span class="st">Content-Disposition: form-data; name=</span><span class="ch">\&quot;</span><span class="st">resources</span><span class="ch">\&quot;</span><span class="st">; filename=</span><span class="ch">\&quot;</span><span class="sc">%s</span><span class="ch">\&quot;\r\n</span><span class="st">&quot;</span></span>
+<span id="cb181-27"><a href="executable.html#cb181-27" tabindex="-1"></a>                          <span class="st">&quot;Content-Type: application/octet-stream</span><span class="ch">\r\n\r\n</span><span class="st">&quot;</span> <span class="op">%</span> (boundary, os.path.basename(name))</span>
+<span id="cb181-28"><a href="executable.html#cb181-28" tabindex="-1"></a>                          ).encode(<span class="st">&quot;utf-8&quot;</span>) <span class="op">+</span> data <span class="op">+</span> <span class="st">b&quot;</span><span class="ch">\r\n</span><span class="st">&quot;</span>)</span>
+<span id="cb181-29"><a href="executable.html#cb181-29" tabindex="-1"></a>        payload <span class="op">=</span> <span class="st">b&quot;&quot;</span>.join(parts) <span class="op">+</span> (<span class="st">&quot;--</span><span class="sc">%s</span><span class="st">--</span><span class="ch">\r\n</span><span class="st">&quot;</span> <span class="op">%</span> boundary).encode(<span class="st">&quot;utf-8&quot;</span>)</span>
+<span id="cb181-30"><a href="executable.html#cb181-30" tabindex="-1"></a>        req <span class="op">=</span> urllib.request.Request(url, data<span class="op">=</span>payload, method<span class="op">=</span>method,</span>
+<span id="cb181-31"><a href="executable.html#cb181-31" tabindex="-1"></a>                                     headers<span class="op">=</span>{<span class="st">&quot;Content-Type&quot;</span>: <span class="st">&quot;multipart/form-data; boundary=&quot;</span> <span class="op">+</span> boundary})</span>
+<span id="cb181-32"><a href="executable.html#cb181-32" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb181-33"><a href="executable.html#cb181-33" tabindex="-1"></a>        data <span class="op">=</span> json.dumps(body).encode(<span class="st">&quot;utf-8&quot;</span>) <span class="cf">if</span> body <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb181-34"><a href="executable.html#cb181-34" tabindex="-1"></a>        req <span class="op">=</span> urllib.request.Request(url, data<span class="op">=</span>data, method<span class="op">=</span>method, headers<span class="op">=</span>{<span class="st">&quot;Content-Type&quot;</span>: <span class="st">&quot;application/json&quot;</span>})</span>
+<span id="cb181-35"><a href="executable.html#cb181-35" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb181-36"><a href="executable.html#cb181-36" tabindex="-1"></a>        <span class="cf">with</span> urllib.request.urlopen(req, timeout<span class="op">=</span><span class="dv">60</span>) <span class="im">as</span> r:</span>
+<span id="cb181-37"><a href="executable.html#cb181-37" tabindex="-1"></a>            text <span class="op">=</span> r.read().decode(<span class="st">&quot;utf-8&quot;</span>)</span>
+<span id="cb181-38"><a href="executable.html#cb181-38" tabindex="-1"></a>            <span class="cf">return</span> json.loads(text) <span class="cf">if</span> text.strip() <span class="cf">else</span> {}</span>
+<span id="cb181-39"><a href="executable.html#cb181-39" tabindex="-1"></a>    <span class="cf">except</span> urllib.error.HTTPError <span class="im">as</span> ex:</span>
+<span id="cb181-40"><a href="executable.html#cb181-40" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">&quot;</span><span class="sc">%s</span><span class="st"> </span><span class="sc">%s</span><span class="st"> -&gt; </span><span class="sc">%s</span><span class="st"> </span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> (method, path, ex.code, ex.read().decode(<span class="st">&quot;utf-8&quot;</span>, <span class="st">&quot;replace&quot;</span>)[:<span class="dv">400</span>]))</span>
+<span id="cb181-41"><a href="executable.html#cb181-41" tabindex="-1"></a></span>
+<span id="cb181-42"><a href="executable.html#cb181-42" tabindex="-1"></a></span>
+<span id="cb181-43"><a href="executable.html#cb181-43" tabindex="-1"></a><span class="kw">def</span> poll(fn, what, timeout<span class="op">=</span><span class="dv">60</span>):</span>
+<span id="cb181-44"><a href="executable.html#cb181-44" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Repeat fn() every second until it returns something: the searches are eventually consistent.&quot;&quot;&quot;</span></span>
+<span id="cb181-45"><a href="executable.html#cb181-45" tabindex="-1"></a>    t0 <span class="op">=</span> time.time()</span>
+<span id="cb181-46"><a href="executable.html#cb181-46" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb181-47"><a href="executable.html#cb181-47" tabindex="-1"></a>        res <span class="op">=</span> fn()</span>
+<span id="cb181-48"><a href="executable.html#cb181-48" tabindex="-1"></a>        <span class="cf">if</span> res:</span>
+<span id="cb181-49"><a href="executable.html#cb181-49" tabindex="-1"></a>            <span class="cf">return</span> res</span>
+<span id="cb181-50"><a href="executable.html#cb181-50" tabindex="-1"></a>        <span class="cf">if</span> time.time() <span class="op">-</span> t0 <span class="op">&gt;</span> timeout:</span>
+<span id="cb181-51"><a href="executable.html#cb181-51" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">&quot;timeout waiting for &quot;</span> <span class="op">+</span> what)</span>
+<span id="cb181-52"><a href="executable.html#cb181-52" tabindex="-1"></a>        time.sleep(<span class="dv">1</span>)</span>
+<span id="cb181-53"><a href="executable.html#cb181-53" tabindex="-1"></a></span>
+<span id="cb181-54"><a href="executable.html#cb181-54" tabindex="-1"></a></span>
+<span id="cb181-55"><a href="executable.html#cb181-55" tabindex="-1"></a><span class="kw">def</span> activate(job_type):</span>
+<span id="cb181-56"><a href="executable.html#cb181-56" tabindex="-1"></a>    <span class="kw">def</span> get():</span>
+<span id="cb181-57"><a href="executable.html#cb181-57" tabindex="-1"></a>        res <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/jobs/activation&quot;</span>, {<span class="st">&quot;type&quot;</span>: job_type, <span class="st">&quot;timeout&quot;</span>: <span class="dv">60000</span>, <span class="st">&quot;maxJobsToActivate&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb181-58"><a href="executable.html#cb181-58" tabindex="-1"></a>                                                 <span class="st">&quot;worker&quot;</span>: <span class="st">&quot;book-purchase-demo&quot;</span>, <span class="st">&quot;requestTimeout&quot;</span>: <span class="dv">2000</span>})</span>
+<span id="cb181-59"><a href="executable.html#cb181-59" tabindex="-1"></a>        <span class="cf">return</span> res.get(<span class="st">&quot;jobs&quot;</span>) <span class="kw">or</span> <span class="va">None</span></span>
+<span id="cb181-60"><a href="executable.html#cb181-60" tabindex="-1"></a>    <span class="cf">return</span> poll(get, <span class="st">&quot;job of type </span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> job_type)[<span class="dv">0</span>]</span>
+<span id="cb181-61"><a href="executable.html#cb181-61" tabindex="-1"></a></span>
+<span id="cb181-62"><a href="executable.html#cb181-62" tabindex="-1"></a></span>
+<span id="cb181-63"><a href="executable.html#cb181-63" tabindex="-1"></a><span class="kw">def</span> user_tasks(pik):</span>
+<span id="cb181-64"><a href="executable.html#cb181-64" tabindex="-1"></a>    res <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/user-tasks/search&quot;</span>, {<span class="st">&quot;filter&quot;</span>: {<span class="st">&quot;processInstanceKey&quot;</span>: pik, <span class="st">&quot;state&quot;</span>: <span class="st">&quot;CREATED&quot;</span>}})</span>
+<span id="cb181-65"><a href="executable.html#cb181-65" tabindex="-1"></a>    <span class="cf">return</span> res.get(<span class="st">&quot;items&quot;</span>) <span class="kw">or</span> <span class="va">None</span></span>
+<span id="cb181-66"><a href="executable.html#cb181-66" tabindex="-1"></a></span>
+<span id="cb181-67"><a href="executable.html#cb181-67" tabindex="-1"></a></span>
+<span id="cb181-68"><a href="executable.html#cb181-68" tabindex="-1"></a><span class="kw">def</span> completed(pik):</span>
+<span id="cb181-69"><a href="executable.html#cb181-69" tabindex="-1"></a>    res <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/element-instances/search&quot;</span>, {<span class="st">&quot;filter&quot;</span>: {<span class="st">&quot;processInstanceKey&quot;</span>: pik}})</span>
+<span id="cb181-70"><a href="executable.html#cb181-70" tabindex="-1"></a>    <span class="cf">return</span> [i[<span class="st">&quot;elementId&quot;</span>] <span class="cf">for</span> i <span class="kw">in</span> res.get(<span class="st">&quot;items&quot;</span>, []) <span class="cf">if</span> i.get(<span class="st">&quot;state&quot;</span>) <span class="op">==</span> <span class="st">&quot;COMPLETED&quot;</span>]</span>
+<span id="cb181-71"><a href="executable.html#cb181-71" tabindex="-1"></a></span>
+<span id="cb181-72"><a href="executable.html#cb181-72" tabindex="-1"></a></span>
+<span id="cb181-73"><a href="executable.html#cb181-73" tabindex="-1"></a><span class="kw">def</span> variables(pik):</span>
+<span id="cb181-74"><a href="executable.html#cb181-74" tabindex="-1"></a>    res <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/variables/search&quot;</span>, {<span class="st">&quot;filter&quot;</span>: {<span class="st">&quot;processInstanceKey&quot;</span>: pik}, <span class="st">&quot;page&quot;</span>: {<span class="st">&quot;limit&quot;</span>: <span class="dv">1000</span>}})</span>
+<span id="cb181-75"><a href="executable.html#cb181-75" tabindex="-1"></a>    out <span class="op">=</span> {}</span>
+<span id="cb181-76"><a href="executable.html#cb181-76" tabindex="-1"></a>    <span class="cf">for</span> v <span class="kw">in</span> res.get(<span class="st">&quot;items&quot;</span>, []):</span>
+<span id="cb181-77"><a href="executable.html#cb181-77" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">str</span>(v.get(<span class="st">&quot;scopeKey&quot;</span>)) <span class="op">==</span> <span class="bu">str</span>(pik):</span>
+<span id="cb181-78"><a href="executable.html#cb181-78" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb181-79"><a href="executable.html#cb181-79" tabindex="-1"></a>                out[v[<span class="st">&quot;name&quot;</span>]] <span class="op">=</span> json.loads(v[<span class="st">&quot;value&quot;</span>])</span>
+<span id="cb181-80"><a href="executable.html#cb181-80" tabindex="-1"></a>            <span class="cf">except</span> (<span class="pp">ValueError</span>, <span class="pp">TypeError</span>):</span>
+<span id="cb181-81"><a href="executable.html#cb181-81" tabindex="-1"></a>                out[v[<span class="st">&quot;name&quot;</span>]] <span class="op">=</span> v[<span class="st">&quot;value&quot;</span>]</span>
+<span id="cb181-82"><a href="executable.html#cb181-82" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb181-83"><a href="executable.html#cb181-83" tabindex="-1"></a></span>
+<span id="cb181-84"><a href="executable.html#cb181-84" tabindex="-1"></a></span>
+<span id="cb181-85"><a href="executable.html#cb181-85" tabindex="-1"></a><span class="co"># 1. export the model and deploy the process, the decision and the forms together</span></span>
+<span id="cb181-86"><a href="executable.html#cb181-86" tabindex="-1"></a>folder <span class="op">=</span> tempfile.mkdtemp(prefix<span class="op">=</span><span class="st">&quot;tok-camunda-&quot;</span>)</span>
+<span id="cb181-87"><a href="executable.html#cb181-87" tabindex="-1"></a>subprocess.run([<span class="st">&quot;tok&quot;</span>, <span class="st">&quot;export&quot;</span>, <span class="st">&quot;10-book-purchase.tok&quot;</span>, <span class="st">&quot;-o&quot;</span>, folder], check<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb181-88"><a href="executable.html#cb181-88" tabindex="-1"></a>files <span class="op">=</span> <span class="bu">sorted</span>(p <span class="cf">for</span> ext <span class="kw">in</span> (<span class="st">&quot;bpmn&quot;</span>, <span class="st">&quot;dmn&quot;</span>, <span class="st">&quot;form&quot;</span>) <span class="cf">for</span> p <span class="kw">in</span> glob.glob(os.path.join(folder, <span class="st">&quot;*.&quot;</span> <span class="op">+</span> ext)))</span>
+<span id="cb181-89"><a href="executable.html#cb181-89" tabindex="-1"></a>call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/deployments&quot;</span>, files<span class="op">=</span>files)</span>
+<span id="cb181-90"><a href="executable.html#cb181-90" tabindex="-1"></a></span>
+<span id="cb181-91"><a href="executable.html#cb181-91" tabindex="-1"></a><span class="co"># 2. start an instance with the variables the start form would give</span></span>
+<span id="cb181-92"><a href="executable.html#cb181-92" tabindex="-1"></a>inst <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/process-instances&quot;</span>, {<span class="st">&quot;processDefinitionId&quot;</span>: <span class="st">&quot;book-purchase&quot;</span>,</span>
+<span id="cb181-93"><a href="executable.html#cb181-93" tabindex="-1"></a>                                           <span class="st">&quot;variables&quot;</span>: {<span class="st">&quot;title&quot;</span>: <span class="st">&quot;Process Mining&quot;</span>, <span class="st">&quot;kind&quot;</span>: <span class="st">&quot;e-book&quot;</span>,</span>
+<span id="cb181-94"><a href="executable.html#cb181-94" tabindex="-1"></a>                                                         <span class="st">&quot;price&quot;</span>: <span class="dv">60</span>}})</span>
+<span id="cb181-95"><a href="executable.html#cb181-95" tabindex="-1"></a>pik <span class="op">=</span> inst[<span class="st">&quot;processInstanceKey&quot;</span>]</span>
+<span id="cb181-96"><a href="executable.html#cb181-96" tabindex="-1"></a></span>
+<span id="cb181-97"><a href="executable.html#cb181-97" tabindex="-1"></a><span class="co"># 3. an e-book needs the manager: complete the approval as the form would</span></span>
+<span id="cb181-98"><a href="executable.html#cb181-98" tabindex="-1"></a>task <span class="op">=</span> poll(<span class="kw">lambda</span>: user_tasks(pik), <span class="st">&quot;user task&quot;</span>)[<span class="dv">0</span>]</span>
+<span id="cb181-99"><a href="executable.html#cb181-99" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;user task priority:&quot;</span>, task.get(<span class="st">&quot;priority&quot;</span>))</span>
+<span id="cb181-100"><a href="executable.html#cb181-100" tabindex="-1"></a>call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/user-tasks/</span><span class="sc">%s</span><span class="st">/completion&quot;</span> <span class="op">%</span> task[<span class="st">&quot;userTaskKey&quot;</span>], {<span class="st">&quot;variables&quot;</span>: {<span class="st">&quot;approved&quot;</span>: <span class="va">True</span>}})</span>
+<span id="cb181-101"><a href="executable.html#cb181-101" tabindex="-1"></a></span>
+<span id="cb181-102"><a href="executable.html#cb181-102" tabindex="-1"></a><span class="co"># 4. act as the worker of the job type order-book</span></span>
+<span id="cb181-103"><a href="executable.html#cb181-103" tabindex="-1"></a>job <span class="op">=</span> activate(<span class="st">&quot;order-book&quot;</span>)</span>
+<span id="cb181-104"><a href="executable.html#cb181-104" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;job headers:&quot;</span>, job.get(<span class="st">&quot;customHeaders&quot;</span>), <span class="st">&quot;retries:&quot;</span>, job.get(<span class="st">&quot;retries&quot;</span>))</span>
+<span id="cb181-105"><a href="executable.html#cb181-105" tabindex="-1"></a>call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/jobs/</span><span class="sc">%s</span><span class="st">/completion&quot;</span> <span class="op">%</span> job[<span class="st">&quot;jobKey&quot;</span>], {<span class="st">&quot;variables&quot;</span>: {<span class="st">&quot;order&quot;</span>: {<span class="st">&quot;number&quot;</span>: <span class="st">&quot;PO-17&quot;</span>}}})</span>
+<span id="cb181-106"><a href="executable.html#cb181-106" tabindex="-1"></a></span>
+<span id="cb181-107"><a href="executable.html#cb181-107" tabindex="-1"></a><span class="co"># 5. the supplier&#39;s delivery message, correlated by the order number</span></span>
+<span id="cb181-108"><a href="executable.html#cb181-108" tabindex="-1"></a>call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/messages/publication&quot;</span>, {<span class="st">&quot;name&quot;</span>: <span class="st">&quot;Delivery&quot;</span>, <span class="st">&quot;correlationKey&quot;</span>: <span class="st">&quot;PO-17&quot;</span>, <span class="st">&quot;timeToLive&quot;</span>: <span class="dv">60000</span>})</span>
+<span id="cb181-109"><a href="executable.html#cb181-109" tabindex="-1"></a></span>
+<span id="cb181-110"><a href="executable.html#cb181-110" tabindex="-1"></a><span class="co"># 6. the instance ends at the end event done; print its variables</span></span>
+<span id="cb181-111"><a href="executable.html#cb181-111" tabindex="-1"></a>poll(<span class="kw">lambda</span>: <span class="st">&quot;done&quot;</span> <span class="kw">in</span> completed(pik), <span class="st">&quot;end event done&quot;</span>)</span>
+<span id="cb181-112"><a href="executable.html#cb181-112" tabindex="-1"></a><span class="bu">print</span>(poll(<span class="kw">lambda</span>: variables(pik), <span class="st">&quot;variables&quot;</span>))</span>
+<span id="cb181-113"><a href="executable.html#cb181-113" tabindex="-1"></a></span>
+<span id="cb181-114"><a href="executable.html#cb181-114" tabindex="-1"></a><span class="co"># 7. the decision on its own, in Camunda and in tok</span></span>
+<span id="cb181-115"><a href="executable.html#cb181-115" tabindex="-1"></a>out <span class="op">=</span> call(<span class="st">&quot;POST&quot;</span>, <span class="st">&quot;/decision-definitions/evaluation&quot;</span>,</span>
+<span id="cb181-116"><a href="executable.html#cb181-116" tabindex="-1"></a>           {<span class="st">&quot;decisionDefinitionId&quot;</span>: <span class="st">&quot;approval-mode&quot;</span>, <span class="st">&quot;variables&quot;</span>: {<span class="st">&quot;kind&quot;</span>: <span class="st">&quot;print&quot;</span>, <span class="st">&quot;price&quot;</span>: <span class="dv">120</span>}})</span>
+<span id="cb181-117"><a href="executable.html#cb181-117" tabindex="-1"></a>theirs <span class="op">=</span> json.loads(out[<span class="st">&quot;output&quot;</span>]) <span class="cf">if</span> <span class="bu">isinstance</span>(out.get(<span class="st">&quot;output&quot;</span>), <span class="bu">str</span>) <span class="cf">else</span> out.get(<span class="st">&quot;output&quot;</span>)</span>
+<span id="cb181-118"><a href="executable.html#cb181-118" tabindex="-1"></a>mine <span class="op">=</span> json.loads(subprocess.run([<span class="st">&quot;tok&quot;</span>, <span class="st">&quot;eval&quot;</span>, <span class="st">&quot;10-book-purchase.tok&quot;</span>, <span class="st">&quot;approval-mode&quot;</span>,</span>
+<span id="cb181-119"><a href="executable.html#cb181-119" tabindex="-1"></a>                                  <span class="st">&quot;kind=print&quot;</span>, <span class="st">&quot;price=120&quot;</span>],</span>
+<span id="cb181-120"><a href="executable.html#cb181-120" tabindex="-1"></a>                                 capture_output<span class="op">=</span><span class="va">True</span>, text<span class="op">=</span><span class="va">True</span>, check<span class="op">=</span><span class="va">True</span>).stdout)</span>
+<span id="cb181-121"><a href="executable.html#cb181-121" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Camunda:&quot;</span>, theirs, <span class="st">&quot;tok eval:&quot;</span>, mine)</span></code></pre></div>
+<p>The pattern is the one to keep for your own tests: export with <code>tok</code>, deploy everything together, drive the instance through its user tasks, jobs and messages, and check the end event and the variables you expect. A test of this kind, kept next to the model in version control, tells you after every change whether the process still runs as intended.</p>
+</div>
+</div>
+<div id="camunda-8-saas-and-self-managed" class="section level2 hasAnchor" number="10.18">
+<h2><span class="header-section-number">10.18</span> Camunda 8 SaaS and Self-Managed<a href="executable.html#camunda-8-saas-and-self-managed" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The same files and the same REST API serve the other forms of Camunda 8: <strong>Camunda 8 SaaS</strong>, run by Camunda, and <strong>Camunda 8 Self-Managed</strong>, installed in your own infrastructure. The difference for your scripts is authentication: these installations protect the API with OAuth. You create client credentials (a client identifier and a secret) in the console of your installation, obtain an access token from its authorization server with the client credentials flow, and send the token with every request in the header <code>Authorization: Bearer TOKEN</code>. The address of the API and of the authorization server are given by your installation. Files can also be deployed through Camunda Web Modeler by uploading them (Chapter <a href="integrations.html#integrations">15</a>).</p>
+<p>The use of Camunda 8 in any of its forms is governed by Camunda’s own licence terms, which differ between the distributions and between development and production use. Check them with Camunda before you run real processes. tok exports standard files and does not change those terms.</p>
+</div>
+<div id="how-the-translation-is-verified" class="section level2 hasAnchor" number="10.19">
+<h2><span class="header-section-number">10.19</span> How the translation is verified<a href="executable.html#how-the-translation-is-verified" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Every construct of this chapter has a conformance case whose expected BPMN export is compared byte for byte by every implementation of tok. In addition, an executable conformance run deploys cases to Camunda 8 Run and drives each instance to its expected end. The run on Camunda 8 Run 8.10.7 covered:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>multi-instance</code>, <code>adhoc</code>, <code>call-activity</code>, <code>mappings</code>, <code>user-task</code>, <code>message-job</code>, <code>compensation</code>, <code>errors</code>, <code>conditional</code>, <code>listeners</code>, <code>connector</code>, <code>version-tag</code></td>
+<td>passed: deployed, started and run to completion, with the user tasks, jobs, messages, errors, variables and headers each case checks</td>
+</tr>
+<tr class="even">
+<td>case 63 (language 1.0: a process deployed with its forms and decisions)</td>
+<td>passed: a FEEL script of conformance level 3, the condition of an exclusive gateway, a job with its retries, header and variables, a user task with its assignee and priority, the expected end event, the version tag <code>1.0</code></td>
+</tr>
+<tr class="odd">
+<td>case 61 (9 evaluations of 6 decisions)</td>
+<td>passed: evaluated by Camunda, equal to <code>tok eval</code> and to the expected values</td>
+</tr>
+<tr class="even">
+<td>case 63, decisions (3 evaluations of 2 decisions, one input named with two words)</td>
+<td>passed, as for case 61</td>
+</tr>
+</tbody>
+</table>
+<p>All 15 runs passed. The run evaluates the decisions last because of a behaviour of Camunda 8 Run 8.10.7 itself: after decisions have been evaluated through the REST API, its exporter to the local secondary storage can stop, and later searches no longer see new instances. If your own tests time out after decision evaluations, stop Camunda 8 Run, empty its data folders and start it again.</p>
+<p>The conformance tables also say what the run does not drive: timers, signals, escalations, link and terminate events, event sub-processes, inclusive and event-based gateways, receive and send tasks and data are fixed by their exported XML and checked by the BPMN rules, but not executed on Camunda in the run. The <a href="conformance.html#conformance">appendix on conformance</a> gives the complete table of what Camunda 8.10 supports and how tok expresses each element.</p>
+</div>
+<div id="exercises-9" class="section level2 unnumbered hasAnchor">
+<h2>Exercises<a href="executable.html#exercises-9" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-11" class="exercise"><strong>Exercise 10.1  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><strong>The profile.</strong> Copy the leave request of the section on the executable profile into a file, check it, and fix every finding: give the user task a form with a field <code>approved</code>, give the rule task a small decision table, give the message event a correlation key, and give the gateway a condition and a default flow. Check until the result is clean, then remove <code>executable</code> and check again. Which diagnostics disappear, and why?</li>
+<li><strong>Static or expression.</strong> In <code>10-book-purchase.tok</code> give the approval task a static due date one week from today, then an assignee computed from a variable <code>manager</code> of the start form (add the field). Which of the two values needs <code>=</code>? Make the check report <code>C090</code> on purpose, and fix it.</li>
+<li><strong>Mapping the job.</strong> Change the job of <code>order</code> so that the worker receives one variable <code>order</code>, a context with the title, the kind and the amount (<code>inputs="order = {title: title, kind: kind, amount: cost}"</code>), and returns <code>{"number": …, "date": …}</code>. Write output mappings that keep both as process variables. Export the model and find the <code>zeebe:ioMapping</code> in the BPMN file.</li>
+<li><strong>Not executed.</strong> Rewrite <code>10-not-executed-error.tok</code> so that Camunda 8 can run it: an embedded sub-process instead of the transaction, an error end event and an error boundary event instead of the cancel events, a job type for the notification, and a parallel join instead of the complex gateway. Check it until there are no errors and compare the two diagrams.</li>
+<li><strong>A run on Camunda 8 Run.</strong> Start Camunda 8 Run, export <code>10-book-purchase.tok</code> and drive two instances through the REST API with <code>curl</code>: a printed book for 120 (no approval needed) and an e-book that the manager rejects. Note the element instances each instance passed and compare them with the paths you expect from the diagram.</li>
+<li><strong>A test script.</strong> Adapt the Python script to <code>10-digitisation.tok</code>: deploy the file, start an instance with two volumes and <code>treatments</code> set to <code>["ocr"]</code>, complete the jobs <code>reserve-scanner</code>, <code>scan-pages</code> (twice) and <code>ocr</code> (twice), and stop at the REST call. Which job types does the instance wait for, in which order, and how many instances of each?</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="decisions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simulation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

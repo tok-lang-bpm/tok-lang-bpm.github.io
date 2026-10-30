@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Renewing a loan" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:process id="process" name="Renewing a loan" isExecutable="false">
+    <bpmn:startEvent id="asked" name="Renewal requested" />
+    <bpmn:userTask id="check" name="Check reservations" />
+    <bpmn:exclusiveGateway id="reserved" name="Is the book reserved by someone else?" />
+    <bpmn:userTask id="renew" name="Extend the loan" />
+    <bpmn:userTask id="refuse" name="Refuse the renewal" />
+    <bpmn:endEvent id="renewed" name="Loan extended" />
+    <bpmn:endEvent id="refused" name="Renewal refused" />
+    <bpmn:boundaryEvent id="late" name="Two days passed" attachedToRef="check" cancelActivity="false">
+      <bpmn:timerEventDefinition id="late-def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="remind" name="Remind the circulation desk" />
+    <bpmn:endEvent id="reminded" name="Desk reminded" />
+    <bpmn:sequenceFlow id="f-asked-check" sourceRef="asked" targetRef="check" />
+    <bpmn:sequenceFlow id="f-check-reserved" sourceRef="check" targetRef="reserved" />
+    <bpmn:sequenceFlow id="f-reserved-refuse" name="yes" sourceRef="reserved" targetRef="refuse" />
+    <bpmn:sequenceFlow id="f-reserved-renew" name="no" sourceRef="reserved" targetRef="renew" />
+    <bpmn:sequenceFlow id="f-renew-renewed" sourceRef="renew" targetRef="renewed" />
+    <bpmn:sequenceFlow id="f-refuse-refused" sourceRef="refuse" targetRef="refused" />
+    <bpmn:sequenceFlow id="f-late-remind" sourceRef="late" targetRef="remind" />
+    <bpmn:sequenceFlow id="f-remind-reminded" sourceRef="remind" targetRef="reminded" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="asked_di" bpmnElement="asked">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="0" y="93" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check_di" bpmnElement="check">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reserved_di" bpmnElement="reserved" isMarkerVisible="true">
+        <dc:Bounds x="291" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="260" y="100" width="112" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="renew_di" bpmnElement="renew">
+        <dc:Bounds x="416" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refuse_di" bpmnElement="refuse">
+        <dc:Bounds x="416" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="renewed_di" bpmnElement="renewed">
+        <dc:Bounds x="566" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="547" y="223" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refused_di" bpmnElement="refused">
+        <dc:Bounds x="566" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="542" y="93" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="remind_di" bpmnElement="remind">
+        <dc:Bounds x="266" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reminded_di" bpmnElement="reminded">
+        <dc:Bounds x="448" y="290" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="429" y="331" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="late_di" bpmnElement="late">
+        <dc:Bounds x="168" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="97" y="131" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-asked-check_di" bpmnElement="f-asked-check">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-check-reserved_di" bpmnElement="f-check-reserved">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="291" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reserved-refuse_di" bpmnElement="f-reserved-refuse">
+        <di:waypoint x="341" y="70" />
+        <di:waypoint x="416" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="348" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reserved-renew_di" bpmnElement="f-reserved-renew">
+        <di:waypoint x="341" y="70" />
+        <di:waypoint x="391" y="70" />
+        <di:waypoint x="391" y="200" />
+        <di:waypoint x="416" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="397" y="80" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-renew-renewed_di" bpmnElement="f-renew-renewed">
+        <di:waypoint x="516" y="200" />
+        <di:waypoint x="566" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-refuse-refused_di" bpmnElement="f-refuse-refused">
+        <di:waypoint x="516" y="70" />
+        <di:waypoint x="566" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-late-remind_di" bpmnElement="f-late-remind">
+        <di:waypoint x="186" y="128" />
+        <di:waypoint x="186" y="200" />
+        <di:waypoint x="266" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-remind-reminded_di" bpmnElement="f-remind-reminded">
+        <di:waypoint x="316" y="240" />
+        <di:waypoint x="316" y="308" />
+        <di:waypoint x="448" y="308" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

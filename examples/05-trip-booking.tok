@@ -1,0 +1,23 @@
+tok 1.0 "Booking a study trip"
+
+start requested "Trip requested"
+transaction booking "Book the room and the ticket"
+  start booking-start
+  service room "Book a room" compensate=release-room
+  service release-room "Release the room" compensation
+  service ticket "Buy a ticket" compensate=refund-ticket
+  service refund-ticket "Refund the ticket" compensation
+  xor booked "Was everything booked?"
+  end booked-end "Booked"
+  end cancel-end "Cancel the booking" cancel
+boundary cancelled "Booking cancelled" cancel on=booking
+user confirm "Confirm the trip to the traveller"
+user inform "Inform the traveller of the cancellation"
+end trip-booked "Trip booked"
+end trip-cancelled "Trip cancelled"
+
+flow booking-start -> room -> ticket -> booked
+flow booked -> booked-end "yes"
+flow booked -> cancel-end "no"
+flow requested -> booking -> confirm -> trip-booked
+flow cancelled -> inform -> trip-cancelled

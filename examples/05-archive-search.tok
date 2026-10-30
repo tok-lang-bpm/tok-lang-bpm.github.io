@@ -1,0 +1,43 @@
+tok 1.0 "Archival search with a sub-process"
+
+pool archive "State archive"
+  lane registry "Registry office"
+    start request "Search request received" message="Search request"
+    user register "Register the request"
+    xor in-scope "Does the request concern the holdings?"
+    end out-of-scope "Request outside the holdings" terminate
+    eventsub withdrawal "Withdrawal of the request"
+      start withdrawn "Request withdrawn" message="Withdrawal"
+      user close "Close the case"
+      end closed "Case closed"
+  lane archivist "Archivist"
+    sub search "Search the holdings"
+      start search-start
+      user finding-aids "Review the finding aids"
+      xor found "Were the records found?"
+      throw difficult "Head of department must decide" escalation="Difficult search"
+      user analyse "Analyse the records"
+      end search-end "Search finished"
+    boundary escalated "Difficult search" noninterrupting on=search escalation="Difficult search"
+    user answer "Prepare the answer"
+    end answered "Answer sent" message="Search answer"
+  lane head "Head of department"
+    user decide "Decide on further searching"
+    end decided "Decision recorded"
+
+pool applicant "Applicant"
+
+flow withdrawn -> close -> closed
+flow search-start -> finding-aids -> found
+flow found -> analyse "yes"
+flow found -> difficult "no"
+flow difficult -> analyse -> search-end
+flow request -> register -> in-scope
+flow in-scope -> search "yes"
+flow in-scope -> out-of-scope "no"
+flow search -> answer -> answered
+flow escalated -> decide -> decided
+
+message applicant -> request "Search request"
+message answered -> applicant "Search answer"
+message applicant -> withdrawn "Withdrawal"

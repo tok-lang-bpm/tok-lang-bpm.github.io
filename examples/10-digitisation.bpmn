@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" id="definitions" name="Digitisation order" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.10.0">
+  <bpmn:error id="Error_Scanner_fault" name="Scanner fault" errorCode="SCAN-FAULT" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="library" name="Digitisation workshop" processRef="digitisation" />
+    <bpmn:participant id="volume" name="Scanning of one volume" processRef="scan-volume" />
+  </bpmn:collaboration>
+  <bpmn:process id="digitisation" name="Digitisation workshop" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:versionTag value="2.1" />
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="received" name="Order received" />
+    <bpmn:serviceTask id="reserve" name="Reserve scanner time">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="reserve-scanner" />
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="reserve-compensate" attachedToRef="reserve">
+      <bpmn:compensateEventDefinition id="reserve-compensate-def" />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="release" name="Release scanner time" isForCompensation="true">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="release-scanner" />
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:callActivity id="scan" name="Scan volume" calledElement="scan-volume">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="scan-volume" bindingType="deployment" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=volume" target="volume" />
+          <zeebe:output source="=file" target="file" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="false">
+        <bpmn:extensionElements>
+          <zeebe:loopCharacteristics inputCollection="=volumes" inputElement="volume" outputCollection="files" outputElement="=file" />
+        </bpmn:extensionElements>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:callActivity>
+    <bpmn:boundaryEvent id="failed" name="Scanner fault" attachedToRef="scan">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=reason" target="reason" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:errorEventDefinition id="failed-def" errorRef="Error_Scanner_fault" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="undo" name="Undo the reservation">
+      <bpmn:compensateEventDefinition id="undo-def" activityRef="reserve" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="cancelled" name="Order cancelled" />
+    <bpmn:serviceTask id="publish" name="Publish in the repository">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="POST" target="method" />
+          <zeebe:input source="https://repository.example.org/api/items" target="url" />
+          <zeebe:input source="={title: title, files: files}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" value="publication" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="check" name="Check the publication">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="f-check" />
+        <zeebe:assignmentDefinition assignee="=requester" />
+        <zeebe:priorityDefinition priority="50" />
+        <zeebe:taskListeners>
+          <zeebe:taskListener eventType="creating" type="notify-requester" />
+        </zeebe:taskListeners>
+      </bpmn:extensionElements>
+    </bpmn:userTask>
+    <bpmn:endEvent id="done" name="Order completed" />
+    <bpmn:sequenceFlow id="f-received-reserve" sourceRef="received" targetRef="reserve" />
+    <bpmn:sequenceFlow id="f-reserve-scan" sourceRef="reserve" targetRef="scan" />
+    <bpmn:sequenceFlow id="f-scan-publish" sourceRef="scan" targetRef="publish" />
+    <bpmn:sequenceFlow id="f-publish-check" sourceRef="publish" targetRef="check" />
+    <bpmn:sequenceFlow id="f-check-done" sourceRef="check" targetRef="done" />
+    <bpmn:sequenceFlow id="f-failed-undo" sourceRef="failed" targetRef="undo" />
+    <bpmn:sequenceFlow id="f-undo-cancelled" sourceRef="undo" targetRef="cancelled" />
+    <bpmn:association id="reserve-compensate-assoc" associationDirection="One" sourceRef="reserve-compensate" targetRef="release" />
+  </bpmn:process>
+  <bpmn:process id="scan-volume" name="Scanning of one volume" isExecutable="true">
+    <bpmn:startEvent id="vol" name="Volume to scan" />
+    <bpmn:serviceTask id="pages" name="Scan pages">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="scan-pages" retries="2" />
+        <zeebe:taskHeaders>
+          <zeebe:header key="resolution" value="600" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:adHocSubProcess id="extras" name="Optional treatments" cancelRemainingInstances="false">
+      <bpmn:extensionElements>
+        <zeebe:adHoc activeElementsCollection="=treatments" />
+      </bpmn:extensionElements>
+      <bpmn:serviceTask id="ocr" name="Recognise text">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="ocr" />
+        </bpmn:extensionElements>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="mark" name="Add a watermark">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="watermark" />
+        </bpmn:extensionElements>
+      </bpmn:serviceTask>
+    </bpmn:adHocSubProcess>
+    <bpmn:scriptTask id="name" name="Name the file">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=&quot;vol-&quot; + string(volume)" resultVariable="file" />
+      </bpmn:extensionElements>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="scanned" name="Volume scanned" />
+    <bpmn:sequenceFlow id="f-vol-pages" sourceRef="vol" targetRef="pages" />
+    <bpmn:sequenceFlow id="f-pages-extras" sourceRef="pages" targetRef="extras" />
+    <bpmn:sequenceFlow id="f-extras-name" sourceRef="extras" targetRef="name" />
+    <bpmn:sequenceFlow id="f-name-scanned" sourceRef="name" targetRef="scanned" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="library_di" bpmnElement="library" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="880" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="volume_di" bpmnElement="volume" isHorizontal="true">
+        <dc:Bounds x="0" y="310" width="880" height="340" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="92" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="70" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reserve_di" bpmnElement="reserve">
+        <dc:Bounds x="210" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="release_di" bpmnElement="release">
+        <dc:Bounds x="60" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="scan_di" bpmnElement="scan">
+        <dc:Bounds x="360" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="undo_di" bpmnElement="undo">
+        <dc:Bounds x="542" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="529" y="223" width="62" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cancelled_di" bpmnElement="cancelled">
+        <dc:Bounds x="692" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="668" y="223" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="publish_di" bpmnElement="publish">
+        <dc:Bounds x="510" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check_di" bpmnElement="check">
+        <dc:Bounds x="660" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="810" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="786" y="93" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="vol_di" bpmnElement="vol">
+        <dc:Bounds x="60" y="462" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="38" y="503" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pages_di" bpmnElement="pages">
+        <dc:Bounds x="146" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="extras_di" bpmnElement="extras" isExpanded="true">
+        <dc:Bounds x="296" y="340" width="160" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ocr_di" bpmnElement="ocr">
+        <dc:Bounds x="326" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="mark_di" bpmnElement="mark">
+        <dc:Bounds x="326" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="name_di" bpmnElement="name">
+        <dc:Bounds x="506" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="scanned_di" bpmnElement="scanned">
+        <dc:Bounds x="656" y="462" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="634" y="503" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reserve-compensate_di" bpmnElement="reserve-compensate">
+        <dc:Bounds x="262" y="92" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="failed_di" bpmnElement="failed">
+        <dc:Bounds x="412" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351" y="131" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-received-reserve_di" bpmnElement="f-received-reserve">
+        <di:waypoint x="128" y="70" />
+        <di:waypoint x="210" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reserve-scan_di" bpmnElement="f-reserve-scan">
+        <di:waypoint x="310" y="70" />
+        <di:waypoint x="360" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-scan-publish_di" bpmnElement="f-scan-publish">
+        <di:waypoint x="460" y="70" />
+        <di:waypoint x="510" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-publish-check_di" bpmnElement="f-publish-check">
+        <di:waypoint x="610" y="70" />
+        <di:waypoint x="660" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-check-done_di" bpmnElement="f-check-done">
+        <di:waypoint x="760" y="70" />
+        <di:waypoint x="810" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-failed-undo_di" bpmnElement="f-failed-undo">
+        <di:waypoint x="430" y="128" />
+        <di:waypoint x="430" y="200" />
+        <di:waypoint x="542" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-undo-cancelled_di" bpmnElement="f-undo-cancelled">
+        <di:waypoint x="578" y="200" />
+        <di:waypoint x="692" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="reserve-compensate-assoc_di" bpmnElement="reserve-compensate-assoc">
+        <di:waypoint x="262" y="120" />
+        <di:waypoint x="160" y="174" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-vol-pages_di" bpmnElement="f-vol-pages">
+        <di:waypoint x="96" y="480" />
+        <di:waypoint x="146" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-pages-extras_di" bpmnElement="f-pages-extras">
+        <di:waypoint x="246" y="480" />
+        <di:waypoint x="296" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-extras-name_di" bpmnElement="f-extras-name">
+        <di:waypoint x="456" y="480" />
+        <di:waypoint x="506" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-name-scanned_di" bpmnElement="f-name-scanned">
+        <di:waypoint x="606" y="480" />
+        <di:waypoint x="656" y="480" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

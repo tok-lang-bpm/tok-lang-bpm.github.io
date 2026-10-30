@@ -1,0 +1,20 @@
+tok 1.0   "Renewing a loan"
+# the reader asks online
+start   asked "Renewal requested"
+flow asked -> check
+user check "Check reservations"
+xor reserved "Is the book reserved by someone else?"
+flow check -> reserved
+flow reserved -> refuse "yes"
+flow reserved -> renew   "no"
+user renew "Extend the loan"    # by 30 days
+user refuse "Refuse the renewal"
+end renewed "Loan extended"
+end refused "Renewal refused"
+flow renew -> renewed
+flow refuse -> refused
+boundary late  "Two days passed" timer=P2D  noninterrupting on=check
+flow late -> remind
+service remind "Remind the circulation desk"
+end reminded "Desk reminded"
+flow remind -> reminded

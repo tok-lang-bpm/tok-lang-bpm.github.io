@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Copyright complaint in the university repository" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Complaint" name="Complaint" />
+  <bpmn:message id="Message_Notice_of_removal" name="Notice of removal" />
+  <bpmn:message id="Message_Reply" name="Reply" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="repository" name="University repository" processRef="repository-process" />
+    <bpmn:participant id="complainant" name="Complainant" />
+    <bpmn:participant id="author" name="Author" />
+    <bpmn:messageFlow id="m-complainant-received" name="Complaint" sourceRef="complainant" targetRef="received" messageRef="Message_Complaint" />
+    <bpmn:messageFlow id="m-inform-author" name="Notice of removal" sourceRef="inform" targetRef="author" messageRef="Message_Notice_of_removal" />
+    <bpmn:messageFlow id="m-reply-complainant" name="Reply" sourceRef="reply" targetRef="complainant" messageRef="Message_Reply" />
+  </bpmn:collaboration>
+  <bpmn:process id="repository-process" name="Copyright complaint in the university repository" isExecutable="false">
+    <bpmn:laneSet id="repository-lanes">
+      <bpmn:lane id="officer" name="Repository officer">
+        <bpmn:flowNodeRef>received</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>assess</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>reminder</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>remind</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>reminded</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>justified</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>inform</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>merge</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>reply</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>closed</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="system" name="Repository system">
+        <bpmn:flowNodeRef>hide</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>remove</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>restore</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="received" name="Complaint received">
+      <bpmn:messageEventDefinition id="received-def" messageRef="Message_Complaint" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="register" name="Register the complaint" />
+    <bpmn:userTask id="assess" name="Assess the complaint" />
+    <bpmn:boundaryEvent id="reminder" name="10 days passed" attachedToRef="assess" cancelActivity="false">
+      <bpmn:timerEventDefinition id="reminder-def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P10D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="remind" name="Remind the head of the repository" />
+    <bpmn:endEvent id="reminded" name="Head reminded" />
+    <bpmn:exclusiveGateway id="justified" name="Is the complaint justified?" />
+    <bpmn:sendTask id="inform" name="Inform the author" messageRef="Message_Notice_of_removal" />
+    <bpmn:exclusiveGateway id="merge" />
+    <bpmn:sendTask id="reply" name="Reply to the complainant" messageRef="Message_Reply" />
+    <bpmn:endEvent id="closed" name="Complaint closed" />
+    <bpmn:serviceTask id="hide" name="Hide the publication" />
+    <bpmn:serviceTask id="remove" name="Remove the publication" />
+    <bpmn:serviceTask id="restore" name="Restore the publication" />
+    <bpmn:sequenceFlow id="f-received-register" sourceRef="received" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-hide" sourceRef="register" targetRef="hide" />
+    <bpmn:sequenceFlow id="f-hide-assess" sourceRef="hide" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-assess-justified" sourceRef="assess" targetRef="justified" />
+    <bpmn:sequenceFlow id="f-justified-inform" name="yes" sourceRef="justified" targetRef="inform" />
+    <bpmn:sequenceFlow id="f-justified-restore" name="no" sourceRef="justified" targetRef="restore" />
+    <bpmn:sequenceFlow id="f-inform-remove" sourceRef="inform" targetRef="remove" />
+    <bpmn:sequenceFlow id="f-remove-merge" sourceRef="remove" targetRef="merge" />
+    <bpmn:sequenceFlow id="f-restore-merge" sourceRef="restore" targetRef="merge" />
+    <bpmn:sequenceFlow id="f-merge-reply" sourceRef="merge" targetRef="reply" />
+    <bpmn:sequenceFlow id="f-reply-closed" sourceRef="reply" targetRef="closed" />
+    <bpmn:sequenceFlow id="f-reminder-remind" sourceRef="reminder" targetRef="remind" />
+    <bpmn:sequenceFlow id="f-remind-reminded" sourceRef="remind" targetRef="reminded" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="repository_di" bpmnElement="repository" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="1400" height="410" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="complainant_di" bpmnElement="complainant" isHorizontal="true">
+        <dc:Bounds x="0" y="450" width="1400" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="author_di" bpmnElement="author" isHorizontal="true">
+        <dc:Bounds x="0" y="560" width="1400" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="officer_di" bpmnElement="officer" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="1370" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="system_di" bpmnElement="system" isHorizontal="true">
+        <dc:Bounds x="30" y="270" width="1370" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="82" y="26" width="52" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assess_di" bpmnElement="assess">
+        <dc:Bounds x="476" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="remind_di" bpmnElement="remind">
+        <dc:Bounds x="626" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reminded_di" bpmnElement="reminded">
+        <dc:Bounds x="808" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="789" y="223" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="justified_di" bpmnElement="justified" isMarkerVisible="true">
+        <dc:Bounds x="651" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="631" y="100" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="inform_di" bpmnElement="inform">
+        <dc:Bounds x="776" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="merge_di" bpmnElement="merge" isMarkerVisible="true">
+        <dc:Bounds x="1076" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reply_di" bpmnElement="reply">
+        <dc:Bounds x="1176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="closed_di" bpmnElement="closed">
+        <dc:Bounds x="1326" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1299" y="93" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="hide_di" bpmnElement="hide">
+        <dc:Bounds x="326" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="remove_di" bpmnElement="remove">
+        <dc:Bounds x="926" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="restore_di" bpmnElement="restore">
+        <dc:Bounds x="776" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reminder_di" bpmnElement="reminder">
+        <dc:Bounds x="528" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="462" y="131" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="m-complainant-received_di" bpmnElement="m-complainant-received">
+        <di:waypoint x="108" y="450" />
+        <di:waypoint x="108" y="88" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="113" y="257" width="52" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-inform-author_di" bpmnElement="m-inform-author">
+        <di:waypoint x="876" y="78" />
+        <di:waypoint x="890" y="78" />
+        <di:waypoint x="890" y="560" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="895" y="544" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-reply-complainant_di" bpmnElement="m-reply-complainant">
+        <di:waypoint x="1226" y="110" />
+        <di:waypoint x="1226" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1192" y="116" width="28" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-received-register_di" bpmnElement="f-received-register">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-hide_di" bpmnElement="f-register-hide">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-hide-assess_di" bpmnElement="f-hide-assess">
+        <di:waypoint x="426" y="340" />
+        <di:waypoint x="451" y="340" />
+        <di:waypoint x="451" y="70" />
+        <di:waypoint x="476" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-assess-justified_di" bpmnElement="f-assess-justified">
+        <di:waypoint x="576" y="70" />
+        <di:waypoint x="651" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-justified-inform_di" bpmnElement="f-justified-inform">
+        <di:waypoint x="701" y="70" />
+        <di:waypoint x="776" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="708" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-justified-restore_di" bpmnElement="f-justified-restore">
+        <di:waypoint x="701" y="70" />
+        <di:waypoint x="726" y="70" />
+        <di:waypoint x="726" y="340" />
+        <di:waypoint x="776" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="732" y="80" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-inform-remove_di" bpmnElement="f-inform-remove">
+        <di:waypoint x="876" y="70" />
+        <di:waypoint x="905" y="70" />
+        <di:waypoint x="905" y="340" />
+        <di:waypoint x="926" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-remove-merge_di" bpmnElement="f-remove-merge">
+        <di:waypoint x="1026" y="340" />
+        <di:waypoint x="1101" y="340" />
+        <di:waypoint x="1101" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-restore-merge_di" bpmnElement="f-restore-merge">
+        <di:waypoint x="876" y="340" />
+        <di:waypoint x="901" y="340" />
+        <di:waypoint x="901" y="70" />
+        <di:waypoint x="1076" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-merge-reply_di" bpmnElement="f-merge-reply">
+        <di:waypoint x="1126" y="70" />
+        <di:waypoint x="1176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reply-closed_di" bpmnElement="f-reply-closed">
+        <di:waypoint x="1276" y="70" />
+        <di:waypoint x="1326" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reminder-remind_di" bpmnElement="f-reminder-remind">
+        <di:waypoint x="546" y="128" />
+        <di:waypoint x="546" y="200" />
+        <di:waypoint x="626" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-remind-reminded_di" bpmnElement="f-remind-reminded">
+        <di:waypoint x="726" y="200" />
+        <di:waypoint x="808" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

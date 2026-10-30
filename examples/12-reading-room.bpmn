@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Reading room order" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="library" name="University library" processRef="library-process" />
+  </bpmn:collaboration>
+  <bpmn:process id="library-process" name="Reading room order" isExecutable="false">
+    <bpmn:laneSet id="library-lanes">
+      <bpmn:lane id="reader" name="Reader">
+        <bpmn:flowNodeRef>wish</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>order</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="stacks" name="Stacks">
+        <bpmn:flowNodeRef>fetch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>found</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>deliver</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>delivered</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>notify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>missing</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="wish" name="Reader needs a volume" />
+    <bpmn:userTask id="order" name="Order the volume to the reading room" />
+    <bpmn:userTask id="fetch" name="Fetch the volume from the stacks" />
+    <bpmn:exclusiveGateway id="found" name="Volume found?" />
+    <bpmn:userTask id="deliver" name="Deliver to the reading room" />
+    <bpmn:endEvent id="delivered" name="Volume ready in the reading room" />
+    <bpmn:userTask id="notify" name="Notify the reader" />
+    <bpmn:endEvent id="missing" name="Volume reported missing" />
+    <bpmn:sequenceFlow id="f-wish-order" sourceRef="wish" targetRef="order" />
+    <bpmn:sequenceFlow id="f-order-fetch" sourceRef="order" targetRef="fetch" />
+    <bpmn:sequenceFlow id="f-fetch-found" sourceRef="fetch" targetRef="found" />
+    <bpmn:sequenceFlow id="f-found-deliver" name="yes" sourceRef="found" targetRef="deliver" />
+    <bpmn:sequenceFlow id="f-found-notify" name="no" sourceRef="found" targetRef="notify" />
+    <bpmn:sequenceFlow id="f-deliver-delivered" sourceRef="deliver" targetRef="delivered" />
+    <bpmn:sequenceFlow id="f-notify-missing" sourceRef="notify" targetRef="missing" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="library_di" bpmnElement="library" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="800" height="410" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reader_di" bpmnElement="reader" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="770" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="stacks_di" bpmnElement="stacks" isHorizontal="true">
+        <dc:Bounds x="30" y="140" width="770" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="wish_di" bpmnElement="wish">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="68" y="93" width="80" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order_di" bpmnElement="order">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fetch_di" bpmnElement="fetch">
+        <dc:Bounds x="326" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="found_di" bpmnElement="found" isMarkerVisible="true">
+        <dc:Bounds x="476" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="507" y="238" width="34" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="deliver_di" bpmnElement="deliver">
+        <dc:Bounds x="576" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="delivered_di" bpmnElement="delivered">
+        <dc:Bounds x="726" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="690" y="233" width="108" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="notify_di" bpmnElement="notify">
+        <dc:Bounds x="576" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="missing_di" bpmnElement="missing">
+        <dc:Bounds x="726" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="702" y="363" width="84" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-wish-order_di" bpmnElement="f-wish-order">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-order-fetch_di" bpmnElement="f-order-fetch">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-fetch-found_di" bpmnElement="f-fetch-found">
+        <di:waypoint x="426" y="210" />
+        <di:waypoint x="476" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-found-deliver_di" bpmnElement="f-found-deliver">
+        <di:waypoint x="526" y="210" />
+        <di:waypoint x="576" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="533" y="195" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-found-notify_di" bpmnElement="f-found-notify">
+        <di:waypoint x="501" y="235" />
+        <di:waypoint x="501" y="340" />
+        <di:waypoint x="576" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="509" y="325" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-deliver-delivered_di" bpmnElement="f-deliver-delivered">
+        <di:waypoint x="676" y="210" />
+        <di:waypoint x="726" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-notify-missing_di" bpmnElement="f-notify-missing">
+        <di:waypoint x="676" y="340" />
+        <di:waypoint x="726" y="340" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

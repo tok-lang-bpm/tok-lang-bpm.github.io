@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 13 Programming interfaces | tok: Process Models as Text</title>
+  <meta name="description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 13 Programming interfaces | tok: Process Models as Text" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="github-repo" content="tok-lang-bpm/tok-lang-bpm.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 Programming interfaces | tok: Process Models as Text" />
+  
+  <meta name="twitter:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  
+
+<meta name="author" content="Marek Deja" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="editors.html"/>
+<link rel="next" href="agents.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tok: Process Models as Text</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-this-book-is-for"><i class="fa fa-check"></i>Who this book is for</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-the-book-is-organised"><i class="fa fa-check"></i>How the book is organised</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#conventions"><i class="fa fa-check"></i>Conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#versions"><i class="fa fa-check"></i>Versions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#licence"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reporting-issues"><i class="fa fa-check"></i>Reporting issues</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-cite"><i class="fa fa-check"></i>How to cite</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="models-as-text.html"><a href="models-as-text.html"><i class="fa fa-check"></i><b>1</b> Models as text</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="models-as-text.html"><a href="models-as-text.html#two-layers-of-a-bpmn-file"><i class="fa fa-check"></i><b>1.1</b> Two layers of a BPMN file</a></li>
+<li class="chapter" data-level="1.2" data-path="models-as-text.html"><a href="models-as-text.html#reading-a-model-line-by-line"><i class="fa fa-check"></i><b>1.2</b> Reading a model line by line</a></li>
+<li class="chapter" data-level="1.3" data-path="models-as-text.html"><a href="models-as-text.html#the-text-is-the-model"><i class="fa fa-check"></i><b>1.3</b> The text is the model</a></li>
+<li class="chapter" data-level="1.4" data-path="models-as-text.html"><a href="models-as-text.html#why-text"><i class="fa fa-check"></i><b>1.4</b> Why text</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="models-as-text.html"><a href="models-as-text.html#version-control"><i class="fa fa-check"></i><b>1.4.1</b> Version control</a></li>
+<li class="chapter" data-level="1.4.2" data-path="models-as-text.html"><a href="models-as-text.html#review"><i class="fa fa-check"></i><b>1.4.2</b> Review</a></li>
+<li class="chapter" data-level="1.4.3" data-path="models-as-text.html"><a href="models-as-text.html#why-collaboration"><i class="fa fa-check"></i><b>1.4.3</b> Collaboration</a></li>
+<li class="chapter" data-level="1.4.4" data-path="models-as-text.html"><a href="models-as-text.html#why-agents"><i class="fa fa-check"></i><b>1.4.4</b> Agents</a></li>
+<li class="chapter" data-level="1.4.5" data-path="models-as-text.html"><a href="models-as-text.html#text-tools"><i class="fa fa-check"></i><b>1.4.5</b> Text tools</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="models-as-text.html"><a href="models-as-text.html#tok-among-other-text-notations"><i class="fa fa-check"></i><b>1.5</b> tok among other text notations</a></li>
+<li class="chapter" data-level="1.6" data-path="models-as-text.html"><a href="models-as-text.html#the-metamodel-underneath"><i class="fa fa-check"></i><b>1.6</b> The metamodel underneath</a></li>
+<li class="chapter" data-level="1.7" data-path="models-as-text.html"><a href="models-as-text.html#round-trip-from-bpmn-back-to-text"><i class="fa fa-check"></i><b>1.7</b> Round trip: from BPMN back to text</a></li>
+<li class="chapter" data-level="" data-path="models-as-text.html"><a href="models-as-text.html#exercises"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started.html"><a href="getting-started.html#ways-to-use-tok"><i class="fa fa-check"></i><b>2.1</b> Ways to use tok</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started.html"><a href="getting-started.html#installing-the-command-line"><i class="fa fa-check"></i><b>2.2</b> Installing the command line</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="getting-started.html"><a href="getting-started.html#with-python"><i class="fa fa-check"></i><b>2.2.1</b> With Python</a></li>
+<li class="chapter" data-level="2.2.2" data-path="getting-started.html"><a href="getting-started.html#with-cargo"><i class="fa fa-check"></i><b>2.2.2</b> With Cargo</a></li>
+<li class="chapter" data-level="2.2.3" data-path="getting-started.html"><a href="getting-started.html#checking-the-installation"><i class="fa fa-check"></i><b>2.2.3</b> Checking the installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="getting-started.html"><a href="getting-started.html#other-ways-to-reach-the-engine"><i class="fa fa-check"></i><b>2.3</b> Other ways to reach the engine</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="getting-started.html"><a href="getting-started.html#r"><i class="fa fa-check"></i><b>2.3.1</b> R</a></li>
+<li class="chapter" data-level="2.3.2" data-path="getting-started.html"><a href="getting-started.html#julia"><i class="fa fa-check"></i><b>2.3.2</b> Julia</a></li>
+<li class="chapter" data-level="2.3.3" data-path="getting-started.html"><a href="getting-started.html#visual-studio-code"><i class="fa fa-check"></i><b>2.3.3</b> Visual Studio Code</a></li>
+<li class="chapter" data-level="2.3.4" data-path="getting-started.html"><a href="getting-started.html#the-playground"><i class="fa fa-check"></i><b>2.3.4</b> The playground</a></li>
+<li class="chapter" data-level="2.3.5" data-path="getting-started.html"><a href="getting-started.html#the-agent-bundle"><i class="fa fa-check"></i><b>2.3.5</b> The agent bundle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="getting-started.html"><a href="getting-started.html#your-first-model"><i class="fa fa-check"></i><b>2.4</b> Your first model</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="getting-started.html"><a href="getting-started.html#step-1-write-the-text"><i class="fa fa-check"></i><b>2.4.1</b> Step 1: write the text</a></li>
+<li class="chapter" data-level="2.4.2" data-path="getting-started.html"><a href="getting-started.html#step-2-check-the-model"><i class="fa fa-check"></i><b>2.4.2</b> Step 2: check the model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="getting-started.html"><a href="getting-started.html#step-3-format-the-text"><i class="fa fa-check"></i><b>2.4.3</b> Step 3: format the text</a></li>
+<li class="chapter" data-level="2.4.4" data-path="getting-started.html"><a href="getting-started.html#step-4-export-bpmn"><i class="fa fa-check"></i><b>2.4.4</b> Step 4: export BPMN</a></li>
+<li class="chapter" data-level="2.4.5" data-path="getting-started.html"><a href="getting-started.html#step-5-draw-the-picture"><i class="fa fa-check"></i><b>2.4.5</b> Step 5: draw the picture</a></li>
+<li class="chapter" data-level="2.4.6" data-path="getting-started.html"><a href="getting-started.html#step-6-open-the-model-in-a-bpmn-tool"><i class="fa fa-check"></i><b>2.4.6</b> Step 6: open the model in a BPMN tool</a></li>
+<li class="chapter" data-level="2.4.7" data-path="getting-started.html"><a href="getting-started.html#step-7-change-and-repeat"><i class="fa fa-check"></i><b>2.4.7</b> Step 7: change and repeat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="getting-started.html"><a href="getting-started.html#setting-up-your-editor"><i class="fa fa-check"></i><b>2.5</b> Setting up your editor</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-1"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="process-basics.html"><a href="process-basics.html"><i class="fa fa-check"></i><b>3</b> Process basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="process-basics.html"><a href="process-basics.html#the-header-line"><i class="fa fa-check"></i><b>3.1</b> The header line</a></li>
+<li class="chapter" data-level="3.2" data-path="process-basics.html"><a href="process-basics.html#statements"><i class="fa fa-check"></i><b>3.2</b> Statements</a></li>
+<li class="chapter" data-level="3.3" data-path="process-basics.html"><a href="process-basics.html#identifiers-and-labels"><i class="fa fa-check"></i><b>3.3</b> Identifiers and labels</a></li>
+<li class="chapter" data-level="3.4" data-path="process-basics.html"><a href="process-basics.html#tasks"><i class="fa fa-check"></i><b>3.4</b> Tasks</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="process-basics.html"><a href="process-basics.html#markers-of-repetition"><i class="fa fa-check"></i><b>3.4.1</b> Markers of repetition</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="process-basics.html"><a href="process-basics.html#events"><i class="fa fa-check"></i><b>3.5</b> Events</a></li>
+<li class="chapter" data-level="3.6" data-path="process-basics.html"><a href="process-basics.html#gateways"><i class="fa fa-check"></i><b>3.6</b> Gateways</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="process-basics.html"><a href="process-basics.html#exclusive-parallel-and-inclusive-gateways"><i class="fa fa-check"></i><b>3.6.1</b> Exclusive, parallel and inclusive gateways</a></li>
+<li class="chapter" data-level="3.6.2" data-path="process-basics.html"><a href="process-basics.html#the-event-based-gateway"><i class="fa fa-check"></i><b>3.6.2</b> The event-based gateway</a></li>
+<li class="chapter" data-level="3.6.3" data-path="process-basics.html"><a href="process-basics.html#the-complex-gateway"><i class="fa fa-check"></i><b>3.6.3</b> The complex gateway</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="process-basics.html"><a href="process-basics.html#sequence-flows"><i class="fa fa-check"></i><b>3.7</b> Sequence flows</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="process-basics.html"><a href="process-basics.html#labels-and-attributes"><i class="fa fa-check"></i><b>3.7.1</b> Labels and attributes</a></li>
+<li class="chapter" data-level="3.7.2" data-path="process-basics.html"><a href="process-basics.html#conditions"><i class="fa fa-check"></i><b>3.7.2</b> Conditions</a></li>
+<li class="chapter" data-level="3.7.3" data-path="process-basics.html"><a href="process-basics.html#default-flows"><i class="fa fa-check"></i><b>3.7.3</b> Default flows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="process-basics.html"><a href="process-basics.html#indentation-and-blocks"><i class="fa fa-check"></i><b>3.8</b> Indentation and blocks</a></li>
+<li class="chapter" data-level="3.9" data-path="process-basics.html"><a href="process-basics.html#comments"><i class="fa fa-check"></i><b>3.9</b> Comments</a></li>
+<li class="chapter" data-level="3.10" data-path="process-basics.html"><a href="process-basics.html#levels-of-the-language"><i class="fa fa-check"></i><b>3.10</b> Levels of the language</a></li>
+<li class="chapter" data-level="3.11" data-path="process-basics.html"><a href="process-basics.html#typical-mistakes"><i class="fa fa-check"></i><b>3.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="process-basics.html"><a href="process-basics.html#exercises-2"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="collaboration.html"><a href="collaboration.html"><i class="fa fa-check"></i><b>4</b> Pools, lanes and messages</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="collaboration.html"><a href="collaboration.html#from-one-process-to-a-collaboration"><i class="fa fa-check"></i><b>4.1</b> From one process to a collaboration</a></li>
+<li class="chapter" data-level="4.2" data-path="collaboration.html"><a href="collaboration.html#pools"><i class="fa fa-check"></i><b>4.2</b> Pools</a></li>
+<li class="chapter" data-level="4.3" data-path="collaboration.html"><a href="collaboration.html#lanes-and-nested-lanes"><i class="fa fa-check"></i><b>4.3</b> Lanes and nested lanes</a></li>
+<li class="chapter" data-level="4.4" data-path="collaboration.html"><a href="collaboration.html#message-flows"><i class="fa fa-check"></i><b>4.4</b> Message flows</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="collaboration.html"><a href="collaboration.html#a-collaboration-with-a-black-box-pool"><i class="fa fa-check"></i><b>4.4.1</b> A collaboration with a black-box pool</a></li>
+<li class="chapter" data-level="4.4.2" data-path="collaboration.html"><a href="collaboration.html#two-processes-that-talk-to-each-other"><i class="fa fa-check"></i><b>4.4.2</b> Two processes that talk to each other</a></li>
+<li class="chapter" data-level="4.4.3" data-path="collaboration.html"><a href="collaboration.html#correlation-keys"><i class="fa fa-check"></i><b>4.4.3</b> Correlation keys</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="collaboration.html"><a href="collaboration.html#structural-rules"><i class="fa fa-check"></i><b>4.5</b> Structural rules</a></li>
+<li class="chapter" data-level="4.6" data-path="collaboration.html"><a href="collaboration.html#conversations"><i class="fa fa-check"></i><b>4.6</b> Conversations</a></li>
+<li class="chapter" data-level="4.7" data-path="collaboration.html"><a href="collaboration.html#choreographies"><i class="fa fa-check"></i><b>4.7</b> Choreographies</a></li>
+<li class="chapter" data-level="4.8" data-path="collaboration.html"><a href="collaboration.html#participant-multiplicity"><i class="fa fa-check"></i><b>4.8</b> Participant multiplicity</a></li>
+<li class="chapter" data-level="4.9" data-path="collaboration.html"><a href="collaboration.html#collaborations-levels-and-camunda"><i class="fa fa-check"></i><b>4.9</b> Collaborations, levels and Camunda</a></li>
+<li class="chapter" data-level="4.10" data-path="collaboration.html"><a href="collaboration.html#the-canonical-form-of-a-collaboration"><i class="fa fa-check"></i><b>4.10</b> The canonical form of a collaboration</a></li>
+<li class="chapter" data-level="" data-path="collaboration.html"><a href="collaboration.html#exercises-3"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="events-exceptions.html"><a href="events-exceptions.html"><i class="fa fa-check"></i><b>5</b> Events, sub-processes and exceptions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="events-exceptions.html"><a href="events-exceptions.html#catching-and-throwing"><i class="fa fa-check"></i><b>5.1</b> Catching and throwing</a></li>
+<li class="chapter" data-level="5.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers"><i class="fa fa-check"></i><b>5.2</b> Triggers</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="events-exceptions.html"><a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier"><i class="fa fa-check"></i><b>5.2.1</b> Events on a path: waiting for a supplier</a></li>
+<li class="chapter" data-level="5.2.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers-without-a-value"><i class="fa fa-check"></i><b>5.2.2</b> Triggers without a value</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="events-exceptions.html"><a href="events-exceptions.html#boundary-events"><i class="fa fa-check"></i><b>5.3</b> Boundary events</a></li>
+<li class="chapter" data-level="5.4" data-path="events-exceptions.html"><a href="events-exceptions.html#embedded-sub-processes"><i class="fa fa-check"></i><b>5.4</b> Embedded sub-processes</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="events-exceptions.html"><a href="events-exceptions.html#escalation-from-a-sub-process"><i class="fa fa-check"></i><b>5.4.1</b> Escalation from a sub-process</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="events-exceptions.html"><a href="events-exceptions.html#event-sub-processes"><i class="fa fa-check"></i><b>5.5</b> Event sub-processes</a></li>
+<li class="chapter" data-level="5.6" data-path="events-exceptions.html"><a href="events-exceptions.html#compensation"><i class="fa fa-check"></i><b>5.6</b> Compensation</a></li>
+<li class="chapter" data-level="5.7" data-path="events-exceptions.html"><a href="events-exceptions.html#transactions-and-cancellation"><i class="fa fa-check"></i><b>5.7</b> Transactions and cancellation</a></li>
+<li class="chapter" data-level="5.8" data-path="events-exceptions.html"><a href="events-exceptions.html#multiple-and-parallel-multiple-events"><i class="fa fa-check"></i><b>5.8</b> Multiple and parallel multiple events</a></li>
+<li class="chapter" data-level="5.9" data-path="events-exceptions.html"><a href="events-exceptions.html#ad-hoc-sub-processes"><i class="fa fa-check"></i><b>5.9</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="5.10" data-path="events-exceptions.html"><a href="events-exceptions.html#call-activities-and-global-tasks"><i class="fa fa-check"></i><b>5.10</b> Call activities and global tasks</a></li>
+<li class="chapter" data-level="5.11" data-path="events-exceptions.html"><a href="events-exceptions.html#loops-and-multi-instance"><i class="fa fa-check"></i><b>5.11</b> Loops and multi-instance</a></li>
+<li class="chapter" data-level="5.12" data-path="events-exceptions.html"><a href="events-exceptions.html#exceptions-and-process-engines"><i class="fa fa-check"></i><b>5.12</b> Exceptions and process engines</a></li>
+<li class="chapter" data-level="5.13" data-path="events-exceptions.html"><a href="events-exceptions.html#typical-mistakes-1"><i class="fa fa-check"></i><b>5.13</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="events-exceptions.html"><a href="events-exceptions.html#exercises-4"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data-artifacts.html"><a href="data-artifacts.html"><i class="fa fa-check"></i><b>6</b> Data, resources and artifacts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="data-artifacts.html"><a href="data-artifacts.html#data-objects"><i class="fa fa-check"></i><b>6.1</b> Data objects</a></li>
+<li class="chapter" data-level="6.2" data-path="data-artifacts.html"><a href="data-artifacts.html#data-stores"><i class="fa fa-check"></i><b>6.2</b> Data stores</a></li>
+<li class="chapter" data-level="6.3" data-path="data-artifacts.html"><a href="data-artifacts.html#reading-and-writing"><i class="fa fa-check"></i><b>6.3</b> Reading and writing</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="data-artifacts.html"><a href="data-artifacts.html#states-and-state-transitions"><i class="fa fa-check"></i><b>6.3.1</b> States and state transitions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="data-artifacts.html"><a href="data-artifacts.html#process-data"><i class="fa fa-check"></i><b>6.4</b> Process data</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="data-artifacts.html"><a href="data-artifacts.html#item-definitions"><i class="fa fa-check"></i><b>6.4.1</b> Item definitions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="data-artifacts.html"><a href="data-artifacts.html#inputs-outputs-and-properties"><i class="fa fa-check"></i><b>6.4.2</b> Inputs, outputs and properties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="data-artifacts.html"><a href="data-artifacts.html#resources-and-performers"><i class="fa fa-check"></i><b>6.5</b> Resources and performers</a></li>
+<li class="chapter" data-level="6.6" data-path="data-artifacts.html"><a href="data-artifacts.html#text-annotations"><i class="fa fa-check"></i><b>6.6</b> Text annotations</a></li>
+<li class="chapter" data-level="6.7" data-path="data-artifacts.html"><a href="data-artifacts.html#groups"><i class="fa fa-check"></i><b>6.7</b> Groups</a></li>
+<li class="chapter" data-level="6.8" data-path="data-artifacts.html"><a href="data-artifacts.html#documentation"><i class="fa fa-check"></i><b>6.8</b> Documentation</a></li>
+<li class="chapter" data-level="6.9" data-path="data-artifacts.html"><a href="data-artifacts.html#typical-mistakes-2"><i class="fa fa-check"></i><b>6.9</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="data-artifacts.html"><a href="data-artifacts.html#exercises-5"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking.html"><a href="checking.html"><i class="fa fa-check"></i><b>7</b> Checking models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking.html"><a href="checking.html#what-tok-check-does"><i class="fa fa-check"></i><b>7.1</b> What <code>tok check</code> does</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="checking.html"><a href="checking.html#severities"><i class="fa fa-check"></i><b>7.1.1</b> Severities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="checking.html"><a href="checking.html#layers-and-codes"><i class="fa fa-check"></i><b>7.2</b> Layers and codes</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="checking.html"><a href="checking.html#the-order-of-the-layers-and-cascades"><i class="fa fa-check"></i><b>7.2.1</b> The order of the layers and cascades</a></li>
+<li class="chapter" data-level="7.2.2" data-path="checking.html"><a href="checking.html#messages-in-polish"><i class="fa fa-check"></i><b>7.2.2</b> Messages in Polish</a></li>
+<li class="chapter" data-level="7.2.3" data-path="checking.html"><a href="checking.html#diagnostics-for-programs"><i class="fa fa-check"></i><b>7.2.3</b> Diagnostics for programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="checking.html"><a href="checking.html#the-bpmn-rules"><i class="fa fa-check"></i><b>7.3</b> The BPMN rules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="checking.html"><a href="checking.html#bpmn-files-from-other-tools"><i class="fa fa-check"></i><b>7.3.1</b> BPMN files from other tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="checking.html"><a href="checking.html#levels-of-the-language-1"><i class="fa fa-check"></i><b>7.4</b> Levels of the language</a></li>
+<li class="chapter" data-level="7.5" data-path="checking.html"><a href="checking.html#bpmn-conformance-classes"><i class="fa fa-check"></i><b>7.5</b> BPMN conformance classes</a></li>
+<li class="chapter" data-level="7.6" data-path="checking.html"><a href="checking.html#the-canonical-form"><i class="fa fa-check"></i><b>7.6</b> The canonical form</a></li>
+<li class="chapter" data-level="7.7" data-path="checking.html"><a href="checking.html#typical-errors-and-their-corrections"><i class="fa fa-check"></i><b>7.7</b> Typical errors and their corrections</a></li>
+<li class="chapter" data-level="7.8" data-path="checking.html"><a href="checking.html#what-a-clean-check-means"><i class="fa fa-check"></i><b>7.8</b> What a clean check means</a></li>
+<li class="chapter" data-level="" data-path="checking.html"><a href="checking.html#exercises-6"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="layout-import.html"><a href="layout-import.html"><i class="fa fa-check"></i><b>8</b> Layout, export and import</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="layout-import.html"><a href="layout-import.html#the-automatic-layout"><i class="fa fa-check"></i><b>8.1</b> The automatic layout</a></li>
+<li class="chapter" data-level="8.2" data-path="layout-import.html"><a href="layout-import.html#pictures-tok-svg"><i class="fa fa-check"></i><b>8.2</b> Pictures: <code>tok svg</code></a></li>
+<li class="chapter" data-level="8.3" data-path="layout-import.html"><a href="layout-import.html#bpmn-files-tok-bpmn"><i class="fa fa-check"></i><b>8.3</b> BPMN files: <code>tok bpmn</code></a></li>
+<li class="chapter" data-level="8.4" data-path="layout-import.html"><a href="layout-import.html#everything-at-once-tok-export"><i class="fa fa-check"></i><b>8.4</b> Everything at once: <code>tok export</code></a></li>
+<li class="chapter" data-level="8.5" data-path="layout-import.html"><a href="layout-import.html#opening-the-files-in-bpmn-tools"><i class="fa fa-check"></i><b>8.5</b> Opening the files in BPMN tools</a></li>
+<li class="chapter" data-level="8.6" data-path="layout-import.html"><a href="layout-import.html#importing-bpmn-files"><i class="fa fa-check"></i><b>8.6</b> Importing BPMN files</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="layout-import.html"><a href="layout-import.html#what-is-kept"><i class="fa fa-check"></i><b>8.6.1</b> What is kept</a></li>
+<li class="chapter" data-level="8.6.2" data-path="layout-import.html"><a href="layout-import.html#what-is-reported"><i class="fa fa-check"></i><b>8.6.2</b> What is reported</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="layout-import.html"><a href="layout-import.html#the-layout-sidecar"><i class="fa fa-check"></i><b>8.7</b> The layout sidecar</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="layout-import.html"><a href="layout-import.html#changing-a-model-that-has-a-sidecar"><i class="fa fa-check"></i><b>8.7.1</b> Changing a model that has a sidecar</a></li>
+<li class="chapter" data-level="8.7.2" data-path="layout-import.html"><a href="layout-import.html#the-round-trip"><i class="fa fa-check"></i><b>8.7.2</b> The round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="layout-import.html"><a href="layout-import.html#importing-dmn-files"><i class="fa fa-check"></i><b>8.8</b> Importing DMN files</a></li>
+<li class="chapter" data-level="8.9" data-path="layout-import.html"><a href="layout-import.html#models-and-sidecars-in-version-control"><i class="fa fa-check"></i><b>8.9</b> Models and sidecars in version control</a></li>
+<li class="chapter" data-level="" data-path="layout-import.html"><a href="layout-import.html#exercises-7"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="decisions.html"><a href="decisions.html"><i class="fa fa-check"></i><b>9</b> Decisions with DMN and FEEL</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="decisions.html"><a href="decisions.html#a-first-decision-table"><i class="fa fa-check"></i><b>9.1</b> A first decision table</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="decisions.html"><a href="decisions.html#testing-with-tok-eval"><i class="fa fa-check"></i><b>9.1.1</b> Testing with <code>tok eval</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="decisions.html"><a href="decisions.html#hit-policies"><i class="fa fa-check"></i><b>9.2</b> Hit policies</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="decisions.html"><a href="decisions.html#overlapping-rules"><i class="fa fa-check"></i><b>9.2.1</b> Overlapping rules</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="decisions.html"><a href="decisions.html#decision-requirements-graphs"><i class="fa fa-check"></i><b>9.3</b> Decision requirements graphs</a></li>
+<li class="chapter" data-level="9.4" data-path="decisions.html"><a href="decisions.html#boxed-expressions"><i class="fa fa-check"></i><b>9.4</b> Boxed expressions</a></li>
+<li class="chapter" data-level="9.5" data-path="decisions.html"><a href="decisions.html#dmn-types"><i class="fa fa-check"></i><b>9.5</b> Types</a></li>
+<li class="chapter" data-level="9.6" data-path="decisions.html"><a href="decisions.html#feel-in-tok"><i class="fa fa-check"></i><b>9.6</b> FEEL in tok</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="decisions.html"><a href="decisions.html#names-with-spaces"><i class="fa fa-check"></i><b>9.6.1</b> Names with spaces</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="decisions.html"><a href="decisions.html#decisions-in-a-process"><i class="fa fa-check"></i><b>9.7</b> Decisions in a process</a></li>
+<li class="chapter" data-level="9.8" data-path="decisions.html"><a href="decisions.html#dmn-export"><i class="fa fa-check"></i><b>9.8</b> DMN export</a></li>
+<li class="chapter" data-level="9.9" data-path="decisions.html"><a href="decisions.html#dmn-import"><i class="fa fa-check"></i><b>9.9</b> DMN import</a></li>
+<li class="chapter" data-level="9.10" data-path="decisions.html"><a href="decisions.html#the-dmn-tck-as-evidence"><i class="fa fa-check"></i><b>9.10</b> The DMN TCK as evidence</a></li>
+<li class="chapter" data-level="9.11" data-path="decisions.html"><a href="decisions.html#typical-mistakes-3"><i class="fa fa-check"></i><b>9.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="decisions.html"><a href="decisions.html#exercises-8"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="executable.html"><a href="executable.html"><i class="fa fa-check"></i><b>10</b> Executable models on Camunda 8</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="executable.html"><a href="executable.html#the-executable-flag"><i class="fa fa-check"></i><b>10.1</b> The executable flag</a></li>
+<li class="chapter" data-level="10.2" data-path="executable.html"><a href="executable.html#the-executable-profile"><i class="fa fa-check"></i><b>10.2</b> The executable profile</a></li>
+<li class="chapter" data-level="10.3" data-path="executable.html"><a href="executable.html#a-complete-executable-model"><i class="fa fa-check"></i><b>10.3</b> A complete executable model</a></li>
+<li class="chapter" data-level="10.4" data-path="executable.html"><a href="executable.html#static-values-and-expressions-the-rule"><i class="fa fa-check"></i><b>10.4</b> Static values and expressions: the <code>=</code> rule</a></li>
+<li class="chapter" data-level="10.5" data-path="executable.html"><a href="executable.html#feel-in-executable-models"><i class="fa fa-check"></i><b>10.5</b> FEEL in executable models</a></li>
+<li class="chapter" data-level="10.6" data-path="executable.html"><a href="executable.html#service-tasks-and-jobs"><i class="fa fa-check"></i><b>10.6</b> Service tasks and jobs</a></li>
+<li class="chapter" data-level="10.7" data-path="executable.html"><a href="executable.html#user-tasks"><i class="fa fa-check"></i><b>10.7</b> User tasks</a></li>
+<li class="chapter" data-level="10.8" data-path="executable.html"><a href="executable.html#camunda-forms"><i class="fa fa-check"></i><b>10.8</b> Camunda forms</a></li>
+<li class="chapter" data-level="10.9" data-path="executable.html"><a href="executable.html#variable-mappings"><i class="fa fa-check"></i><b>10.9</b> Variable mappings</a></li>
+<li class="chapter" data-level="10.10" data-path="executable.html"><a href="executable.html#messages-and-correlation"><i class="fa fa-check"></i><b>10.10</b> Messages and correlation</a></li>
+<li class="chapter" data-level="10.11" data-path="executable.html"><a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities"><i class="fa fa-check"></i><b>10.11</b> Multi-instance, ad-hoc sub-processes and call activities</a>
+<ul>
+<li class="chapter" data-level="10.11.1" data-path="executable.html"><a href="executable.html#multi-instance"><i class="fa fa-check"></i><b>10.11.1</b> Multi-instance</a></li>
+<li class="chapter" data-level="10.11.2" data-path="executable.html"><a href="executable.html#ad-hoc-sub-processes-1"><i class="fa fa-check"></i><b>10.11.2</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="10.11.3" data-path="executable.html"><a href="executable.html#call-activities"><i class="fa fa-check"></i><b>10.11.3</b> Call activities</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="executable.html"><a href="executable.html#compensation-errors-and-listeners"><i class="fa fa-check"></i><b>10.12</b> Compensation, errors and listeners</a></li>
+<li class="chapter" data-level="10.13" data-path="executable.html"><a href="executable.html#version-tags-and-bindings"><i class="fa fa-check"></i><b>10.13</b> Version tags and bindings</a></li>
+<li class="chapter" data-level="10.14" data-path="executable.html"><a href="executable.html#the-rest-connector"><i class="fa fa-check"></i><b>10.14</b> The REST connector</a></li>
+<li class="chapter" data-level="10.15" data-path="executable.html"><a href="executable.html#elements-camunda-8-does-not-execute"><i class="fa fa-check"></i><b>10.15</b> Elements Camunda 8 does not execute</a></li>
+<li class="chapter" data-level="10.16" data-path="executable.html"><a href="executable.html#exporting-with-tok-export"><i class="fa fa-check"></i><b>10.16</b> Exporting with <code>tok export</code></a></li>
+<li class="chapter" data-level="10.17" data-path="executable.html"><a href="executable.html#executable-run"><i class="fa fa-check"></i><b>10.17</b> Deploying and running on Camunda 8 Run</a>
+<ul>
+<li class="chapter" data-level="10.17.1" data-path="executable.html"><a href="executable.html#deploy"><i class="fa fa-check"></i><b>10.17.1</b> Deploy</a></li>
+<li class="chapter" data-level="10.17.2" data-path="executable.html"><a href="executable.html#start-an-instance"><i class="fa fa-check"></i><b>10.17.2</b> Start an instance</a></li>
+<li class="chapter" data-level="10.17.3" data-path="executable.html"><a href="executable.html#complete-a-user-task"><i class="fa fa-check"></i><b>10.17.3</b> Complete a user task</a></li>
+<li class="chapter" data-level="10.17.4" data-path="executable.html"><a href="executable.html#work-on-a-job"><i class="fa fa-check"></i><b>10.17.4</b> Work on a job</a></li>
+<li class="chapter" data-level="10.17.5" data-path="executable.html"><a href="executable.html#publish-a-message"><i class="fa fa-check"></i><b>10.17.5</b> Publish a message</a></li>
+<li class="chapter" data-level="10.17.6" data-path="executable.html"><a href="executable.html#follow-the-instance"><i class="fa fa-check"></i><b>10.17.6</b> Follow the instance</a></li>
+<li class="chapter" data-level="10.17.7" data-path="executable.html"><a href="executable.html#evaluate-a-decision"><i class="fa fa-check"></i><b>10.17.7</b> Evaluate a decision</a></li>
+<li class="chapter" data-level="10.17.8" data-path="executable.html"><a href="executable.html#the-same-run-in-python"><i class="fa fa-check"></i><b>10.17.8</b> The same run in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.18" data-path="executable.html"><a href="executable.html#camunda-8-saas-and-self-managed"><i class="fa fa-check"></i><b>10.18</b> Camunda 8 SaaS and Self-Managed</a></li>
+<li class="chapter" data-level="10.19" data-path="executable.html"><a href="executable.html#how-the-translation-is-verified"><i class="fa fa-check"></i><b>10.19</b> How the translation is verified</a></li>
+<li class="chapter" data-level="" data-path="executable.html"><a href="executable.html#exercises-9"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>11</b> Simulation and process mining</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simulation.html"><a href="simulation.html#the-simulation-layer"><i class="fa fa-check"></i><b>11.1</b> The simulation layer</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="simulation.html"><a href="simulation.html#distributions"><i class="fa fa-check"></i><b>11.1.1</b> Distributions</a></li>
+<li class="chapter" data-level="11.1.2" data-path="simulation.html"><a href="simulation.html#choosing-a-branch"><i class="fa fa-check"></i><b>11.1.2</b> Choosing a branch</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="simulation.html"><a href="simulation.html#a-simulation-model"><i class="fa fa-check"></i><b>11.2</b> A simulation model</a></li>
+<li class="chapter" data-level="11.3" data-path="simulation.html"><a href="simulation.html#running-tok-sim"><i class="fa fa-check"></i><b>11.3</b> Running <code>tok sim</code></a></li>
+<li class="chapter" data-level="11.4" data-path="simulation.html"><a href="simulation.html#reading-the-indicators"><i class="fa fa-check"></i><b>11.4</b> Reading the indicators</a></li>
+<li class="chapter" data-level="11.5" data-path="simulation.html"><a href="simulation.html#seeds-cases-and-replications"><i class="fa fa-check"></i><b>11.5</b> Seeds, cases and replications</a></li>
+<li class="chapter" data-level="11.6" data-path="simulation.html"><a href="simulation.html#comparing-scenarios"><i class="fa fa-check"></i><b>11.6</b> Comparing scenarios</a></li>
+<li class="chapter" data-level="11.7" data-path="simulation.html"><a href="simulation.html#event-logs"><i class="fa fa-check"></i><b>11.7</b> Event logs</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="simulation.html"><a href="simulation.html#xes-for-process-mining-tools"><i class="fa fa-check"></i><b>11.7.1</b> XES for process-mining tools</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="simulation.html"><a href="simulation.html#process-mining-on-simulated-logs"><i class="fa fa-check"></i><b>11.8</b> Process mining on simulated logs</a></li>
+<li class="chapter" data-level="11.9" data-path="simulation.html"><a href="simulation.html#simulation-in-r"><i class="fa fa-check"></i><b>11.9</b> Simulation in R</a></li>
+<li class="chapter" data-level="11.10" data-path="simulation.html"><a href="simulation.html#simulation-in-python"><i class="fa fa-check"></i><b>11.10</b> Simulation in Python</a></li>
+<li class="chapter" data-level="11.11" data-path="simulation.html"><a href="simulation.html#native-simulation-in-julia"><i class="fa fa-check"></i><b>11.11</b> Native simulation in Julia</a></li>
+<li class="chapter" data-level="11.12" data-path="simulation.html"><a href="simulation.html#calibration-on-an-event-log"><i class="fa fa-check"></i><b>11.12</b> Calibration on an event log</a></li>
+<li class="chapter" data-level="11.13" data-path="simulation.html"><a href="simulation.html#what-the-simulator-does-not-do"><i class="fa fa-check"></i><b>11.13</b> What the simulator does not do</a></li>
+<li class="chapter" data-level="" data-path="simulation.html"><a href="simulation.html#exercises-10"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="editors.html"><a href="editors.html"><i class="fa fa-check"></i><b>12</b> Editors and the playground</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="editors.html"><a href="editors.html#the-vs-code-extension"><i class="fa fa-check"></i><b>12.1</b> The VS Code extension</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="editors.html"><a href="editors.html#installing"><i class="fa fa-check"></i><b>12.1.1</b> Installing</a></li>
+<li class="chapter" data-level="12.1.2" data-path="editors.html"><a href="editors.html#what-you-see-while-editing"><i class="fa fa-check"></i><b>12.1.2</b> What you see while editing</a></li>
+<li class="chapter" data-level="12.1.3" data-path="editors.html"><a href="editors.html#navigation-and-rename"><i class="fa fa-check"></i><b>12.1.3</b> Navigation and rename</a></li>
+<li class="chapter" data-level="12.1.4" data-path="editors.html"><a href="editors.html#the-diagram-beside-the-text"><i class="fa fa-check"></i><b>12.1.4</b> The diagram beside the text</a></li>
+<li class="chapter" data-level="12.1.5" data-path="editors.html"><a href="editors.html#commands-and-settings"><i class="fa fa-check"></i><b>12.1.5</b> Commands and settings</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="editors.html"><a href="editors.html#the-language-server-for-other-editors"><i class="fa fa-check"></i><b>12.2</b> The language server for other editors</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="editors.html"><a href="editors.html#installing-the-server"><i class="fa fa-check"></i><b>12.2.1</b> Installing the server</a></li>
+<li class="chapter" data-level="12.2.2" data-path="editors.html"><a href="editors.html#what-an-editor-needs"><i class="fa fa-check"></i><b>12.2.2</b> What an editor needs</a></li>
+<li class="chapter" data-level="12.2.3" data-path="editors.html"><a href="editors.html#neovim"><i class="fa fa-check"></i><b>12.2.3</b> Neovim</a></li>
+<li class="chapter" data-level="12.2.4" data-path="editors.html"><a href="editors.html#helix"><i class="fa fa-check"></i><b>12.2.4</b> Helix</a></li>
+<li class="chapter" data-level="12.2.5" data-path="editors.html"><a href="editors.html#emacs"><i class="fa fa-check"></i><b>12.2.5</b> Emacs</a></li>
+<li class="chapter" data-level="12.2.6" data-path="editors.html"><a href="editors.html#other-editors"><i class="fa fa-check"></i><b>12.2.6</b> Other editors</a></li>
+<li class="chapter" data-level="12.2.7" data-path="editors.html"><a href="editors.html#requests-for-editor-extensions"><i class="fa fa-check"></i><b>12.2.7</b> Requests for editor extensions</a></li>
+<li class="chapter" data-level="12.2.8" data-path="editors.html"><a href="editors.html#limits"><i class="fa fa-check"></i><b>12.2.8</b> Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="editors.html"><a href="editors.html#the-playground-in-the-browser"><i class="fa fa-check"></i><b>12.3</b> The playground in the browser</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="editors.html"><a href="editors.html#the-page"><i class="fa fa-check"></i><b>12.3.1</b> The page</a></li>
+<li class="chapter" data-level="12.3.2" data-path="editors.html"><a href="editors.html#sharing-a-model-by-a-link"><i class="fa fa-check"></i><b>12.3.2</b> Sharing a model by a link</a></li>
+<li class="chapter" data-level="12.3.3" data-path="editors.html"><a href="editors.html#offline-and-privacy"><i class="fa fa-check"></i><b>12.3.3</b> Offline and privacy</a></li>
+<li class="chapter" data-level="12.3.4" data-path="editors.html"><a href="editors.html#limits-of-the-browser"><i class="fa fa-check"></i><b>12.3.4</b> Limits of the browser</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="editors.html"><a href="editors.html#choosing-a-tool"><i class="fa fa-check"></i><b>12.4</b> Choosing a tool</a></li>
+<li class="chapter" data-level="" data-path="editors.html"><a href="editors.html#exercises-11"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>13</b> Programming interfaces</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="programming.html"><a href="programming.html#one-engine-many-bindings"><i class="fa fa-check"></i><b>13.1</b> One engine, many bindings</a></li>
+<li class="chapter" data-level="13.2" data-path="programming.html"><a href="programming.html#python"><i class="fa fa-check"></i><b>13.2</b> Python</a></li>
+<li class="chapter" data-level="13.3" data-path="programming.html"><a href="programming.html#r-1"><i class="fa fa-check"></i><b>13.3</b> R</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="programming.html"><a href="programming.html#the-knitr-engine"><i class="fa fa-check"></i><b>13.3.1</b> The knitr engine</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="programming.html"><a href="programming.html#julia-1"><i class="fa fa-check"></i><b>13.4</b> Julia</a></li>
+<li class="chapter" data-level="13.5" data-path="programming.html"><a href="programming.html#javascript-and-webassembly"><i class="fa fa-check"></i><b>13.5</b> JavaScript and WebAssembly</a></li>
+<li class="chapter" data-level="13.6" data-path="programming.html"><a href="programming.html#the-c-interface"><i class="fa fa-check"></i><b>13.6</b> The C interface</a></li>
+<li class="chapter" data-level="13.7" data-path="programming.html"><a href="programming.html#the-rust-crates"><i class="fa fa-check"></i><b>13.7</b> The Rust crates</a></li>
+<li class="chapter" data-level="13.8" data-path="programming.html"><a href="programming.html#which-interface-to-choose"><i class="fa fa-check"></i><b>13.8</b> Which interface to choose</a></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#exercises-12"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="agents.html"><a href="agents.html"><i class="fa fa-check"></i><b>14</b> Working with AI agents</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="agents.html"><a href="agents.html#why-a-text-language-suits-agents"><i class="fa fa-check"></i><b>14.1</b> Why a text language suits agents</a></li>
+<li class="chapter" data-level="14.2" data-path="agents.html"><a href="agents.html#the-skill-tok-modelling"><i class="fa fa-check"></i><b>14.2</b> The skill <code>tok-modelling</code></a></li>
+<li class="chapter" data-level="14.3" data-path="agents.html"><a href="agents.html#the-mcp-server"><i class="fa fa-check"></i><b>14.3</b> The MCP server</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="agents.html"><a href="agents.html#starting-the-server"><i class="fa fa-check"></i><b>14.3.1</b> Starting the server</a></li>
+<li class="chapter" data-level="14.3.2" data-path="agents.html"><a href="agents.html#tools"><i class="fa fa-check"></i><b>14.3.2</b> Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="agents.html"><a href="agents.html#configuring-clients"><i class="fa fa-check"></i><b>14.4</b> Configuring clients</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="agents.html"><a href="agents.html#clients-with-an-mcpservers-configuration"><i class="fa fa-check"></i><b>14.4.1</b> Clients with an <code>mcpServers</code> configuration</a></li>
+<li class="chapter" data-level="14.4.2" data-path="agents.html"><a href="agents.html#vs-code"><i class="fa fa-check"></i><b>14.4.2</b> VS Code</a></li>
+<li class="chapter" data-level="14.4.3" data-path="agents.html"><a href="agents.html#claude-code"><i class="fa fa-check"></i><b>14.4.3</b> Claude Code</a></li>
+<li class="chapter" data-level="14.4.4" data-path="agents.html"><a href="agents.html#other-agents"><i class="fa fa-check"></i><b>14.4.4</b> Other agents</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="agents.html"><a href="agents.html#working-without-mcp"><i class="fa fa-check"></i><b>14.5</b> Working without MCP</a></li>
+<li class="chapter" data-level="14.6" data-path="agents.html"><a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file"><i class="fa fa-check"></i><b>14.6</b> A session: from a table of steps to a BPMN file</a></li>
+<li class="chapter" data-level="14.7" data-path="agents.html"><a href="agents.html#reviewing-what-an-agent-produces"><i class="fa fa-check"></i><b>14.7</b> Reviewing what an agent produces</a></li>
+<li class="chapter" data-level="" data-path="agents.html"><a href="agents.html#exercises-13"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="integrations.html"><a href="integrations.html"><i class="fa fa-check"></i><b>15</b> Integrations</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="integrations.html"><a href="integrations.html#continuous-integration-on-github"><i class="fa fa-check"></i><b>15.1</b> Continuous integration on GitHub</a></li>
+<li class="chapter" data-level="15.2" data-path="integrations.html"><a href="integrations.html#other-ci-systems"><i class="fa fa-check"></i><b>15.2</b> Other CI systems</a></li>
+<li class="chapter" data-level="15.3" data-path="integrations.html"><a href="integrations.html#a-pre-commit-hook"><i class="fa fa-check"></i><b>15.3</b> A pre-commit hook</a></li>
+<li class="chapter" data-level="15.4" data-path="integrations.html"><a href="integrations.html#models-in-documents"><i class="fa fa-check"></i><b>15.4</b> Models in documents</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="integrations.html"><a href="integrations.html#r-markdown-and-quarto"><i class="fa fa-check"></i><b>15.4.1</b> R Markdown and Quarto</a></li>
+<li class="chapter" data-level="15.4.2" data-path="integrations.html"><a href="integrations.html#jupyter"><i class="fa fa-check"></i><b>15.4.2</b> Jupyter</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="integrations.html"><a href="integrations.html#bpmn-tools"><i class="fa fa-check"></i><b>15.5</b> BPMN tools</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="integrations.html"><a href="integrations.html#how-much-survives-a-round-trip"><i class="fa fa-check"></i><b>15.5.1</b> How much survives a round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="integrations.html"><a href="integrations.html#camunda-8"><i class="fa fa-check"></i><b>15.6</b> Camunda 8</a></li>
+<li class="chapter" data-level="15.7" data-path="integrations.html"><a href="integrations.html#process-mining-tools"><i class="fa fa-check"></i><b>15.7</b> Process-mining tools</a></li>
+<li class="chapter" data-level="15.8" data-path="integrations.html"><a href="integrations.html#decisions-in-other-dmn-engines"><i class="fa fa-check"></i><b>15.8</b> Decisions in other DMN engines</a></li>
+<li class="chapter" data-level="15.9" data-path="integrations.html"><a href="integrations.html#a-version-control-workflow"><i class="fa fa-check"></i><b>15.9</b> A version-control workflow</a></li>
+<li class="chapter" data-level="" data-path="integrations.html"><a href="integrations.html#exercises-14"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="symbols.html"><a href="symbols.html"><i class="fa fa-check"></i><b>A</b> BPMN symbols</a>
+<ul>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events"><i class="fa fa-check"></i>Start events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events-of-event-sub-processes"><i class="fa fa-check"></i>Start events of event sub-processes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#intermediate-events"><i class="fa fa-check"></i>Intermediate events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#boundary-events-1"><i class="fa fa-check"></i>Boundary events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#end-events"><i class="fa fa-check"></i>End events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activities"><i class="fa fa-check"></i>Activities</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activity-markers"><i class="fa fa-check"></i>Activity markers</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#gateways-1"><i class="fa fa-check"></i>Gateways</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#connections"><i class="fa fa-check"></i>Connections</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#artifacts"><i class="fa fa-check"></i>Artifacts</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#pools-and-lanes"><i class="fa fa-check"></i>Pools and lanes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#conversations-1"><i class="fa fa-check"></i>Conversations</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#choreographies-1"><i class="fa fa-check"></i>Choreographies</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="cheatsheet.html"><a href="cheatsheet.html"><i class="fa fa-check"></i><b>B</b> Language on one page</a></li>
+<li class="chapter" data-level="C" data-path="commands.html"><a href="commands.html"><i class="fa fa-check"></i><b>C</b> Command reference</a></li>
+<li class="chapter" data-level="D" data-path="diagnostics.html"><a href="diagnostics.html"><i class="fa fa-check"></i><b>D</b> Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-1"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-2"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-3"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-4"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-5"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-6"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-7"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-8"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-9"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="E" data-path="conformance.html"><a href="conformance.html"><i class="fa fa-check"></i><b>E</b> Conformance with Camunda 8</a>
+<ul>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-10"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-11"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-12"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-13"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-14"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-15"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>F</b> Glossary</a></li>
+<li class="chapter" data-level="G" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>G</b> References</a>
+<ul>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#standards"><i class="fa fa-check"></i>Standards</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tools-and-test-suites"><i class="fa fa-check"></i>Tools and test suites</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tok"><i class="fa fa-check"></i>tok</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+<li><a href="playground/" target="_blank">Playground in the browser</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tok: Process Models as Text</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="programming" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">Chapter 13</span> Programming interfaces<a href="programming.html#programming" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="goals">
+<p><strong>In this chapter</strong> you will see how one engine in Rust reaches every host language · call tok from Python with <code>tok.api</code> · work with models as data frames in R with <code>tokr</code>, draw them with <code>tok_plot()</code> and write them in R Markdown and Quarto chunks · use <code>Tok.jl</code> and <code>Tok.Engine</code> in Julia · run the engine in a web page through WebAssembly · link the C library <code>tokengine</code> with <code>tok.h</code> · use the Rust crates from crates.io · choose the interface that fits your program</p>
+</div>
+<p>Everything tok does, from checking a document to simulating it, is written once, in Rust. The command <code>tok</code>, the language server, the MCP server and the playground are programs around that engine, and so are the packages for Python, R and Julia. This chapter is about using the engine from your own code: a script that checks every model of a repository, a notebook that draws a model next to its analysis, a web service that converts text to BPMN, a Julia experiment that simulates thousands of scenarios.</p>
+<div id="one-engine-many-bindings" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> One engine, many bindings<a href="programming.html#one-engine-many-bindings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The engine consists of a few Rust crates. The bindings are thin layers that pass text in and results out:</p>
+<pre><code>   tok-core (parser, checker, printer, BPMN and DMN export and import, FEEL)
+   tok-bpmn (BPMN rules, layout, SVG)              tok-sim (simulator)
+        │                                                │
+        │                              tok-cli: the module tok_cli::api
+        │         ┌───────────┬───────────┬──────────────┼────────────┬──────────────┐
+     R tokr    tok (CLI)    tok-lsp     tok-mcp      tokengine     tok-wasm     Python tok-lang
+                            (editors)   (agents)     (C, tok.h)    (browser)    (tok.api, tok mcp)
+                                                         │
+                                                    Julia Tok.jl</code></pre>
+<p>The functions in <code>tok_cli::api</code> take the text of a document and options as JSON and return a JSON result. The C library, the language server, the MCP server and the WebAssembly module call exactly these functions, so they accept the same options and give the same results; the Python package builds on the same crates, and the R package compiles the core crates into itself. The consequence for you is simple: <strong>every interface gives the same diagnostics, the same canonical text, the same files and the same simulation results</strong>, number by number for the same seed. A model checked in a notebook is checked exactly as in continuous integration, and a simulation in R can be reproduced in the playground.</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Interface</th>
+<th>Package</th>
+<th>Install</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>command line</td>
+<td><code>tok</code></td>
+<td><code>pip install tok-lang</code> or <code>cargo install tok-cli</code></td>
+<td>shells, scripts, continuous integration</td>
+</tr>
+<tr class="even">
+<td>Python</td>
+<td><code>tok-lang</code>, module <code>tok.api</code></td>
+<td><code>pip install tok-lang</code></td>
+<td>scripts, notebooks, services</td>
+</tr>
+<tr class="odd">
+<td>R</td>
+<td><code>tokr</code></td>
+<td><code>install.packages("tokr")</code></td>
+<td>data analysis, R Markdown and Quarto documents</td>
+</tr>
+<tr class="even">
+<td>Julia</td>
+<td><code>Tok.jl</code></td>
+<td><code>Pkg.add("Tok")</code></td>
+<td>large simulation experiments, calibration</td>
+</tr>
+<tr class="odd">
+<td>JavaScript</td>
+<td><code>tok-wasm</code></td>
+<td>the WebAssembly module of the playground</td>
+<td>web pages, browser tools</td>
+</tr>
+<tr class="even">
+<td>C and any language with a C interface</td>
+<td><code>tokengine</code>, header <code>tok.h</code></td>
+<td>release archives, or a build from source</td>
+<td>C, C++, Go, Zig, Fortran, …</td>
+</tr>
+<tr class="odd">
+<td>Rust</td>
+<td><code>tok-core</code>, <code>tok-bpmn</code>, <code>tok-sim</code>, <code>tok-cli</code></td>
+<td>crates.io</td>
+<td>Rust programs</td>
+</tr>
+</tbody>
+</table>
+<p>The examples of this chapter use one small model: a loan renewal decided by a decision table, with simulation parameters.</p>
+<pre class="tok"><code>tok 1.0 &quot;Loan renewal&quot;
+
+start asked &quot;Reader asks for a renewal&quot;
+rule decide &quot;Decide on the renewal&quot; decision=renewal result=renewal by=desk duration=&quot;tri(1m, 2m, 4m)&quot;
+xor allowed &quot;Is the renewal allowed?&quot;
+task extend &quot;Extend the loan period&quot; by=desk duration=&quot;tri(1m, 3m, 6m)&quot;
+task explain &quot;Explain the refusal&quot; by=desk duration=&quot;tri(3m, 5m, 10m)&quot;
+end extended &quot;Loan extended&quot;
+end refused &quot;Renewal refused&quot;
+
+flow asked -&gt; decide -&gt; allowed
+flow allowed -&gt; extend &quot;yes&quot; when=&quot;renewal = \&quot;allowed\&quot;&quot;
+flow allowed -&gt; explain &quot;no&quot; default
+flow extend -&gt; extended
+flow explain -&gt; refused
+
+inputdata renewals &quot;Renewals so far&quot; type=number
+inputdata reserved &quot;Reserved by another reader&quot; type=boolean
+
+decision renewal &quot;Renewal&quot; type=string requires=&quot;renewals reserved&quot; hit=first
+  | reserved: boolean | renewals: number || renewal: string |
+  | true              | -                || &quot;refused&quot;       |
+  | -                 | &gt;= 3             || &quot;refused&quot;       |
+  | -                 | -                || &quot;allowed&quot;       |
+
+simulate cases=200 seed=3 arrival=&quot;exp(10m)&quot;
+resource desk &quot;Loan desk&quot; count=1
+variable renewals &quot;cat(0=0.5, 1=0.3, 2=0.15, 3=0.05)&quot;
+variable reserved &quot;bern(0.1)&quot;</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:programming-renewal-diagram"></span>
+<img src="examples/13-loan-renewal.svg" alt="The loan renewal used in the examples of this chapter." width="100%" />
+<p class="caption">
+Figure 13.1: The loan renewal used in the examples of this chapter.
+</p>
+</div>
+<p><a class="download" href="examples/13-loan-renewal.tok" download>Download the model (.tok)</a> <a class="download" href="examples/13-loan-renewal.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+</div>
+<div id="python" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">13.2</span> Python<a href="programming.html#python" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The package <code>tok-lang</code> on PyPI gives both the <code>tok</code> command and the module <code>tok.api</code>. It installs a wheel with the Rust engine compiled in, for every Python from 3.8: Windows x64, Linux x86_64 and aarch64, and macOS for Intel and Apple silicon. On another platform pip builds the engine from the source archive, which needs Rust.</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb214-1"><a href="programming.html#cb214-1" tabindex="-1"></a><span class="ex">pip</span> install tok-lang</span></code></pre></div>
+<p>Every function of <code>tok.api</code> takes the text of a document (or of a BPMN file):</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Command</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>check(text, lang="en", level="full", bpmn=True)</code></td>
+<td><code>tok check</code></td>
+<td>the diagnostics: a list of dicts with <code>code</code>, <code>severity</code>, <code>line</code>, <code>id</code> and <code>message</code>, sorted by line and code</td>
+</tr>
+<tr class="even">
+<td><code>fmt(text)</code></td>
+<td><code>tok fmt</code></td>
+<td>the canonical text</td>
+</tr>
+<tr class="odd">
+<td><code>bpmn(text)</code></td>
+<td><code>tok bpmn</code></td>
+<td>BPMN 2.0 XML with the diagram layout</td>
+</tr>
+<tr class="even">
+<td><code>svg(text, title=None)</code></td>
+<td><code>tok svg</code></td>
+<td>the SVG picture</td>
+</tr>
+<tr class="odd">
+<td><code>export(text, name="model")</code></td>
+<td><code>tok export</code></td>
+<td>every file of <code>tok export</code> as a dict file name → content</td>
+</tr>
+<tr class="even">
+<td><code>import_bpmn(xml, keep_ids=True)</code></td>
+<td><code>tok import</code></td>
+<td><code>(text, warnings)</code></td>
+</tr>
+<tr class="odd">
+<td><code>eval_decision(text, decision, values=None)</code></td>
+<td><code>tok eval</code></td>
+<td>the value of a decision for a dict of inputs</td>
+</tr>
+<tr class="even">
+<td><code>simulate(text, cases=None, seed=None)</code></td>
+<td><code>tok sim</code></td>
+<td>the result of the simulation</td>
+</tr>
+<tr class="odd">
+<td><code>format_kpi(kpi, lang="en")</code></td>
+<td><code>tok sim</code></td>
+<td>the text report for <code>simulate(...).kpi()</code></td>
+</tr>
+<tr class="even">
+<td><code>engine()</code>, <code>version()</code></td>
+<td><code>tok --version</code></td>
+<td><code>"rust"</code> for the engine, and its version</td>
+</tr>
+</tbody>
+</table>
+<p>The functions that need a valid document raise <code>ValueError</code> with the error diagnostics, one per line, as <code>tok check</code> prints them; <code>check</code> returns them as data instead. A session with the renewal model:</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb215-1"><a href="programming.html#cb215-1" tabindex="-1"></a><span class="im">from</span> tok <span class="im">import</span> api</span>
+<span id="cb215-2"><a href="programming.html#cb215-2" tabindex="-1"></a></span>
+<span id="cb215-3"><a href="programming.html#cb215-3" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;13-loan-renewal.tok&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb215-4"><a href="programming.html#cb215-4" tabindex="-1"></a><span class="bu">print</span>(api.engine())</span>
+<span id="cb215-5"><a href="programming.html#cb215-5" tabindex="-1"></a><span class="bu">print</span>(api.check(text))</span>
+<span id="cb215-6"><a href="programming.html#cb215-6" tabindex="-1"></a><span class="bu">print</span>(api.eval_decision(text, <span class="st">&quot;renewal&quot;</span>, {<span class="st">&quot;renewals&quot;</span>: <span class="dv">3</span>, <span class="st">&quot;reserved&quot;</span>: <span class="va">False</span>}))</span>
+<span id="cb215-7"><a href="programming.html#cb215-7" tabindex="-1"></a>files <span class="op">=</span> api.export(text, name<span class="op">=</span><span class="st">&quot;loan-renewal&quot;</span>)</span>
+<span id="cb215-8"><a href="programming.html#cb215-8" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sorted</span>(files))</span>
+<span id="cb215-9"><a href="programming.html#cb215-9" tabindex="-1"></a>result <span class="op">=</span> api.simulate(text, cases<span class="op">=</span><span class="dv">500</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb215-10"><a href="programming.html#cb215-10" tabindex="-1"></a>kpi <span class="op">=</span> result.kpi()</span>
+<span id="cb215-11"><a href="programming.html#cb215-11" tabindex="-1"></a><span class="bu">print</span>(kpi[<span class="st">&quot;cycle_time&quot;</span>][<span class="st">&quot;mean&quot;</span>], kpi[<span class="st">&quot;resources&quot;</span>][<span class="st">&quot;desk&quot;</span>][<span class="st">&quot;utilization&quot;</span>])</span>
+<span id="cb215-12"><a href="programming.html#cb215-12" tabindex="-1"></a><span class="bu">print</span>(result.log[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>rust
+[]
+refused
+[&#39;loan-renewal.bpmn&#39;, &#39;loan-renewal.svg&#39;, &#39;renewal.dmn&#39;, &#39;renewal.drd.svg&#39;]
+11.7 min 0.6138
+{&#39;case&#39;: 1, &#39;activity&#39;: &#39;decide&#39;, &#39;label&#39;: &#39;Decide on the renewal&#39;, &#39;resource&#39;: &#39;desk&#39;, &#39;enqueue&#39;: &#39;2027-01-04T08:00:00&#39;, &#39;start&#39;: &#39;2027-01-04T08:00:00&#39;, &#39;end&#39;: &#39;2027-01-04T08:02:48&#39;, &#39;status&#39;: &#39;completed&#39;}</code></pre>
+<p><code>export</code> returns the contents of the files instead of writing them, which suits a web service or a test; writing them is a loop over the dict. A document with an error, here a misspelt decision:</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb217-1"><a href="programming.html#cb217-1" tabindex="-1"></a>broken <span class="op">=</span> text.replace(<span class="st">&quot;decision=renewal&quot;</span>, <span class="st">&quot;decision=renewl&quot;</span>)</span>
+<span id="cb217-2"><a href="programming.html#cb217-2" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> api.check(broken):</span>
+<span id="cb217-3"><a href="programming.html#cb217-3" tabindex="-1"></a>    <span class="bu">print</span>(d)</span>
+<span id="cb217-4"><a href="programming.html#cb217-4" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb217-5"><a href="programming.html#cb217-5" tabindex="-1"></a>    api.bpmn(broken)</span>
+<span id="cb217-6"><a href="programming.html#cb217-6" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb217-7"><a href="programming.html#cb217-7" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;ValueError:&quot;</span>, e)</span></code></pre></div>
+<pre><code>{&#39;code&#39;: &#39;R002&#39;, &#39;severity&#39;: &#39;error&#39;, &#39;line&#39;: 4, &#39;id&#39;: &#39;renewl&#39;, &#39;message&#39;: &quot;unknown decision &#39;renewl&#39;&quot;}
+ValueError: line 4: error R002: unknown decision &#39;renewl&#39;</code></pre>
+<p>The result of <code>simulate</code> has <code>kpi()</code> (the indicators as a dict, as <code>tok sim --json</code>), <code>log</code> (one dict per activity instance), <code>cases</code> (one dict per case), <code>warnings</code>, <code>seed</code>, <code>horizon</code>, <code>to_json(include_log=False)</code>, <code>write_csv(path_log, path_cases=None)</code>, <code>to_xes()</code> and <code>write_xes(path)</code>. Chapter <a href="simulation.html#simulation">11</a> uses them for replications and process mining.</p>
+<p>In a Jupyter notebook a model can be drawn in a cell with <code>IPython.display.SVG(api.svg(text))</code>, which Chapter <a href="integrations.html#integrations">15</a> uses for documents.</p>
+<p>The package also contains a pure-Python implementation of the language, frozen at language 0.3, which serves as the reference of the parity tests of the engine. The environment variable <code>TOK_ENGINE=python</code> selects it, and <code>api.engine()</code> then returns <code>"python"</code>; it reads only documents of languages 0.1 and 0.3. For everything else, and by default, the functions run on the engine.</p>
+</div>
+<div id="r-1" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">13.3</span> R<a href="programming.html#r-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The R package <strong>tokr</strong> runs the same engine, compiled into the package, and gives its results as R objects: diagnostics and simulation results as data frames, diagrams in the viewer, models in R Markdown and Quarto chunks.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="programming.html#cb219-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tokr&quot;</span>)</span></code></pre></div>
+<p>Installing from source compiles the engine and needs Rust; on Windows also Rtools for your version of R.</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tok_read(path)</code></td>
+<td>reads a <code>.tok</code> file into a <code>tok_model</code> (a list with <code>text</code>, <code>path</code> and <code>name</code>)</td>
+</tr>
+<tr class="even">
+<td><code>tok_check(x, lang, level, bpmn = TRUE)</code></td>
+<td>the diagnostics as a data frame with the columns <code>line</code>, <code>code</code>, <code>severity</code>, <code>id</code> and <code>message</code>, no rows when the model is clean</td>
+</tr>
+<tr class="odd">
+<td><code>tok_fmt(x, write = FALSE, lang)</code></td>
+<td>the canonical text; <code>write = TRUE</code> rewrites the file</td>
+</tr>
+<tr class="even">
+<td><code>tok_bpmn(x, file = NULL, lang)</code>, <code>tok_svg(x, file = NULL, title = NULL, lang)</code></td>
+<td>BPMN XML and SVG, written to <code>file</code> when given</td>
+</tr>
+<tr class="odd">
+<td><code>tok_plot(x, title = NULL, lang)</code></td>
+<td>the diagram in the viewer of RStudio or Positron, or in the browser</td>
+</tr>
+<tr class="even">
+<td><code>tok_export(x, dir = ".", name = NULL, lang)</code></td>
+<td>every file of <code>tok export</code> into a folder; returns their paths</td>
+</tr>
+<tr class="odd">
+<td><code>tok_import(file, keep_ids = TRUE)</code></td>
+<td>a BPMN file as a <code>tok_model</code>; what was not kept is signalled as warnings</td>
+</tr>
+<tr class="even">
+<td><code>tok_eval(x, decision, inputs = list(), lang)</code></td>
+<td>the value of a decision for a named list of inputs</td>
+</tr>
+<tr class="odd">
+<td><code>tok_sim(x, cases = NULL, seed = NULL, lang)</code></td>
+<td>the simulation, with indicators, the event log and the table of cases as data frames</td>
+</tr>
+<tr class="even">
+<td><code>tok_xes(x, file = NULL, cases = NULL, seed = NULL, lang)</code></td>
+<td>the XES log of a simulation</td>
+</tr>
+<tr class="odd">
+<td><code>tok_version()</code></td>
+<td>the version of the engine</td>
+</tr>
+</tbody>
+</table>
+<p>Every function takes a model read with <code>tok_read()</code>, the path of a <code>.tok</code> file, or the text of a model. <code>options(tok.lang = "pl")</code> switches all messages to Polish.</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="programming.html#cb220-1" tabindex="-1"></a><span class="fu">library</span>(tokr)</span>
+<span id="cb220-2"><a href="programming.html#cb220-2" tabindex="-1"></a></span>
+<span id="cb220-3"><a href="programming.html#cb220-3" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">tok_read</span>(<span class="st">&quot;13-loan-renewal.tok&quot;</span>)</span>
+<span id="cb220-4"><a href="programming.html#cb220-4" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">tok_check</span>(m)                    <span class="co"># a data frame, printed like tok check</span></span>
+<span id="cb220-5"><a href="programming.html#cb220-5" tabindex="-1"></a><span class="fu">nrow</span>(d)                              <span class="co"># 0: no problems</span></span>
+<span id="cb220-6"><a href="programming.html#cb220-6" tabindex="-1"></a><span class="fu">tok_plot</span>(m)                          <span class="co"># the diagram in the viewer</span></span>
+<span id="cb220-7"><a href="programming.html#cb220-7" tabindex="-1"></a><span class="fu">tok_eval</span>(m, <span class="st">&quot;renewal&quot;</span>, <span class="fu">list</span>(<span class="at">renewals =</span> <span class="dv">3</span>, <span class="at">reserved =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb220-8"><a href="programming.html#cb220-8" tabindex="-1"></a><span class="fu">tok_export</span>(m, <span class="at">dir =</span> <span class="st">&quot;out&quot;</span>)           <span class="co"># BPMN, SVG, DMN and forms</span></span>
+<span id="cb220-9"><a href="programming.html#cb220-9" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">tok_sim</span>(m, <span class="at">cases =</span> <span class="dv">500</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb220-10"><a href="programming.html#cb220-10" tabindex="-1"></a>s<span class="sc">$</span>kpi<span class="sc">$</span>activities                     <span class="co"># one row per activity</span></span>
+<span id="cb220-11"><a href="programming.html#cb220-11" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">as.data.frame</span>(s))               <span class="co"># the event log</span></span></code></pre></div>
+<p>Because diagnostics are a data frame, they combine with the rest of R. A course can check all submitted models in one call and tabulate the codes:</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="programming.html#cb221-1" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;submissions&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.tok$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb221-2"><a href="programming.html#cb221-2" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(files, <span class="cf">function</span>(f) <span class="fu">cbind</span>(<span class="at">file =</span> <span class="fu">basename</span>(f), <span class="fu">tok_check</span>(f))))</span>
+<span id="cb221-3"><a href="programming.html#cb221-3" tabindex="-1"></a><span class="fu">table</span>(all<span class="sc">$</span>code[all<span class="sc">$</span>severity <span class="sc">==</span> <span class="st">&quot;error&quot;</span>])</span></code></pre></div>
+<div id="the-knitr-engine" class="section level3 hasAnchor" number="13.3.1">
+<h3><span class="header-section-number">13.3.1</span> The knitr engine<a href="programming.html#the-knitr-engine" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Loading tokr registers a knitr engine called <code>tok</code>. A chunk written as</p>
+<pre><code>```{tok, fig.cap = &quot;Loan renewal&quot;}
+tok 1.0 &quot;Loan renewal&quot;
+start asked &quot;Reader asks for a renewal&quot;
+task extend &quot;Extend the loan period&quot;
+end extended &quot;Loan extended&quot;
+flow asked -&gt; extend -&gt; extended
+```</code></pre>
+<p>draws the diagram of the model in the chunk, as a figure with its caption. Chunk options choose another output:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tok.output = "svg"</code></td>
+<td>the diagram (default)</td>
+</tr>
+<tr class="even">
+<td><code>tok.output = "check"</code></td>
+<td>the diagnostics, as <code>tok check</code> prints them</td>
+</tr>
+<tr class="odd">
+<td><code>tok.output = "fmt"</code></td>
+<td>the canonical text</td>
+</tr>
+<tr class="even">
+<td><code>tok.output = "bpmn"</code></td>
+<td>the BPMN XML</td>
+</tr>
+<tr class="odd">
+<td><code>tok.title = "…"</code></td>
+<td>a title drawn above the diagram</td>
+</tr>
+<tr class="even">
+<td><code>tok.lang = "pl"</code></td>
+<td>the language of the messages</td>
+</tr>
+<tr class="odd">
+<td><code>tok.export = "dir"</code></td>
+<td>also writes every exported file into <code>dir</code></td>
+</tr>
+</tbody>
+</table>
+<p>The diagram is written as an SVG file, which suits HTML output; for PDF output use <code>tok.output = "check"</code> or include an exported picture. Chapter <a href="integrations.html#integrations">15</a> shows the engine in reports and course materials.</p>
+</div>
+</div>
+<div id="julia-1" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">13.4</span> Julia<a href="programming.html#julia-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Tok.jl</strong> brings tok to Julia in three layers: <code>Tok.Engine</code> gives the whole language through the C interface of the engine; the module <code>Tok</code> itself contains a second, independent implementation of the core of the specification; and <code>Tok.Sim</code> and <code>Tok.Fit</code> are a native simulator and the calibration of simulation parameters (Chapter <a href="simulation.html#simulation">11</a>).</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb223-1"><a href="programming.html#cb223-1" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
+<span id="cb223-2"><a href="programming.html#cb223-2" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">&quot;Tok&quot;</span>)</span></code></pre></div>
+<p>The package needs Julia 1.10 or newer. It looks for the engine library in this order: at the path in the environment variable <code>TOK_LIBTOK</code> (<code>tokengine.dll</code>, <code>libtokengine.so</code> or <code>libtokengine.dylib</code>), in the binary package <code>tok_jll</code> when it is installed in the active environment, and in the build folder of a checkout of the repository. <code>Tok.Engine.available()</code> tells whether it was found and <code>Tok.Engine.library()</code> where. Without it the independent core still works.</p>
+<p>The functions of <code>Tok.Engine</code> mirror those of Python and R:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Julia</th>
+<th>Python</th>
+<th>R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>check(text; lang, level, class)</code></td>
+<td><code>check</code></td>
+<td><code>tok_check</code></td>
+</tr>
+<tr class="even">
+<td><code>fmt(text)</code></td>
+<td><code>fmt</code></td>
+<td><code>tok_fmt</code></td>
+</tr>
+<tr class="odd">
+<td><code>bpmn(text)</code>, <code>svg(text; title)</code></td>
+<td><code>bpmn</code>, <code>svg</code></td>
+<td><code>tok_bpmn</code>, <code>tok_plot</code></td>
+</tr>
+<tr class="even">
+<td><code>export_files(text; name)</code></td>
+<td><code>export</code></td>
+<td><code>tok_export</code></td>
+</tr>
+<tr class="odd">
+<td><code>import_bpmn(xml)</code>, <code>import_dmn(xml)</code>, <code>import_file(xml)</code></td>
+<td><code>import_bpmn</code></td>
+<td><code>tok_import</code></td>
+</tr>
+<tr class="even">
+<td><code>eval_decision(text, decision, values)</code></td>
+<td><code>eval_decision</code></td>
+<td><code>tok_eval</code></td>
+</tr>
+<tr class="odd">
+<td><code>simulate(text; cases, seed, xes)</code>, <code>sim_xes(text)</code></td>
+<td><code>simulate</code>, <code>SimResult.to_xes</code></td>
+<td><code>tok_sim</code>, <code>tok_xes</code></td>
+</tr>
+<tr class="even">
+<td><code>bpmn_class(text)</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>cli(args)</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><code>export</code>, <code>import</code> and <code>eval</code> are reserved words or functions of Julia, hence the longer names.</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb224-1"><a href="programming.html#cb224-1" tabindex="-1"></a><span class="im">using</span> <span class="bu">Tok</span></span>
+<span id="cb224-2"><a href="programming.html#cb224-2" tabindex="-1"></a><span class="kw">const</span> E <span class="op">=</span> Tok.Engine</span>
+<span id="cb224-3"><a href="programming.html#cb224-3" tabindex="-1"></a></span>
+<span id="cb224-4"><a href="programming.html#cb224-4" tabindex="-1"></a>text <span class="op">=</span> <span class="fu">read</span>(<span class="st">&quot;13-loan-renewal.tok&quot;</span>, <span class="dt">String</span>)</span>
+<span id="cb224-5"><a href="programming.html#cb224-5" tabindex="-1"></a><span class="fu">println</span>(E.<span class="fu">check</span>(text))</span>
+<span id="cb224-6"><a href="programming.html#cb224-6" tabindex="-1"></a><span class="fu">println</span>(E.<span class="fu">bpmn_class</span>(text))</span>
+<span id="cb224-7"><a href="programming.html#cb224-7" tabindex="-1"></a><span class="fu">println</span>(E.<span class="fu">eval_decision</span>(text, <span class="st">&quot;renewal&quot;</span>, <span class="fu">Dict</span>(<span class="st">&quot;renewals&quot;</span> <span class="op">=&gt;</span> <span class="fl">3</span>, <span class="st">&quot;reserved&quot;</span> <span class="op">=&gt;</span> <span class="cn">false</span>)))</span>
+<span id="cb224-8"><a href="programming.html#cb224-8" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">sort</span>(<span class="fu">collect</span>(<span class="fu">keys</span>(E.<span class="fu">export_files</span>(text; name<span class="op">=</span><span class="st">&quot;loan-renewal&quot;</span>)))))</span>
+<span id="cb224-9"><a href="programming.html#cb224-9" tabindex="-1"></a>r <span class="op">=</span> E.<span class="fu">simulate</span>(text; cases<span class="op">=</span><span class="fl">500</span>, seed<span class="op">=</span><span class="fl">1</span>)</span>
+<span id="cb224-10"><a href="programming.html#cb224-10" tabindex="-1"></a><span class="fu">println</span>(r)</span>
+<span id="cb224-11"><a href="programming.html#cb224-11" tabindex="-1"></a><span class="fu">println</span>(r.kpi[<span class="st">&quot;cycle_time&quot;</span>][<span class="st">&quot;mean&quot;</span>])</span></code></pre></div>
+<pre><code>Any[]
+full
+refused
+[&quot;loan-renewal.bpmn&quot;, &quot;loan-renewal.svg&quot;, &quot;renewal.dmn&quot;, &quot;renewal.drd.svg&quot;]
+SimResult(500 cases, seed 1)
+11.7 min</code></pre>
+<p>The mean cycle time is the one Python gave for the same cases and seed, because both ran the same engine. The class <code>full</code> is the smallest BPMN 2.0.2 conformance class the document fits (Chapter <a href="checking.html#checking">7</a>). Errors of the engine are thrown as <code>Tok.Engine.TokError</code> with a <code>kind</code>, a <code>message</code> and, for a document with errors, its <code>diagnostics</code>:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb226-1"><a href="programming.html#cb226-1" tabindex="-1"></a><span class="cf">try</span></span>
+<span id="cb226-2"><a href="programming.html#cb226-2" tabindex="-1"></a>    E.<span class="fu">bpmn</span>(<span class="fu">replace</span>(text, <span class="st">&quot;decision=renewal&quot;</span> <span class="op">=&gt;</span> <span class="st">&quot;decision=renewl&quot;</span>))</span>
+<span id="cb226-3"><a href="programming.html#cb226-3" tabindex="-1"></a><span class="cf">catch</span> err</span>
+<span id="cb226-4"><a href="programming.html#cb226-4" tabindex="-1"></a>    <span class="fu">println</span>(err.kind, <span class="st">&quot;: &quot;</span>, err.message)</span>
+<span id="cb226-5"><a href="programming.html#cb226-5" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<pre><code>document: line 4: error R002: unknown decision &#39;renewl&#39;</code></pre>
+<p>The functions may be called from several threads at once.</p>
+<p>The <strong>independent core</strong> is a second implementation of the lexer, the parser, the canonical printer and the semantic BPMN export, written in Julia without the engine. It exists because two implementations of one specification are the strongest test that the specification is unambiguous, and it passes the core level of the conformance corpus for every case:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb228-1"><a href="programming.html#cb228-1" tabindex="-1"></a>doc, diags <span class="op">=</span> Tok.<span class="fu">parse_tok</span>(text)</span>
+<span id="cb228-2"><a href="programming.html#cb228-2" tabindex="-1"></a><span class="fu">print</span>(Tok.<span class="fu">fmt</span>(doc))            <span class="co"># the canonical text</span></span>
+<span id="cb228-3"><a href="programming.html#cb228-3" tabindex="-1"></a><span class="fu">print</span>(Tok.<span class="fu">semantic_xml</span>(doc))   <span class="co"># the semantic BPMN XML of the conformance corpus</span></span></code></pre></div>
+</div>
+<div id="javascript-and-webassembly" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">13.5</span> JavaScript and WebAssembly<a href="programming.html#javascript-and-webassembly" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The crate <code>tok-wasm</code> compiles the engine to WebAssembly. The result is an ES module, <code>tok_wasm.js</code>, with the WebAssembly file <code>tok_wasm_bg.wasm</code> next to it. The playground (Chapter <a href="editors.html#editors">12</a>) is built on it, and its folder <code>pkg/</code> holds both files; you can also build them from the repository with the Rust target <code>wasm32-unknown-unknown</code> and the <code>wasm-bindgen</code> command (the playground documentation of the repository gives the commands).</p>
+<p>The module’s default export loads the WebAssembly code. Its other exports are the functions of the engine. Each takes the text of a document (or of an XML file) and the options as a JSON string, and returns a JSON string: <code>{"ok": VALUE}</code> on success, <code>{"error": {"kind", "message"}}</code> on failure, with the options and results of the C interface (below). The functions are <code>check</code>, <code>fmt</code>, <code>bpmn</code>, <code>svg</code>, <code>sim</code>, <code>version</code> and <code>cheatsheet</code>, and, because <code>export</code>, <code>import</code> and <code>eval</code> are reserved words of JavaScript, <code>_export</code>, <code>_import</code> and <code>_eval</code>. A page imports the module as a namespace:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb229-1"><a href="programming.html#cb229-1" tabindex="-1"></a><span class="im">import</span> init<span class="op">,</span> <span class="op">*</span> <span class="im">as</span> tok <span class="im">from</span> <span class="st">&quot;./pkg/tok_wasm.js&quot;</span><span class="op">;</span></span>
+<span id="cb229-2"><a href="programming.html#cb229-2" tabindex="-1"></a></span>
+<span id="cb229-3"><a href="programming.html#cb229-3" tabindex="-1"></a><span class="cf">await</span> <span class="fu">init</span>()<span class="op">;</span></span>
+<span id="cb229-4"><a href="programming.html#cb229-4" tabindex="-1"></a><span class="kw">const</span> text <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;#model&quot;</span>)<span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
+<span id="cb229-5"><a href="programming.html#cb229-5" tabindex="-1"></a></span>
+<span id="cb229-6"><a href="programming.html#cb229-6" tabindex="-1"></a><span class="kw">const</span> checked <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(tok<span class="op">.</span><span class="fu">check</span>(text<span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">lang</span><span class="op">:</span> <span class="st">&quot;en&quot;</span> })))<span class="op">;</span></span>
+<span id="cb229-7"><a href="programming.html#cb229-7" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(checked<span class="op">.</span><span class="at">ok</span><span class="op">.</span><span class="at">errors</span><span class="op">,</span> checked<span class="op">.</span><span class="at">ok</span><span class="op">.</span><span class="at">bpmn_class</span>)<span class="op">;</span></span>
+<span id="cb229-8"><a href="programming.html#cb229-8" tabindex="-1"></a></span>
+<span id="cb229-9"><a href="programming.html#cb229-9" tabindex="-1"></a><span class="kw">const</span> decided <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(tok<span class="op">.</span><span class="fu">_eval</span>(text<span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">decision</span><span class="op">:</span> <span class="st">&quot;renewal&quot;</span><span class="op">,</span> <span class="dt">values</span><span class="op">:</span> { <span class="dt">renewals</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">reserved</span><span class="op">:</span> <span class="kw">false</span> } })))<span class="op">;</span></span>
+<span id="cb229-10"><a href="programming.html#cb229-10" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(decided<span class="op">.</span><span class="at">ok</span>)<span class="op">;</span></span>
+<span id="cb229-11"><a href="programming.html#cb229-11" tabindex="-1"></a></span>
+<span id="cb229-12"><a href="programming.html#cb229-12" tabindex="-1"></a><span class="kw">const</span> files <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(tok<span class="op">.</span><span class="fu">_export</span>(text<span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;loan-renewal&quot;</span> })))<span class="op">;</span></span>
+<span id="cb229-13"><a href="programming.html#cb229-13" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(files<span class="op">.</span><span class="at">ok</span>))<span class="op">;</span></span>
+<span id="cb229-14"><a href="programming.html#cb229-14" tabindex="-1"></a></span>
+<span id="cb229-15"><a href="programming.html#cb229-15" tabindex="-1"></a><span class="kw">const</span> run <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(tok<span class="op">.</span><span class="fu">sim</span>(text<span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">seed</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">log</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> <span class="dt">cases_table</span><span class="op">:</span> <span class="kw">false</span> })))<span class="op">;</span></span>
+<span id="cb229-16"><a href="programming.html#cb229-16" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(run<span class="op">.</span><span class="at">ok</span><span class="op">.</span><span class="at">kpi</span><span class="op">.</span><span class="at">cycle_time</span><span class="op">.</span><span class="at">mean</span><span class="op">,</span> run<span class="op">.</span><span class="at">ok</span><span class="op">.</span><span class="at">kpi</span><span class="op">.</span><span class="at">resources</span><span class="op">.</span><span class="at">desk</span><span class="op">.</span><span class="at">utilization</span>)<span class="op">;</span></span>
+<span id="cb229-17"><a href="programming.html#cb229-17" tabindex="-1"></a></span>
+<span id="cb229-18"><a href="programming.html#cb229-18" tabindex="-1"></a><span class="kw">const</span> picture <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(tok<span class="op">.</span><span class="fu">svg</span>(text<span class="op">,</span> <span class="st">&quot;{}&quot;</span>))<span class="op">.</span><span class="at">ok</span><span class="op">;</span>   <span class="co">// an SVG string to put into the page</span></span></code></pre></div>
+<p>With the renewal model the calls print:</p>
+<pre><code>0 full
+refused
+[
+  &#39;loan-renewal.bpmn&#39;,
+  &#39;loan-renewal.svg&#39;,
+  &#39;renewal.dmn&#39;,
+  &#39;renewal.drd.svg&#39;
+]
+11.5 min 0.662</code></pre>
+<p>(The simulation uses the 200 cases of the model’s <code>simulate</code> statement here, so its mean differs from the 500 cases above.) A document with errors gives an error object; for <code>svg</code> of a document whose flow names unknown nodes:</p>
+<pre><code>document line 2: error R002: unknown flow node &#39;a&#39;</code></pre>
+<p>where <code>document</code> is the <code>kind</code> and the rest the <code>message</code>. Browsers load WebAssembly only over HTTP, so serve the page from a web server, even a local one, not from a <code>file:</code> address. In Node.js the default export takes the bytes of the WebAssembly file: <code>await init({ module_or_path: await readFile("./pkg/tok_wasm_bg.wasm") })</code>. The module has no threads: the simulator runs on the module’s stack, and FEEL <code>now()</code> and <code>today()</code> read the clock of the page in UTC.</p>
+</div>
+<div id="the-c-interface" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">13.6</span> The C interface<a href="programming.html#the-c-interface" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The engine is also a C library, <strong><code>tokengine</code></strong>, with the declarations in the header <strong><code>tok.h</code></strong>. Any language that can call C can use it: C and C++ directly, Go through cgo, Zig, Fortran, and Julia, whose <code>Tok.Engine</code> is built on it. The library comes as a shared library (<code>tokengine.dll</code> on Windows, <code>libtokengine.so</code> on Linux, <code>libtokengine.dylib</code> on macOS) and as a static library.</p>
+<p>Every function has the same shape:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb232-1"><a href="programming.html#cb232-1" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>tok_check<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>text<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>options<span class="op">);</span></span></code></pre></div>
+<ul>
+<li><strong>Arguments</strong> are NUL-terminated UTF-8 strings: the text of a document (or of an XML file, an expression, a list of command-line arguments) and the options, a JSON object such as <code>{"lang": "pl"}</code>; <code>NULL</code> or an empty string means no options. An unknown option is an error, so that a misspelt option does not go unnoticed.</li>
+<li><strong>The result</strong> is a newly allocated string with one JSON object, <code>{"ok": VALUE}</code> or <code>{"error": {"kind": KIND, "message": TEXT}}</code>. The caller frees it with <code>tok_free</code>, exactly once. No function returns <code>NULL</code>.</li>
+<li><strong>Errors</strong> have a kind: <code>invalid_argument</code>, <code>document</code> (with the <code>diagnostics</code> of the document), <code>render</code>, <code>import</code>, <code>unknown_decision</code>, <code>decision</code>, <code>feel</code>, <code>distribution</code>, <code>simulation</code>, <code>io</code> or <code>internal</code>.</li>
+<li><strong>Threads.</strong> The functions keep no state, are reentrant and can be called from several threads at once. A panic in the engine never unwinds into the caller; it is returned as an error of kind <code>internal</code>.</li>
+</ul>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Options</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tok_check</code></td>
+<td><code>lang</code>, <code>level</code>, <code>bpmn</code>, <code>class</code></td>
+<td><code>{"errors", "bpmn_class", "diagnostics"}</code>, as <code>tok check --json</code></td>
+</tr>
+<tr class="even">
+<td><code>tok_fmt</code></td>
+<td><code>lang</code></td>
+<td>the canonical text</td>
+</tr>
+<tr class="odd">
+<td><code>tok_bpmn</code></td>
+<td><code>lang</code>, <code>layout</code>, <code>sidecar</code> (the text of a layout sidecar)</td>
+<td>BPMN 2.0 XML</td>
+</tr>
+<tr class="even">
+<td><code>tok_svg</code></td>
+<td><code>lang</code>, <code>title</code>, <code>sidecar</code></td>
+<td>the SVG picture</td>
+</tr>
+<tr class="odd">
+<td><code>tok_export</code></td>
+<td><code>lang</code>, <code>name</code>, <code>sidecar</code></td>
+<td>an object file name → content</td>
+</tr>
+<tr class="even">
+<td><code>tok_import</code></td>
+<td><code>format</code> (<code>auto</code>, <code>bpmn</code>, <code>dmn</code>), <code>flow_ids</code>, <code>layout</code></td>
+<td><code>{"format", "text", "warnings", "layout"}</code></td>
+</tr>
+<tr class="odd">
+<td><code>tok_eval</code></td>
+<td><code>decision</code>, <code>values</code>, <code>lang</code></td>
+<td>the value of the decision</td>
+</tr>
+<tr class="even">
+<td><code>tok_sim</code></td>
+<td><code>cases</code>, <code>seed</code>, <code>lang</code>, <code>log</code>, <code>cases_table</code>, <code>csv</code>, <code>xes</code></td>
+<td><code>{"kpi", "report", …}</code></td>
+</tr>
+<tr class="odd">
+<td><code>tok_sim_model</code>, <code>tok_sim_dist</code>, <code>tok_sim_eval</code></td>
+<td></td>
+<td>the simulation model, a parsed distribution, an evaluated expression: the building blocks of external simulators such as <code>Tok.Sim</code></td>
+</tr>
+<tr class="even">
+<td><code>tok_cli</code></td>
+<td></td>
+<td>the <code>tok</code> command line with the arguments of a JSON array</td>
+</tr>
+<tr class="odd">
+<td><code>tok_version()</code>, <code>tok_abi_version()</code>, <code>tok_free(s)</code></td>
+<td></td>
+<td>the version of the engine (a static string, not freed), the version of the C interface, freeing a result</td>
+</tr>
+</tbody>
+</table>
+<p>A small program:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb233-1"><a href="programming.html#cb233-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb233-2"><a href="programming.html#cb233-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;tok.h&quot;</span></span>
+<span id="cb233-3"><a href="programming.html#cb233-3" tabindex="-1"></a></span>
+<span id="cb233-4"><a href="programming.html#cb233-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb233-5"><a href="programming.html#cb233-5" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>doc <span class="op">=</span></span>
+<span id="cb233-6"><a href="programming.html#cb233-6" tabindex="-1"></a>        <span class="st">&quot;tok 1.0 </span><span class="sc">\&quot;</span><span class="st">Example</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span></span>
+<span id="cb233-7"><a href="programming.html#cb233-7" tabindex="-1"></a>        <span class="st">&quot;start s</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb233-8"><a href="programming.html#cb233-8" tabindex="-1"></a>        <span class="st">&quot;task a </span><span class="sc">\&quot;</span><span class="st">Work</span><span class="sc">\&quot;</span><span class="st"> duration=</span><span class="sc">\&quot;</span><span class="st">exp(1h)</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span></span>
+<span id="cb233-9"><a href="programming.html#cb233-9" tabindex="-1"></a>        <span class="st">&quot;end e</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb233-10"><a href="programming.html#cb233-10" tabindex="-1"></a>        <span class="st">&quot;flow s -&gt; a -&gt; e</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb233-11"><a href="programming.html#cb233-11" tabindex="-1"></a>        <span class="st">&quot;simulate cases=10 seed=1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">;</span></span>
+<span id="cb233-12"><a href="programming.html#cb233-12" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;engine </span><span class="sc">%s</span><span class="st">, interface </span><span class="sc">%u\n</span><span class="st">&quot;</span><span class="op">,</span> tok_version<span class="op">(),</span> tok_abi_version<span class="op">());</span></span>
+<span id="cb233-13"><a href="programming.html#cb233-13" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>r <span class="op">=</span> tok_check<span class="op">(</span>doc<span class="op">,</span> <span class="st">&quot;{</span><span class="sc">\&quot;</span><span class="st">lang</span><span class="sc">\&quot;</span><span class="st">: </span><span class="sc">\&quot;</span><span class="st">en</span><span class="sc">\&quot;</span><span class="st">}&quot;</span><span class="op">);</span></span>
+<span id="cb233-14"><a href="programming.html#cb233-14" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span></span>
+<span id="cb233-15"><a href="programming.html#cb233-15" tabindex="-1"></a>    tok_free<span class="op">(</span>r<span class="op">);</span></span>
+<span id="cb233-16"><a href="programming.html#cb233-16" tabindex="-1"></a>    r <span class="op">=</span> tok_fmt<span class="op">(</span><span class="st">&quot;tok 1.0 </span><span class="sc">\&quot;</span><span class="st">Broken</span><span class="sc">\&quot;\n</span><span class="st">start s </span><span class="sc">\&quot;</span><span class="st">unterminated</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb233-17"><a href="programming.html#cb233-17" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span></span>
+<span id="cb233-18"><a href="programming.html#cb233-18" tabindex="-1"></a>    tok_free<span class="op">(</span>r<span class="op">);</span></span>
+<span id="cb233-19"><a href="programming.html#cb233-19" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb233-20"><a href="programming.html#cb233-20" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Compiled against the library (on Linux <code>cc app.c -I include -L lib -ltokengine -o app</code>, with the folders of <code>tok.h</code> and of the library), it prints:</p>
+<pre><code>engine 1.0.3, interface 1
+{&quot;ok&quot;: {&quot;errors&quot;: 0, &quot;bpmn_class&quot;: &quot;descriptive&quot;, &quot;diagnostics&quot;: []}}
+{&quot;error&quot;: {&quot;kind&quot;: &quot;document&quot;, &quot;message&quot;: &quot;line 2: error T001: invalid token: unterminated string&quot;, &quot;diagnostics&quot;: [{&quot;code&quot;: &quot;T001&quot;, &quot;severity&quot;: &quot;error&quot;, &quot;line&quot;: 2, &quot;id&quot;: null, &quot;message&quot;: &quot;invalid token: unterminated string&quot;}]}}</code></pre>
+<p><code>tok_abi_version()</code> changes only when a function is removed or changes its parameters, or when a member of a result changes its meaning. New functions, options and members keep the version, so a program should ignore members it does not know; it can compare <code>tok_abi_version()</code> with the constant <code>TOK_ABI_VERSION</code> of the header it was built with.</p>
+<p>The library comes with the release archives of the repository. To build it yourself, run <code>cargo build --release -p tok-capi</code> in the folder <code>rust/</code> of a checkout; the files appear in <code>rust/target/release</code>.</p>
+</div>
+<div id="the-rust-crates" class="section level2 hasAnchor" number="13.7">
+<h2><span class="header-section-number">13.7</span> The Rust crates<a href="programming.html#the-rust-crates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The engine is published on crates.io as six crates:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Crate</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tok-core</code></td>
+<td>the parser, the checker, the canonical printer, BPMN 2.0 and DMN 1.5 export and import, and FEEL</td>
+</tr>
+<tr class="even">
+<td><code>tok-bpmn</code></td>
+<td>the BPMN 2.0 rules, the automatic layout and the SVG rendering</td>
+</tr>
+<tr class="odd">
+<td><code>tok-sim</code></td>
+<td>the discrete-event simulator</td>
+</tr>
+<tr class="even">
+<td><code>tok-cli</code></td>
+<td>the <code>tok</code> command (the program is called <code>tok</code>; the crate name <code>tok</code> was taken) and the library <code>tok_cli</code> with the module <code>api</code></td>
+</tr>
+<tr class="odd">
+<td><code>tok-lsp</code></td>
+<td>the language server (Chapter <a href="editors.html#editors">12</a>)</td>
+</tr>
+<tr class="even">
+<td><code>tok-mcp</code></td>
+<td>the MCP server for AI agents (Chapter <a href="agents.html#agents">14</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>The programs install with cargo:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb235-1"><a href="programming.html#cb235-1" tabindex="-1"></a><span class="ex">cargo</span> install tok-cli              <span class="co"># the program tok</span></span>
+<span id="cb235-2"><a href="programming.html#cb235-2" tabindex="-1"></a><span class="ex">cargo</span> install tok-lsp tok-mcp      <span class="co"># the language server and the MCP server</span></span></code></pre></div>
+<p>In a Rust program, the simplest entry point is <code>tok_cli::api</code>: the functions of the C interface as Rust functions, <code>fn check(text: &amp;str, options: &amp;str) -&gt; Result&lt;Json, ApiError&gt;</code> and the others (<code>fmt</code>, <code>bpmn</code>, <code>svg</code>, <code>export_files</code>, <code>import_file</code>, <code>eval</code>, <code>sim</code>, <code>sim_model</code>, <code>sim_dist</code>, <code>sim_eval</code>, <code>cli</code>), with the same options and results. <code>api::respond</code> turns a result into the JSON text the C functions return. The crate <code>tok-core</code> gives the lower levels, such as <code>tok_core::parse</code>, which returns the document and its parser diagnostics, and <code>tok_core::fmt</code>, which prints a document in canonical form:</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb236-1"><a href="programming.html#cb236-1" tabindex="-1"></a><span class="kw">[dependencies]</span></span>
+<span id="cb236-2"><a href="programming.html#cb236-2" tabindex="-1"></a><span class="dt">tok-cli</span> <span class="op">=</span> <span class="st">&quot;1.0.3&quot;</span></span>
+<span id="cb236-3"><a href="programming.html#cb236-3" tabindex="-1"></a><span class="dt">tok-core</span> <span class="op">=</span> <span class="st">&quot;1.0.3&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb237-1"><a href="programming.html#cb237-1" tabindex="-1"></a><span class="kw">use</span> <span class="pp">tok_cli::</span>api<span class="op">;</span></span>
+<span id="cb237-2"><a href="programming.html#cb237-2" tabindex="-1"></a></span>
+<span id="cb237-3"><a href="programming.html#cb237-3" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">-&gt;</span> <span class="pp">std::io::</span><span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb237-4"><a href="programming.html#cb237-4" tabindex="-1"></a>    <span class="kw">let</span> text <span class="op">=</span> <span class="pp">std::fs::</span>read_to_string(<span class="st">&quot;13-loan-renewal.tok&quot;</span>)<span class="op">?;</span></span>
+<span id="cb237-5"><a href="programming.html#cb237-5" tabindex="-1"></a></span>
+<span id="cb237-6"><a href="programming.html#cb237-6" tabindex="-1"></a>    <span class="co">// the functions of the C interface, with options and results as JSON</span></span>
+<span id="cb237-7"><a href="programming.html#cb237-7" tabindex="-1"></a>    <span class="kw">let</span> checked <span class="op">=</span> <span class="pp">api::</span>check(<span class="op">&amp;</span>text<span class="op">,</span> <span class="st">r#&quot;{&quot;lang&quot;: &quot;en&quot;}&quot;#</span>)<span class="op">;</span></span>
+<span id="cb237-8"><a href="programming.html#cb237-8" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> <span class="pp">api::</span>respond(<span class="op">&amp;</span>checked))<span class="op">;</span></span>
+<span id="cb237-9"><a href="programming.html#cb237-9" tabindex="-1"></a>    <span class="kw">let</span> value <span class="op">=</span> <span class="pp">api::</span>eval(<span class="op">&amp;</span>text<span class="op">,</span> <span class="st">r#&quot;{&quot;decision&quot;: &quot;renewal&quot;, &quot;values&quot;: {&quot;renewals&quot;: 3, &quot;reserved&quot;: false}}&quot;#</span>)<span class="op">;</span></span>
+<span id="cb237-10"><a href="programming.html#cb237-10" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> <span class="pp">api::</span>respond(<span class="op">&amp;</span>value))<span class="op">;</span></span>
+<span id="cb237-11"><a href="programming.html#cb237-11" tabindex="-1"></a></span>
+<span id="cb237-12"><a href="programming.html#cb237-12" tabindex="-1"></a>    <span class="co">// the core: parse and print the canonical form</span></span>
+<span id="cb237-13"><a href="programming.html#cb237-13" tabindex="-1"></a>    <span class="kw">let</span> (doc<span class="op">,</span> diags) <span class="op">=</span> <span class="pp">tok_core::</span>parse(<span class="op">&amp;</span>text)<span class="op">;</span></span>
+<span id="cb237-14"><a href="programming.html#cb237-14" tabindex="-1"></a>    <span class="cf">for</span> d <span class="kw">in</span> <span class="op">&amp;</span>diags <span class="op">{</span></span>
+<span id="cb237-15"><a href="programming.html#cb237-15" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> <span class="pp">tok_core::diagnostics::</span>format_diag(d<span class="op">,</span> <span class="st">&quot;en&quot;</span><span class="op">,</span> <span class="cn">None</span>))<span class="op">;</span></span>
+<span id="cb237-16"><a href="programming.html#cb237-16" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb237-17"><a href="programming.html#cb237-17" tabindex="-1"></a>    <span class="pp">print!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> <span class="op">&amp;</span><span class="pp">tok_core::</span>fmt(<span class="op">&amp;</span>doc)[<span class="op">..</span><span class="dv">40</span>])<span class="op">;</span></span>
+<span id="cb237-18"><a href="programming.html#cb237-18" tabindex="-1"></a>    <span class="pp">println!</span>()<span class="op">;</span></span>
+<span id="cb237-19"><a href="programming.html#cb237-19" tabindex="-1"></a>    <span class="cn">Ok</span>(())</span>
+<span id="cb237-20"><a href="programming.html#cb237-20" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<pre><code>{&quot;ok&quot;: {&quot;errors&quot;: 0, &quot;bpmn_class&quot;: &quot;full&quot;, &quot;diagnostics&quot;: []}}
+{&quot;ok&quot;: &quot;refused&quot;}
+tok 1.0 &quot;Loan renewal&quot;
+
+start asked &quot;Rea</code></pre>
+<p>The JSON interface of <code>tok_cli::api</code> is the stable one: it is the interface of the C library, documented option by option. The internal modules of <code>tok-core</code> follow the structure of the implementation and are the place for programs that need to work on the document model itself.</p>
+</div>
+<div id="which-interface-to-choose" class="section level2 hasAnchor" number="13.8">
+<h2><span class="header-section-number">13.8</span> Which interface to choose<a href="programming.html#which-interface-to-choose" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a script in a shell or a CI job</td>
+<td>the <code>tok</code> command, with <code>--json</code> where a program reads the output</td>
+</tr>
+<tr class="even">
+<td>a Python script, notebook or web service</td>
+<td><code>tok.api</code></td>
+</tr>
+<tr class="odd">
+<td>an analysis or a report in R, a course with R Markdown</td>
+<td><code>tokr</code> and its knitr engine</td>
+</tr>
+<tr class="even">
+<td>simulation experiments with many scenarios and replications</td>
+<td><code>Tok.Sim</code> in Julia</td>
+</tr>
+<tr class="odd">
+<td>a web page that checks or draws models in the browser</td>
+<td>the WebAssembly module</td>
+</tr>
+<tr class="even">
+<td>a program in C, C++, Go or another language with a C interface</td>
+<td><code>tokengine</code> with <code>tok.h</code></td>
+</tr>
+<tr class="odd">
+<td>a Rust program</td>
+<td><code>tok_cli::api</code>, or <code>tok-core</code> for the document model</td>
+</tr>
+<tr class="even">
+<td>an editor</td>
+<td><code>tok-lsp</code> (Chapter <a href="editors.html#editors">12</a>)</td>
+</tr>
+<tr class="odd">
+<td>an AI agent</td>
+<td><code>tok-mcp</code> or <code>tok mcp</code> (Chapter <a href="agents.html#agents">14</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Whatever you choose, the text of the model stays the source. Programs read and write <code>.tok</code> files, the engine does the work, and the results are the same in every host language. The sources of the engine and of every binding are in the repository <a href="https://github.com/tok-lang-bpm/tok" class="uri">https://github.com/tok-lang-bpm/tok</a>, where questions and bug reports go to its issues.</p>
+</div>
+<div id="exercises-12" class="section level2 unnumbered hasAnchor">
+<h2>Exercises<a href="programming.html#exercises-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-14" class="exercise"><strong>Exercise 13.1  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><strong>A checker for a folder.</strong> Write a Python script that checks every <code>.tok</code> file in a folder with <code>api.check</code>, prints one line per file with the numbers of errors and warnings, and exits with status 1 when any file has errors. Run it on the <code>examples/</code> folder of this book: which files have errors, and why?</li>
+<li><strong>Decisions as a table.</strong> In R, evaluate the decision <code>renewal</code> of <code>13-loan-renewal.tok</code> for every combination of <code>renewals</code> from 0 to 4 and <code>reserved</code> <code>TRUE</code> and <code>FALSE</code> with <code>tok_eval</code>, and arrange the results in a data frame with one row per combination. Compare the table with the rules of the decision.</li>
+<li><strong>Two implementations.</strong> In Julia, parse the examples of this book with the independent core (<code>Tok.parse_tok</code>) and print them with <code>Tok.fmt</code>. Compare the text with <code>Tok.Engine.fmt</code> for each file. Are there differences?</li>
+<li><strong>A page.</strong> Build a minimal web page with a text area and a picture: on every change it calls <code>check</code> of the WebAssembly module and shows the number of errors, and when there are none, puts the result of <code>svg</code> into the page. Serve it with <code>python -m http.server</code>.</li>
+<li><strong>The same result everywhere.</strong> Simulate <code>13-loan-renewal.tok</code> with 300 cases and seed 5 from the command line (<code>tok sim --cases 300 --seed 5</code>), from Python and from R or Julia. Compare the mean cycle times and the utilization. What do you conclude about reproducing results reported by someone else?</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="editors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="agents.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

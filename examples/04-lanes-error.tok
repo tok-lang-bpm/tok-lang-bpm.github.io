@@ -1,0 +1,12 @@
+tok 1.0 "Routing a letter (with errors)"
+
+start received "Letter received"
+
+pool university "University"
+  user register "Register the letter"
+  lane office "Dean's office"
+    user assign "Assign the letter to a unit"
+    end assigned "Letter assigned"
+
+flow received -> register -> assign -> assigned
+message register -> assign "Letter"

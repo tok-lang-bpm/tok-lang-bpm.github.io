@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Waiting for missing details" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Missing_details" name="Missing details" />
+  <bpmn:process id="process" name="Waiting for missing details" isExecutable="false">
+    <bpmn:startEvent id="asked" name="Request for details sent" />
+    <bpmn:eventBasedGateway id="wait" name="What happens first?" />
+    <bpmn:intermediateCatchEvent id="details" name="Details received">
+      <bpmn:messageEventDefinition id="details-def" messageRef="Message_Missing_details" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="deadline" name="14 days passed">
+      <bpmn:timerEventDefinition id="deadline-def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="reassess" name="Reassess the query" />
+    <bpmn:userTask id="shelve" name="Close the query without action" />
+    <bpmn:endEvent id="reassessed" name="Query reassessed" />
+    <bpmn:endEvent id="shelved" name="Query closed without action" />
+    <bpmn:sequenceFlow id="f-asked-wait" sourceRef="asked" targetRef="wait" />
+    <bpmn:sequenceFlow id="f-wait-details" sourceRef="wait" targetRef="details" />
+    <bpmn:sequenceFlow id="f-wait-deadline" sourceRef="wait" targetRef="deadline" />
+    <bpmn:sequenceFlow id="f-details-reassess" sourceRef="details" targetRef="reassess" />
+    <bpmn:sequenceFlow id="f-reassess-reassessed" sourceRef="reassess" targetRef="reassessed" />
+    <bpmn:sequenceFlow id="f-deadline-shelve" sourceRef="deadline" targetRef="shelve" />
+    <bpmn:sequenceFlow id="f-shelve-shelved" sourceRef="shelve" targetRef="shelved" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="asked_di" bpmnElement="asked">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-6" y="93" width="108" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="wait_di" bpmnElement="wait">
+        <dc:Bounds x="116" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="145" y="32" width="108" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="details_di" bpmnElement="details">
+        <dc:Bounds x="216" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="189" y="93" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="deadline_di" bpmnElement="deadline">
+        <dc:Bounds x="216" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="194" y="223" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reassess_di" bpmnElement="reassess">
+        <dc:Bounds x="302" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shelve_di" bpmnElement="shelve">
+        <dc:Bounds x="302" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reassessed_di" bpmnElement="reassessed">
+        <dc:Bounds x="452" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="425" y="93" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shelved_di" bpmnElement="shelved">
+        <dc:Bounds x="452" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="430" y="223" width="80" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-asked-wait_di" bpmnElement="f-asked-wait">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-wait-details_di" bpmnElement="f-wait-details">
+        <di:waypoint x="166" y="70" />
+        <di:waypoint x="216" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-wait-deadline_di" bpmnElement="f-wait-deadline">
+        <di:waypoint x="141" y="95" />
+        <di:waypoint x="141" y="200" />
+        <di:waypoint x="216" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-details-reassess_di" bpmnElement="f-details-reassess">
+        <di:waypoint x="252" y="70" />
+        <di:waypoint x="302" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reassess-reassessed_di" bpmnElement="f-reassess-reassessed">
+        <di:waypoint x="402" y="70" />
+        <di:waypoint x="452" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-deadline-shelve_di" bpmnElement="f-deadline-shelve">
+        <di:waypoint x="252" y="200" />
+        <di:waypoint x="302" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-shelve-shelved_di" bpmnElement="f-shelve-shelved">
+        <di:waypoint x="402" y="200" />
+        <di:waypoint x="452" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

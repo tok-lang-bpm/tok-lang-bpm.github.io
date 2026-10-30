@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Events, sub-processes and exceptions | tok: Process Models as Text</title>
+  <meta name="description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Events, sub-processes and exceptions | tok: Process Models as Text" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  <meta name="github-repo" content="tok-lang-bpm/tok-lang-bpm.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Events, sub-processes and exceptions | tok: Process Models as Text" />
+  
+  <meta name="twitter:description" content="The guide to tok, a text language for BPMN 2.0 process models and DMN decisions: language, tools, programming interfaces, AI agents and integrations." />
+  
+
+<meta name="author" content="Marek Deja" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="collaboration.html"/>
+<link rel="next" href="data-artifacts.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">tok: Process Models as Text</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who-this-book-is-for"><i class="fa fa-check"></i>Who this book is for</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-the-book-is-organised"><i class="fa fa-check"></i>How the book is organised</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#conventions"><i class="fa fa-check"></i>Conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#versions"><i class="fa fa-check"></i>Versions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#licence"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reporting-issues"><i class="fa fa-check"></i>Reporting issues</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-cite"><i class="fa fa-check"></i>How to cite</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="models-as-text.html"><a href="models-as-text.html"><i class="fa fa-check"></i><b>1</b> Models as text</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="models-as-text.html"><a href="models-as-text.html#two-layers-of-a-bpmn-file"><i class="fa fa-check"></i><b>1.1</b> Two layers of a BPMN file</a></li>
+<li class="chapter" data-level="1.2" data-path="models-as-text.html"><a href="models-as-text.html#reading-a-model-line-by-line"><i class="fa fa-check"></i><b>1.2</b> Reading a model line by line</a></li>
+<li class="chapter" data-level="1.3" data-path="models-as-text.html"><a href="models-as-text.html#the-text-is-the-model"><i class="fa fa-check"></i><b>1.3</b> The text is the model</a></li>
+<li class="chapter" data-level="1.4" data-path="models-as-text.html"><a href="models-as-text.html#why-text"><i class="fa fa-check"></i><b>1.4</b> Why text</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="models-as-text.html"><a href="models-as-text.html#version-control"><i class="fa fa-check"></i><b>1.4.1</b> Version control</a></li>
+<li class="chapter" data-level="1.4.2" data-path="models-as-text.html"><a href="models-as-text.html#review"><i class="fa fa-check"></i><b>1.4.2</b> Review</a></li>
+<li class="chapter" data-level="1.4.3" data-path="models-as-text.html"><a href="models-as-text.html#why-collaboration"><i class="fa fa-check"></i><b>1.4.3</b> Collaboration</a></li>
+<li class="chapter" data-level="1.4.4" data-path="models-as-text.html"><a href="models-as-text.html#why-agents"><i class="fa fa-check"></i><b>1.4.4</b> Agents</a></li>
+<li class="chapter" data-level="1.4.5" data-path="models-as-text.html"><a href="models-as-text.html#text-tools"><i class="fa fa-check"></i><b>1.4.5</b> Text tools</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="models-as-text.html"><a href="models-as-text.html#tok-among-other-text-notations"><i class="fa fa-check"></i><b>1.5</b> tok among other text notations</a></li>
+<li class="chapter" data-level="1.6" data-path="models-as-text.html"><a href="models-as-text.html#the-metamodel-underneath"><i class="fa fa-check"></i><b>1.6</b> The metamodel underneath</a></li>
+<li class="chapter" data-level="1.7" data-path="models-as-text.html"><a href="models-as-text.html#round-trip-from-bpmn-back-to-text"><i class="fa fa-check"></i><b>1.7</b> Round trip: from BPMN back to text</a></li>
+<li class="chapter" data-level="" data-path="models-as-text.html"><a href="models-as-text.html#exercises"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started.html"><a href="getting-started.html#ways-to-use-tok"><i class="fa fa-check"></i><b>2.1</b> Ways to use tok</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started.html"><a href="getting-started.html#installing-the-command-line"><i class="fa fa-check"></i><b>2.2</b> Installing the command line</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="getting-started.html"><a href="getting-started.html#with-python"><i class="fa fa-check"></i><b>2.2.1</b> With Python</a></li>
+<li class="chapter" data-level="2.2.2" data-path="getting-started.html"><a href="getting-started.html#with-cargo"><i class="fa fa-check"></i><b>2.2.2</b> With Cargo</a></li>
+<li class="chapter" data-level="2.2.3" data-path="getting-started.html"><a href="getting-started.html#checking-the-installation"><i class="fa fa-check"></i><b>2.2.3</b> Checking the installation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="getting-started.html"><a href="getting-started.html#other-ways-to-reach-the-engine"><i class="fa fa-check"></i><b>2.3</b> Other ways to reach the engine</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="getting-started.html"><a href="getting-started.html#r"><i class="fa fa-check"></i><b>2.3.1</b> R</a></li>
+<li class="chapter" data-level="2.3.2" data-path="getting-started.html"><a href="getting-started.html#julia"><i class="fa fa-check"></i><b>2.3.2</b> Julia</a></li>
+<li class="chapter" data-level="2.3.3" data-path="getting-started.html"><a href="getting-started.html#visual-studio-code"><i class="fa fa-check"></i><b>2.3.3</b> Visual Studio Code</a></li>
+<li class="chapter" data-level="2.3.4" data-path="getting-started.html"><a href="getting-started.html#the-playground"><i class="fa fa-check"></i><b>2.3.4</b> The playground</a></li>
+<li class="chapter" data-level="2.3.5" data-path="getting-started.html"><a href="getting-started.html#the-agent-bundle"><i class="fa fa-check"></i><b>2.3.5</b> The agent bundle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="getting-started.html"><a href="getting-started.html#your-first-model"><i class="fa fa-check"></i><b>2.4</b> Your first model</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="getting-started.html"><a href="getting-started.html#step-1-write-the-text"><i class="fa fa-check"></i><b>2.4.1</b> Step 1: write the text</a></li>
+<li class="chapter" data-level="2.4.2" data-path="getting-started.html"><a href="getting-started.html#step-2-check-the-model"><i class="fa fa-check"></i><b>2.4.2</b> Step 2: check the model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="getting-started.html"><a href="getting-started.html#step-3-format-the-text"><i class="fa fa-check"></i><b>2.4.3</b> Step 3: format the text</a></li>
+<li class="chapter" data-level="2.4.4" data-path="getting-started.html"><a href="getting-started.html#step-4-export-bpmn"><i class="fa fa-check"></i><b>2.4.4</b> Step 4: export BPMN</a></li>
+<li class="chapter" data-level="2.4.5" data-path="getting-started.html"><a href="getting-started.html#step-5-draw-the-picture"><i class="fa fa-check"></i><b>2.4.5</b> Step 5: draw the picture</a></li>
+<li class="chapter" data-level="2.4.6" data-path="getting-started.html"><a href="getting-started.html#step-6-open-the-model-in-a-bpmn-tool"><i class="fa fa-check"></i><b>2.4.6</b> Step 6: open the model in a BPMN tool</a></li>
+<li class="chapter" data-level="2.4.7" data-path="getting-started.html"><a href="getting-started.html#step-7-change-and-repeat"><i class="fa fa-check"></i><b>2.4.7</b> Step 7: change and repeat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="getting-started.html"><a href="getting-started.html#setting-up-your-editor"><i class="fa fa-check"></i><b>2.5</b> Setting up your editor</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-1"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="process-basics.html"><a href="process-basics.html"><i class="fa fa-check"></i><b>3</b> Process basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="process-basics.html"><a href="process-basics.html#the-header-line"><i class="fa fa-check"></i><b>3.1</b> The header line</a></li>
+<li class="chapter" data-level="3.2" data-path="process-basics.html"><a href="process-basics.html#statements"><i class="fa fa-check"></i><b>3.2</b> Statements</a></li>
+<li class="chapter" data-level="3.3" data-path="process-basics.html"><a href="process-basics.html#identifiers-and-labels"><i class="fa fa-check"></i><b>3.3</b> Identifiers and labels</a></li>
+<li class="chapter" data-level="3.4" data-path="process-basics.html"><a href="process-basics.html#tasks"><i class="fa fa-check"></i><b>3.4</b> Tasks</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="process-basics.html"><a href="process-basics.html#markers-of-repetition"><i class="fa fa-check"></i><b>3.4.1</b> Markers of repetition</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="process-basics.html"><a href="process-basics.html#events"><i class="fa fa-check"></i><b>3.5</b> Events</a></li>
+<li class="chapter" data-level="3.6" data-path="process-basics.html"><a href="process-basics.html#gateways"><i class="fa fa-check"></i><b>3.6</b> Gateways</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="process-basics.html"><a href="process-basics.html#exclusive-parallel-and-inclusive-gateways"><i class="fa fa-check"></i><b>3.6.1</b> Exclusive, parallel and inclusive gateways</a></li>
+<li class="chapter" data-level="3.6.2" data-path="process-basics.html"><a href="process-basics.html#the-event-based-gateway"><i class="fa fa-check"></i><b>3.6.2</b> The event-based gateway</a></li>
+<li class="chapter" data-level="3.6.3" data-path="process-basics.html"><a href="process-basics.html#the-complex-gateway"><i class="fa fa-check"></i><b>3.6.3</b> The complex gateway</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="process-basics.html"><a href="process-basics.html#sequence-flows"><i class="fa fa-check"></i><b>3.7</b> Sequence flows</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="process-basics.html"><a href="process-basics.html#labels-and-attributes"><i class="fa fa-check"></i><b>3.7.1</b> Labels and attributes</a></li>
+<li class="chapter" data-level="3.7.2" data-path="process-basics.html"><a href="process-basics.html#conditions"><i class="fa fa-check"></i><b>3.7.2</b> Conditions</a></li>
+<li class="chapter" data-level="3.7.3" data-path="process-basics.html"><a href="process-basics.html#default-flows"><i class="fa fa-check"></i><b>3.7.3</b> Default flows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="process-basics.html"><a href="process-basics.html#indentation-and-blocks"><i class="fa fa-check"></i><b>3.8</b> Indentation and blocks</a></li>
+<li class="chapter" data-level="3.9" data-path="process-basics.html"><a href="process-basics.html#comments"><i class="fa fa-check"></i><b>3.9</b> Comments</a></li>
+<li class="chapter" data-level="3.10" data-path="process-basics.html"><a href="process-basics.html#levels-of-the-language"><i class="fa fa-check"></i><b>3.10</b> Levels of the language</a></li>
+<li class="chapter" data-level="3.11" data-path="process-basics.html"><a href="process-basics.html#typical-mistakes"><i class="fa fa-check"></i><b>3.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="process-basics.html"><a href="process-basics.html#exercises-2"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="collaboration.html"><a href="collaboration.html"><i class="fa fa-check"></i><b>4</b> Pools, lanes and messages</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="collaboration.html"><a href="collaboration.html#from-one-process-to-a-collaboration"><i class="fa fa-check"></i><b>4.1</b> From one process to a collaboration</a></li>
+<li class="chapter" data-level="4.2" data-path="collaboration.html"><a href="collaboration.html#pools"><i class="fa fa-check"></i><b>4.2</b> Pools</a></li>
+<li class="chapter" data-level="4.3" data-path="collaboration.html"><a href="collaboration.html#lanes-and-nested-lanes"><i class="fa fa-check"></i><b>4.3</b> Lanes and nested lanes</a></li>
+<li class="chapter" data-level="4.4" data-path="collaboration.html"><a href="collaboration.html#message-flows"><i class="fa fa-check"></i><b>4.4</b> Message flows</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="collaboration.html"><a href="collaboration.html#a-collaboration-with-a-black-box-pool"><i class="fa fa-check"></i><b>4.4.1</b> A collaboration with a black-box pool</a></li>
+<li class="chapter" data-level="4.4.2" data-path="collaboration.html"><a href="collaboration.html#two-processes-that-talk-to-each-other"><i class="fa fa-check"></i><b>4.4.2</b> Two processes that talk to each other</a></li>
+<li class="chapter" data-level="4.4.3" data-path="collaboration.html"><a href="collaboration.html#correlation-keys"><i class="fa fa-check"></i><b>4.4.3</b> Correlation keys</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="collaboration.html"><a href="collaboration.html#structural-rules"><i class="fa fa-check"></i><b>4.5</b> Structural rules</a></li>
+<li class="chapter" data-level="4.6" data-path="collaboration.html"><a href="collaboration.html#conversations"><i class="fa fa-check"></i><b>4.6</b> Conversations</a></li>
+<li class="chapter" data-level="4.7" data-path="collaboration.html"><a href="collaboration.html#choreographies"><i class="fa fa-check"></i><b>4.7</b> Choreographies</a></li>
+<li class="chapter" data-level="4.8" data-path="collaboration.html"><a href="collaboration.html#participant-multiplicity"><i class="fa fa-check"></i><b>4.8</b> Participant multiplicity</a></li>
+<li class="chapter" data-level="4.9" data-path="collaboration.html"><a href="collaboration.html#collaborations-levels-and-camunda"><i class="fa fa-check"></i><b>4.9</b> Collaborations, levels and Camunda</a></li>
+<li class="chapter" data-level="4.10" data-path="collaboration.html"><a href="collaboration.html#the-canonical-form-of-a-collaboration"><i class="fa fa-check"></i><b>4.10</b> The canonical form of a collaboration</a></li>
+<li class="chapter" data-level="" data-path="collaboration.html"><a href="collaboration.html#exercises-3"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="events-exceptions.html"><a href="events-exceptions.html"><i class="fa fa-check"></i><b>5</b> Events, sub-processes and exceptions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="events-exceptions.html"><a href="events-exceptions.html#catching-and-throwing"><i class="fa fa-check"></i><b>5.1</b> Catching and throwing</a></li>
+<li class="chapter" data-level="5.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers"><i class="fa fa-check"></i><b>5.2</b> Triggers</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="events-exceptions.html"><a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier"><i class="fa fa-check"></i><b>5.2.1</b> Events on a path: waiting for a supplier</a></li>
+<li class="chapter" data-level="5.2.2" data-path="events-exceptions.html"><a href="events-exceptions.html#triggers-without-a-value"><i class="fa fa-check"></i><b>5.2.2</b> Triggers without a value</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="events-exceptions.html"><a href="events-exceptions.html#boundary-events"><i class="fa fa-check"></i><b>5.3</b> Boundary events</a></li>
+<li class="chapter" data-level="5.4" data-path="events-exceptions.html"><a href="events-exceptions.html#embedded-sub-processes"><i class="fa fa-check"></i><b>5.4</b> Embedded sub-processes</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="events-exceptions.html"><a href="events-exceptions.html#escalation-from-a-sub-process"><i class="fa fa-check"></i><b>5.4.1</b> Escalation from a sub-process</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="events-exceptions.html"><a href="events-exceptions.html#event-sub-processes"><i class="fa fa-check"></i><b>5.5</b> Event sub-processes</a></li>
+<li class="chapter" data-level="5.6" data-path="events-exceptions.html"><a href="events-exceptions.html#compensation"><i class="fa fa-check"></i><b>5.6</b> Compensation</a></li>
+<li class="chapter" data-level="5.7" data-path="events-exceptions.html"><a href="events-exceptions.html#transactions-and-cancellation"><i class="fa fa-check"></i><b>5.7</b> Transactions and cancellation</a></li>
+<li class="chapter" data-level="5.8" data-path="events-exceptions.html"><a href="events-exceptions.html#multiple-and-parallel-multiple-events"><i class="fa fa-check"></i><b>5.8</b> Multiple and parallel multiple events</a></li>
+<li class="chapter" data-level="5.9" data-path="events-exceptions.html"><a href="events-exceptions.html#ad-hoc-sub-processes"><i class="fa fa-check"></i><b>5.9</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="5.10" data-path="events-exceptions.html"><a href="events-exceptions.html#call-activities-and-global-tasks"><i class="fa fa-check"></i><b>5.10</b> Call activities and global tasks</a></li>
+<li class="chapter" data-level="5.11" data-path="events-exceptions.html"><a href="events-exceptions.html#loops-and-multi-instance"><i class="fa fa-check"></i><b>5.11</b> Loops and multi-instance</a></li>
+<li class="chapter" data-level="5.12" data-path="events-exceptions.html"><a href="events-exceptions.html#exceptions-and-process-engines"><i class="fa fa-check"></i><b>5.12</b> Exceptions and process engines</a></li>
+<li class="chapter" data-level="5.13" data-path="events-exceptions.html"><a href="events-exceptions.html#typical-mistakes-1"><i class="fa fa-check"></i><b>5.13</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="events-exceptions.html"><a href="events-exceptions.html#exercises-4"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data-artifacts.html"><a href="data-artifacts.html"><i class="fa fa-check"></i><b>6</b> Data, resources and artifacts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="data-artifacts.html"><a href="data-artifacts.html#data-objects"><i class="fa fa-check"></i><b>6.1</b> Data objects</a></li>
+<li class="chapter" data-level="6.2" data-path="data-artifacts.html"><a href="data-artifacts.html#data-stores"><i class="fa fa-check"></i><b>6.2</b> Data stores</a></li>
+<li class="chapter" data-level="6.3" data-path="data-artifacts.html"><a href="data-artifacts.html#reading-and-writing"><i class="fa fa-check"></i><b>6.3</b> Reading and writing</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="data-artifacts.html"><a href="data-artifacts.html#states-and-state-transitions"><i class="fa fa-check"></i><b>6.3.1</b> States and state transitions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="data-artifacts.html"><a href="data-artifacts.html#process-data"><i class="fa fa-check"></i><b>6.4</b> Process data</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="data-artifacts.html"><a href="data-artifacts.html#item-definitions"><i class="fa fa-check"></i><b>6.4.1</b> Item definitions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="data-artifacts.html"><a href="data-artifacts.html#inputs-outputs-and-properties"><i class="fa fa-check"></i><b>6.4.2</b> Inputs, outputs and properties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="data-artifacts.html"><a href="data-artifacts.html#resources-and-performers"><i class="fa fa-check"></i><b>6.5</b> Resources and performers</a></li>
+<li class="chapter" data-level="6.6" data-path="data-artifacts.html"><a href="data-artifacts.html#text-annotations"><i class="fa fa-check"></i><b>6.6</b> Text annotations</a></li>
+<li class="chapter" data-level="6.7" data-path="data-artifacts.html"><a href="data-artifacts.html#groups"><i class="fa fa-check"></i><b>6.7</b> Groups</a></li>
+<li class="chapter" data-level="6.8" data-path="data-artifacts.html"><a href="data-artifacts.html#documentation"><i class="fa fa-check"></i><b>6.8</b> Documentation</a></li>
+<li class="chapter" data-level="6.9" data-path="data-artifacts.html"><a href="data-artifacts.html#typical-mistakes-2"><i class="fa fa-check"></i><b>6.9</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="data-artifacts.html"><a href="data-artifacts.html#exercises-5"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="checking.html"><a href="checking.html"><i class="fa fa-check"></i><b>7</b> Checking models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="checking.html"><a href="checking.html#what-tok-check-does"><i class="fa fa-check"></i><b>7.1</b> What <code>tok check</code> does</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="checking.html"><a href="checking.html#severities"><i class="fa fa-check"></i><b>7.1.1</b> Severities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="checking.html"><a href="checking.html#layers-and-codes"><i class="fa fa-check"></i><b>7.2</b> Layers and codes</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="checking.html"><a href="checking.html#the-order-of-the-layers-and-cascades"><i class="fa fa-check"></i><b>7.2.1</b> The order of the layers and cascades</a></li>
+<li class="chapter" data-level="7.2.2" data-path="checking.html"><a href="checking.html#messages-in-polish"><i class="fa fa-check"></i><b>7.2.2</b> Messages in Polish</a></li>
+<li class="chapter" data-level="7.2.3" data-path="checking.html"><a href="checking.html#diagnostics-for-programs"><i class="fa fa-check"></i><b>7.2.3</b> Diagnostics for programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="checking.html"><a href="checking.html#the-bpmn-rules"><i class="fa fa-check"></i><b>7.3</b> The BPMN rules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="checking.html"><a href="checking.html#bpmn-files-from-other-tools"><i class="fa fa-check"></i><b>7.3.1</b> BPMN files from other tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="checking.html"><a href="checking.html#levels-of-the-language-1"><i class="fa fa-check"></i><b>7.4</b> Levels of the language</a></li>
+<li class="chapter" data-level="7.5" data-path="checking.html"><a href="checking.html#bpmn-conformance-classes"><i class="fa fa-check"></i><b>7.5</b> BPMN conformance classes</a></li>
+<li class="chapter" data-level="7.6" data-path="checking.html"><a href="checking.html#the-canonical-form"><i class="fa fa-check"></i><b>7.6</b> The canonical form</a></li>
+<li class="chapter" data-level="7.7" data-path="checking.html"><a href="checking.html#typical-errors-and-their-corrections"><i class="fa fa-check"></i><b>7.7</b> Typical errors and their corrections</a></li>
+<li class="chapter" data-level="7.8" data-path="checking.html"><a href="checking.html#what-a-clean-check-means"><i class="fa fa-check"></i><b>7.8</b> What a clean check means</a></li>
+<li class="chapter" data-level="" data-path="checking.html"><a href="checking.html#exercises-6"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="layout-import.html"><a href="layout-import.html"><i class="fa fa-check"></i><b>8</b> Layout, export and import</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="layout-import.html"><a href="layout-import.html#the-automatic-layout"><i class="fa fa-check"></i><b>8.1</b> The automatic layout</a></li>
+<li class="chapter" data-level="8.2" data-path="layout-import.html"><a href="layout-import.html#pictures-tok-svg"><i class="fa fa-check"></i><b>8.2</b> Pictures: <code>tok svg</code></a></li>
+<li class="chapter" data-level="8.3" data-path="layout-import.html"><a href="layout-import.html#bpmn-files-tok-bpmn"><i class="fa fa-check"></i><b>8.3</b> BPMN files: <code>tok bpmn</code></a></li>
+<li class="chapter" data-level="8.4" data-path="layout-import.html"><a href="layout-import.html#everything-at-once-tok-export"><i class="fa fa-check"></i><b>8.4</b> Everything at once: <code>tok export</code></a></li>
+<li class="chapter" data-level="8.5" data-path="layout-import.html"><a href="layout-import.html#opening-the-files-in-bpmn-tools"><i class="fa fa-check"></i><b>8.5</b> Opening the files in BPMN tools</a></li>
+<li class="chapter" data-level="8.6" data-path="layout-import.html"><a href="layout-import.html#importing-bpmn-files"><i class="fa fa-check"></i><b>8.6</b> Importing BPMN files</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="layout-import.html"><a href="layout-import.html#what-is-kept"><i class="fa fa-check"></i><b>8.6.1</b> What is kept</a></li>
+<li class="chapter" data-level="8.6.2" data-path="layout-import.html"><a href="layout-import.html#what-is-reported"><i class="fa fa-check"></i><b>8.6.2</b> What is reported</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="layout-import.html"><a href="layout-import.html#the-layout-sidecar"><i class="fa fa-check"></i><b>8.7</b> The layout sidecar</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="layout-import.html"><a href="layout-import.html#changing-a-model-that-has-a-sidecar"><i class="fa fa-check"></i><b>8.7.1</b> Changing a model that has a sidecar</a></li>
+<li class="chapter" data-level="8.7.2" data-path="layout-import.html"><a href="layout-import.html#the-round-trip"><i class="fa fa-check"></i><b>8.7.2</b> The round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="layout-import.html"><a href="layout-import.html#importing-dmn-files"><i class="fa fa-check"></i><b>8.8</b> Importing DMN files</a></li>
+<li class="chapter" data-level="8.9" data-path="layout-import.html"><a href="layout-import.html#models-and-sidecars-in-version-control"><i class="fa fa-check"></i><b>8.9</b> Models and sidecars in version control</a></li>
+<li class="chapter" data-level="" data-path="layout-import.html"><a href="layout-import.html#exercises-7"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="decisions.html"><a href="decisions.html"><i class="fa fa-check"></i><b>9</b> Decisions with DMN and FEEL</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="decisions.html"><a href="decisions.html#a-first-decision-table"><i class="fa fa-check"></i><b>9.1</b> A first decision table</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="decisions.html"><a href="decisions.html#testing-with-tok-eval"><i class="fa fa-check"></i><b>9.1.1</b> Testing with <code>tok eval</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="decisions.html"><a href="decisions.html#hit-policies"><i class="fa fa-check"></i><b>9.2</b> Hit policies</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="decisions.html"><a href="decisions.html#overlapping-rules"><i class="fa fa-check"></i><b>9.2.1</b> Overlapping rules</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="decisions.html"><a href="decisions.html#decision-requirements-graphs"><i class="fa fa-check"></i><b>9.3</b> Decision requirements graphs</a></li>
+<li class="chapter" data-level="9.4" data-path="decisions.html"><a href="decisions.html#boxed-expressions"><i class="fa fa-check"></i><b>9.4</b> Boxed expressions</a></li>
+<li class="chapter" data-level="9.5" data-path="decisions.html"><a href="decisions.html#dmn-types"><i class="fa fa-check"></i><b>9.5</b> Types</a></li>
+<li class="chapter" data-level="9.6" data-path="decisions.html"><a href="decisions.html#feel-in-tok"><i class="fa fa-check"></i><b>9.6</b> FEEL in tok</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="decisions.html"><a href="decisions.html#names-with-spaces"><i class="fa fa-check"></i><b>9.6.1</b> Names with spaces</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="decisions.html"><a href="decisions.html#decisions-in-a-process"><i class="fa fa-check"></i><b>9.7</b> Decisions in a process</a></li>
+<li class="chapter" data-level="9.8" data-path="decisions.html"><a href="decisions.html#dmn-export"><i class="fa fa-check"></i><b>9.8</b> DMN export</a></li>
+<li class="chapter" data-level="9.9" data-path="decisions.html"><a href="decisions.html#dmn-import"><i class="fa fa-check"></i><b>9.9</b> DMN import</a></li>
+<li class="chapter" data-level="9.10" data-path="decisions.html"><a href="decisions.html#the-dmn-tck-as-evidence"><i class="fa fa-check"></i><b>9.10</b> The DMN TCK as evidence</a></li>
+<li class="chapter" data-level="9.11" data-path="decisions.html"><a href="decisions.html#typical-mistakes-3"><i class="fa fa-check"></i><b>9.11</b> Typical mistakes</a></li>
+<li class="chapter" data-level="" data-path="decisions.html"><a href="decisions.html#exercises-8"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="executable.html"><a href="executable.html"><i class="fa fa-check"></i><b>10</b> Executable models on Camunda 8</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="executable.html"><a href="executable.html#the-executable-flag"><i class="fa fa-check"></i><b>10.1</b> The executable flag</a></li>
+<li class="chapter" data-level="10.2" data-path="executable.html"><a href="executable.html#the-executable-profile"><i class="fa fa-check"></i><b>10.2</b> The executable profile</a></li>
+<li class="chapter" data-level="10.3" data-path="executable.html"><a href="executable.html#a-complete-executable-model"><i class="fa fa-check"></i><b>10.3</b> A complete executable model</a></li>
+<li class="chapter" data-level="10.4" data-path="executable.html"><a href="executable.html#static-values-and-expressions-the-rule"><i class="fa fa-check"></i><b>10.4</b> Static values and expressions: the <code>=</code> rule</a></li>
+<li class="chapter" data-level="10.5" data-path="executable.html"><a href="executable.html#feel-in-executable-models"><i class="fa fa-check"></i><b>10.5</b> FEEL in executable models</a></li>
+<li class="chapter" data-level="10.6" data-path="executable.html"><a href="executable.html#service-tasks-and-jobs"><i class="fa fa-check"></i><b>10.6</b> Service tasks and jobs</a></li>
+<li class="chapter" data-level="10.7" data-path="executable.html"><a href="executable.html#user-tasks"><i class="fa fa-check"></i><b>10.7</b> User tasks</a></li>
+<li class="chapter" data-level="10.8" data-path="executable.html"><a href="executable.html#camunda-forms"><i class="fa fa-check"></i><b>10.8</b> Camunda forms</a></li>
+<li class="chapter" data-level="10.9" data-path="executable.html"><a href="executable.html#variable-mappings"><i class="fa fa-check"></i><b>10.9</b> Variable mappings</a></li>
+<li class="chapter" data-level="10.10" data-path="executable.html"><a href="executable.html#messages-and-correlation"><i class="fa fa-check"></i><b>10.10</b> Messages and correlation</a></li>
+<li class="chapter" data-level="10.11" data-path="executable.html"><a href="executable.html#multi-instance-ad-hoc-sub-processes-and-call-activities"><i class="fa fa-check"></i><b>10.11</b> Multi-instance, ad-hoc sub-processes and call activities</a>
+<ul>
+<li class="chapter" data-level="10.11.1" data-path="executable.html"><a href="executable.html#multi-instance"><i class="fa fa-check"></i><b>10.11.1</b> Multi-instance</a></li>
+<li class="chapter" data-level="10.11.2" data-path="executable.html"><a href="executable.html#ad-hoc-sub-processes-1"><i class="fa fa-check"></i><b>10.11.2</b> Ad-hoc sub-processes</a></li>
+<li class="chapter" data-level="10.11.3" data-path="executable.html"><a href="executable.html#call-activities"><i class="fa fa-check"></i><b>10.11.3</b> Call activities</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="executable.html"><a href="executable.html#compensation-errors-and-listeners"><i class="fa fa-check"></i><b>10.12</b> Compensation, errors and listeners</a></li>
+<li class="chapter" data-level="10.13" data-path="executable.html"><a href="executable.html#version-tags-and-bindings"><i class="fa fa-check"></i><b>10.13</b> Version tags and bindings</a></li>
+<li class="chapter" data-level="10.14" data-path="executable.html"><a href="executable.html#the-rest-connector"><i class="fa fa-check"></i><b>10.14</b> The REST connector</a></li>
+<li class="chapter" data-level="10.15" data-path="executable.html"><a href="executable.html#elements-camunda-8-does-not-execute"><i class="fa fa-check"></i><b>10.15</b> Elements Camunda 8 does not execute</a></li>
+<li class="chapter" data-level="10.16" data-path="executable.html"><a href="executable.html#exporting-with-tok-export"><i class="fa fa-check"></i><b>10.16</b> Exporting with <code>tok export</code></a></li>
+<li class="chapter" data-level="10.17" data-path="executable.html"><a href="executable.html#executable-run"><i class="fa fa-check"></i><b>10.17</b> Deploying and running on Camunda 8 Run</a>
+<ul>
+<li class="chapter" data-level="10.17.1" data-path="executable.html"><a href="executable.html#deploy"><i class="fa fa-check"></i><b>10.17.1</b> Deploy</a></li>
+<li class="chapter" data-level="10.17.2" data-path="executable.html"><a href="executable.html#start-an-instance"><i class="fa fa-check"></i><b>10.17.2</b> Start an instance</a></li>
+<li class="chapter" data-level="10.17.3" data-path="executable.html"><a href="executable.html#complete-a-user-task"><i class="fa fa-check"></i><b>10.17.3</b> Complete a user task</a></li>
+<li class="chapter" data-level="10.17.4" data-path="executable.html"><a href="executable.html#work-on-a-job"><i class="fa fa-check"></i><b>10.17.4</b> Work on a job</a></li>
+<li class="chapter" data-level="10.17.5" data-path="executable.html"><a href="executable.html#publish-a-message"><i class="fa fa-check"></i><b>10.17.5</b> Publish a message</a></li>
+<li class="chapter" data-level="10.17.6" data-path="executable.html"><a href="executable.html#follow-the-instance"><i class="fa fa-check"></i><b>10.17.6</b> Follow the instance</a></li>
+<li class="chapter" data-level="10.17.7" data-path="executable.html"><a href="executable.html#evaluate-a-decision"><i class="fa fa-check"></i><b>10.17.7</b> Evaluate a decision</a></li>
+<li class="chapter" data-level="10.17.8" data-path="executable.html"><a href="executable.html#the-same-run-in-python"><i class="fa fa-check"></i><b>10.17.8</b> The same run in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.18" data-path="executable.html"><a href="executable.html#camunda-8-saas-and-self-managed"><i class="fa fa-check"></i><b>10.18</b> Camunda 8 SaaS and Self-Managed</a></li>
+<li class="chapter" data-level="10.19" data-path="executable.html"><a href="executable.html#how-the-translation-is-verified"><i class="fa fa-check"></i><b>10.19</b> How the translation is verified</a></li>
+<li class="chapter" data-level="" data-path="executable.html"><a href="executable.html#exercises-9"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>11</b> Simulation and process mining</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simulation.html"><a href="simulation.html#the-simulation-layer"><i class="fa fa-check"></i><b>11.1</b> The simulation layer</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="simulation.html"><a href="simulation.html#distributions"><i class="fa fa-check"></i><b>11.1.1</b> Distributions</a></li>
+<li class="chapter" data-level="11.1.2" data-path="simulation.html"><a href="simulation.html#choosing-a-branch"><i class="fa fa-check"></i><b>11.1.2</b> Choosing a branch</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="simulation.html"><a href="simulation.html#a-simulation-model"><i class="fa fa-check"></i><b>11.2</b> A simulation model</a></li>
+<li class="chapter" data-level="11.3" data-path="simulation.html"><a href="simulation.html#running-tok-sim"><i class="fa fa-check"></i><b>11.3</b> Running <code>tok sim</code></a></li>
+<li class="chapter" data-level="11.4" data-path="simulation.html"><a href="simulation.html#reading-the-indicators"><i class="fa fa-check"></i><b>11.4</b> Reading the indicators</a></li>
+<li class="chapter" data-level="11.5" data-path="simulation.html"><a href="simulation.html#seeds-cases-and-replications"><i class="fa fa-check"></i><b>11.5</b> Seeds, cases and replications</a></li>
+<li class="chapter" data-level="11.6" data-path="simulation.html"><a href="simulation.html#comparing-scenarios"><i class="fa fa-check"></i><b>11.6</b> Comparing scenarios</a></li>
+<li class="chapter" data-level="11.7" data-path="simulation.html"><a href="simulation.html#event-logs"><i class="fa fa-check"></i><b>11.7</b> Event logs</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="simulation.html"><a href="simulation.html#xes-for-process-mining-tools"><i class="fa fa-check"></i><b>11.7.1</b> XES for process-mining tools</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="simulation.html"><a href="simulation.html#process-mining-on-simulated-logs"><i class="fa fa-check"></i><b>11.8</b> Process mining on simulated logs</a></li>
+<li class="chapter" data-level="11.9" data-path="simulation.html"><a href="simulation.html#simulation-in-r"><i class="fa fa-check"></i><b>11.9</b> Simulation in R</a></li>
+<li class="chapter" data-level="11.10" data-path="simulation.html"><a href="simulation.html#simulation-in-python"><i class="fa fa-check"></i><b>11.10</b> Simulation in Python</a></li>
+<li class="chapter" data-level="11.11" data-path="simulation.html"><a href="simulation.html#native-simulation-in-julia"><i class="fa fa-check"></i><b>11.11</b> Native simulation in Julia</a></li>
+<li class="chapter" data-level="11.12" data-path="simulation.html"><a href="simulation.html#calibration-on-an-event-log"><i class="fa fa-check"></i><b>11.12</b> Calibration on an event log</a></li>
+<li class="chapter" data-level="11.13" data-path="simulation.html"><a href="simulation.html#what-the-simulator-does-not-do"><i class="fa fa-check"></i><b>11.13</b> What the simulator does not do</a></li>
+<li class="chapter" data-level="" data-path="simulation.html"><a href="simulation.html#exercises-10"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="editors.html"><a href="editors.html"><i class="fa fa-check"></i><b>12</b> Editors and the playground</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="editors.html"><a href="editors.html#the-vs-code-extension"><i class="fa fa-check"></i><b>12.1</b> The VS Code extension</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="editors.html"><a href="editors.html#installing"><i class="fa fa-check"></i><b>12.1.1</b> Installing</a></li>
+<li class="chapter" data-level="12.1.2" data-path="editors.html"><a href="editors.html#what-you-see-while-editing"><i class="fa fa-check"></i><b>12.1.2</b> What you see while editing</a></li>
+<li class="chapter" data-level="12.1.3" data-path="editors.html"><a href="editors.html#navigation-and-rename"><i class="fa fa-check"></i><b>12.1.3</b> Navigation and rename</a></li>
+<li class="chapter" data-level="12.1.4" data-path="editors.html"><a href="editors.html#the-diagram-beside-the-text"><i class="fa fa-check"></i><b>12.1.4</b> The diagram beside the text</a></li>
+<li class="chapter" data-level="12.1.5" data-path="editors.html"><a href="editors.html#commands-and-settings"><i class="fa fa-check"></i><b>12.1.5</b> Commands and settings</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="editors.html"><a href="editors.html#the-language-server-for-other-editors"><i class="fa fa-check"></i><b>12.2</b> The language server for other editors</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="editors.html"><a href="editors.html#installing-the-server"><i class="fa fa-check"></i><b>12.2.1</b> Installing the server</a></li>
+<li class="chapter" data-level="12.2.2" data-path="editors.html"><a href="editors.html#what-an-editor-needs"><i class="fa fa-check"></i><b>12.2.2</b> What an editor needs</a></li>
+<li class="chapter" data-level="12.2.3" data-path="editors.html"><a href="editors.html#neovim"><i class="fa fa-check"></i><b>12.2.3</b> Neovim</a></li>
+<li class="chapter" data-level="12.2.4" data-path="editors.html"><a href="editors.html#helix"><i class="fa fa-check"></i><b>12.2.4</b> Helix</a></li>
+<li class="chapter" data-level="12.2.5" data-path="editors.html"><a href="editors.html#emacs"><i class="fa fa-check"></i><b>12.2.5</b> Emacs</a></li>
+<li class="chapter" data-level="12.2.6" data-path="editors.html"><a href="editors.html#other-editors"><i class="fa fa-check"></i><b>12.2.6</b> Other editors</a></li>
+<li class="chapter" data-level="12.2.7" data-path="editors.html"><a href="editors.html#requests-for-editor-extensions"><i class="fa fa-check"></i><b>12.2.7</b> Requests for editor extensions</a></li>
+<li class="chapter" data-level="12.2.8" data-path="editors.html"><a href="editors.html#limits"><i class="fa fa-check"></i><b>12.2.8</b> Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="editors.html"><a href="editors.html#the-playground-in-the-browser"><i class="fa fa-check"></i><b>12.3</b> The playground in the browser</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="editors.html"><a href="editors.html#the-page"><i class="fa fa-check"></i><b>12.3.1</b> The page</a></li>
+<li class="chapter" data-level="12.3.2" data-path="editors.html"><a href="editors.html#sharing-a-model-by-a-link"><i class="fa fa-check"></i><b>12.3.2</b> Sharing a model by a link</a></li>
+<li class="chapter" data-level="12.3.3" data-path="editors.html"><a href="editors.html#offline-and-privacy"><i class="fa fa-check"></i><b>12.3.3</b> Offline and privacy</a></li>
+<li class="chapter" data-level="12.3.4" data-path="editors.html"><a href="editors.html#limits-of-the-browser"><i class="fa fa-check"></i><b>12.3.4</b> Limits of the browser</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="editors.html"><a href="editors.html#choosing-a-tool"><i class="fa fa-check"></i><b>12.4</b> Choosing a tool</a></li>
+<li class="chapter" data-level="" data-path="editors.html"><a href="editors.html#exercises-11"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>13</b> Programming interfaces</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="programming.html"><a href="programming.html#one-engine-many-bindings"><i class="fa fa-check"></i><b>13.1</b> One engine, many bindings</a></li>
+<li class="chapter" data-level="13.2" data-path="programming.html"><a href="programming.html#python"><i class="fa fa-check"></i><b>13.2</b> Python</a></li>
+<li class="chapter" data-level="13.3" data-path="programming.html"><a href="programming.html#r-1"><i class="fa fa-check"></i><b>13.3</b> R</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="programming.html"><a href="programming.html#the-knitr-engine"><i class="fa fa-check"></i><b>13.3.1</b> The knitr engine</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="programming.html"><a href="programming.html#julia-1"><i class="fa fa-check"></i><b>13.4</b> Julia</a></li>
+<li class="chapter" data-level="13.5" data-path="programming.html"><a href="programming.html#javascript-and-webassembly"><i class="fa fa-check"></i><b>13.5</b> JavaScript and WebAssembly</a></li>
+<li class="chapter" data-level="13.6" data-path="programming.html"><a href="programming.html#the-c-interface"><i class="fa fa-check"></i><b>13.6</b> The C interface</a></li>
+<li class="chapter" data-level="13.7" data-path="programming.html"><a href="programming.html#the-rust-crates"><i class="fa fa-check"></i><b>13.7</b> The Rust crates</a></li>
+<li class="chapter" data-level="13.8" data-path="programming.html"><a href="programming.html#which-interface-to-choose"><i class="fa fa-check"></i><b>13.8</b> Which interface to choose</a></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#exercises-12"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="agents.html"><a href="agents.html"><i class="fa fa-check"></i><b>14</b> Working with AI agents</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="agents.html"><a href="agents.html#why-a-text-language-suits-agents"><i class="fa fa-check"></i><b>14.1</b> Why a text language suits agents</a></li>
+<li class="chapter" data-level="14.2" data-path="agents.html"><a href="agents.html#the-skill-tok-modelling"><i class="fa fa-check"></i><b>14.2</b> The skill <code>tok-modelling</code></a></li>
+<li class="chapter" data-level="14.3" data-path="agents.html"><a href="agents.html#the-mcp-server"><i class="fa fa-check"></i><b>14.3</b> The MCP server</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="agents.html"><a href="agents.html#starting-the-server"><i class="fa fa-check"></i><b>14.3.1</b> Starting the server</a></li>
+<li class="chapter" data-level="14.3.2" data-path="agents.html"><a href="agents.html#tools"><i class="fa fa-check"></i><b>14.3.2</b> Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="agents.html"><a href="agents.html#configuring-clients"><i class="fa fa-check"></i><b>14.4</b> Configuring clients</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="agents.html"><a href="agents.html#clients-with-an-mcpservers-configuration"><i class="fa fa-check"></i><b>14.4.1</b> Clients with an <code>mcpServers</code> configuration</a></li>
+<li class="chapter" data-level="14.4.2" data-path="agents.html"><a href="agents.html#vs-code"><i class="fa fa-check"></i><b>14.4.2</b> VS Code</a></li>
+<li class="chapter" data-level="14.4.3" data-path="agents.html"><a href="agents.html#claude-code"><i class="fa fa-check"></i><b>14.4.3</b> Claude Code</a></li>
+<li class="chapter" data-level="14.4.4" data-path="agents.html"><a href="agents.html#other-agents"><i class="fa fa-check"></i><b>14.4.4</b> Other agents</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="agents.html"><a href="agents.html#working-without-mcp"><i class="fa fa-check"></i><b>14.5</b> Working without MCP</a></li>
+<li class="chapter" data-level="14.6" data-path="agents.html"><a href="agents.html#a-session-from-a-table-of-steps-to-a-bpmn-file"><i class="fa fa-check"></i><b>14.6</b> A session: from a table of steps to a BPMN file</a></li>
+<li class="chapter" data-level="14.7" data-path="agents.html"><a href="agents.html#reviewing-what-an-agent-produces"><i class="fa fa-check"></i><b>14.7</b> Reviewing what an agent produces</a></li>
+<li class="chapter" data-level="" data-path="agents.html"><a href="agents.html#exercises-13"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="integrations.html"><a href="integrations.html"><i class="fa fa-check"></i><b>15</b> Integrations</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="integrations.html"><a href="integrations.html#continuous-integration-on-github"><i class="fa fa-check"></i><b>15.1</b> Continuous integration on GitHub</a></li>
+<li class="chapter" data-level="15.2" data-path="integrations.html"><a href="integrations.html#other-ci-systems"><i class="fa fa-check"></i><b>15.2</b> Other CI systems</a></li>
+<li class="chapter" data-level="15.3" data-path="integrations.html"><a href="integrations.html#a-pre-commit-hook"><i class="fa fa-check"></i><b>15.3</b> A pre-commit hook</a></li>
+<li class="chapter" data-level="15.4" data-path="integrations.html"><a href="integrations.html#models-in-documents"><i class="fa fa-check"></i><b>15.4</b> Models in documents</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="integrations.html"><a href="integrations.html#r-markdown-and-quarto"><i class="fa fa-check"></i><b>15.4.1</b> R Markdown and Quarto</a></li>
+<li class="chapter" data-level="15.4.2" data-path="integrations.html"><a href="integrations.html#jupyter"><i class="fa fa-check"></i><b>15.4.2</b> Jupyter</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="integrations.html"><a href="integrations.html#bpmn-tools"><i class="fa fa-check"></i><b>15.5</b> BPMN tools</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="integrations.html"><a href="integrations.html#how-much-survives-a-round-trip"><i class="fa fa-check"></i><b>15.5.1</b> How much survives a round trip</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="integrations.html"><a href="integrations.html#camunda-8"><i class="fa fa-check"></i><b>15.6</b> Camunda 8</a></li>
+<li class="chapter" data-level="15.7" data-path="integrations.html"><a href="integrations.html#process-mining-tools"><i class="fa fa-check"></i><b>15.7</b> Process-mining tools</a></li>
+<li class="chapter" data-level="15.8" data-path="integrations.html"><a href="integrations.html#decisions-in-other-dmn-engines"><i class="fa fa-check"></i><b>15.8</b> Decisions in other DMN engines</a></li>
+<li class="chapter" data-level="15.9" data-path="integrations.html"><a href="integrations.html#a-version-control-workflow"><i class="fa fa-check"></i><b>15.9</b> A version-control workflow</a></li>
+<li class="chapter" data-level="" data-path="integrations.html"><a href="integrations.html#exercises-14"><i class="fa fa-check"></i>Exercises</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendices</b></span></li>
+<li class="chapter" data-level="A" data-path="symbols.html"><a href="symbols.html"><i class="fa fa-check"></i><b>A</b> BPMN symbols</a>
+<ul>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events"><i class="fa fa-check"></i>Start events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#start-events-of-event-sub-processes"><i class="fa fa-check"></i>Start events of event sub-processes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#intermediate-events"><i class="fa fa-check"></i>Intermediate events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#boundary-events-1"><i class="fa fa-check"></i>Boundary events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#end-events"><i class="fa fa-check"></i>End events</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activities"><i class="fa fa-check"></i>Activities</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#activity-markers"><i class="fa fa-check"></i>Activity markers</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#gateways-1"><i class="fa fa-check"></i>Gateways</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#connections"><i class="fa fa-check"></i>Connections</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#artifacts"><i class="fa fa-check"></i>Artifacts</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#pools-and-lanes"><i class="fa fa-check"></i>Pools and lanes</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#conversations-1"><i class="fa fa-check"></i>Conversations</a></li>
+<li class="chapter" data-level="" data-path="symbols.html"><a href="symbols.html#choreographies-1"><i class="fa fa-check"></i>Choreographies</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="cheatsheet.html"><a href="cheatsheet.html"><i class="fa fa-check"></i><b>B</b> Language on one page</a></li>
+<li class="chapter" data-level="C" data-path="commands.html"><a href="commands.html"><i class="fa fa-check"></i><b>C</b> Command reference</a></li>
+<li class="chapter" data-level="D" data-path="diagnostics.html"><a href="diagnostics.html"><i class="fa fa-check"></i><b>D</b> Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-1"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-2"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-3"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-4"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-5"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-6"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-7"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-8"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="diagnostics.html"><a href="diagnostics.html#section-9"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="E" data-path="conformance.html"><a href="conformance.html"><i class="fa fa-check"></i><b>E</b> Conformance with Camunda 8</a>
+<ul>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-10"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-11"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-12"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-13"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-14"><i class="fa fa-check"></i></a></li>
+<li class="chapter" data-level="" data-path="conformance.html"><a href="conformance.html#section-15"><i class="fa fa-check"></i></a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>F</b> Glossary</a></li>
+<li class="chapter" data-level="G" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>G</b> References</a>
+<ul>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#standards"><i class="fa fa-check"></i>Standards</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tools-and-test-suites"><i class="fa fa-check"></i>Tools and test suites</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html#tok"><i class="fa fa-check"></i>tok</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/tok-lang-bpm/tok" target="_blank">Source code (GitHub)</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok/issues" target="_blank">Report an issue</a></li>
+<li><a href="https://github.com/tok-lang-bpm/tok-agent" target="_blank">Skill and MCP server for agents</a></li>
+<li><a href="playground/" target="_blank">Playground in the browser</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">tok: Process Models as Text</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="events-exceptions" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Events, sub-processes and exceptions<a href="events-exceptions.html#events-exceptions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="goals">
+<p><strong>In this chapter</strong> you will tell catching events from throwing events and know where each trigger may stand · write message, timer, conditional, signal, error, escalation, compensation, cancel, link, terminate, multiple and parallel multiple events · attach interrupting and non-interrupting boundary events to activities · group work in embedded sub-processes, event sub-processes, transactions and ad-hoc sub-processes · call other processes and global tasks · mark loops and multi-instance activities · undo completed work with compensation handlers</p>
+</div>
+<p>A process description written by the people who do the work usually covers the normal case: the request comes in, it is checked, it is answered. The interesting questions come afterwards. What happens if the reader never collects the book? If the registration system is down? If the applicant withdraws the request while the archivist is still searching? In BPMN these questions are answered with <strong>events</strong>: things that happen and either start, interrupt or redirect the work. This chapter covers every kind of event of BPMN 2.0.2 as tok writes it, and the containers that give events a scope: sub-processes, event sub-processes, transactions and ad-hoc sub-processes.</p>
+<p>Chapter <a href="process-basics.html#process-basics">3</a> introduced the five event keywords and the plain (none) events. Here they receive their triggers.</p>
+<div id="catching-and-throwing" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Catching and throwing<a href="events-exceptions.html#catching-and-throwing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Every event either <strong>catches</strong> something or <strong>throws</strong> something. A catching event waits until its trigger happens: a message arrives, a time passes, a condition becomes true. A throwing event makes its trigger happen: it sends a message, raises an error, broadcasts a signal. In the diagram a catching event has a white symbol and a throwing event a black one.</p>
+<p>The position of the event decides which of the two it is:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keyword</th>
+<th>BPMN element</th>
+<th>Catches or throws</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img class="symbol" src="symbols/event-start-none.svg" alt="start event" title="start event" style="height:2em"> <code>start</code></td>
+<td>start event</td>
+<td>catches: the trigger starts the process (or the sub-process)</td>
+</tr>
+<tr class="even">
+<td><img class="symbol" src="symbols/event-catch-message.svg" alt="catching message intermediate event" title="catching message intermediate event" style="height:2em"> <code>catch</code></td>
+<td>intermediate catch event</td>
+<td>catches: the token waits on the path until the trigger happens</td>
+</tr>
+<tr class="odd">
+<td><img class="symbol" src="symbols/event-boundary-timer.svg" alt="interrupting timer boundary event" title="interrupting timer boundary event" style="height:2em"> <code>boundary</code></td>
+<td>boundary event</td>
+<td>catches: the trigger happens while the activity it is attached to is running</td>
+</tr>
+<tr class="even">
+<td><img class="symbol" src="symbols/event-throw-none.svg" alt="intermediate event (none)" title="intermediate event (none)" style="height:2em"> <code>throw</code></td>
+<td>intermediate throw event</td>
+<td>throws: the token passes through and the trigger happens</td>
+</tr>
+<tr class="odd">
+<td><img class="symbol" src="symbols/event-end-none.svg" alt="end event" title="end event" style="height:2em"> <code>end</code></td>
+<td>end event</td>
+<td>throws: the path ends and the trigger happens</td>
+</tr>
+</tbody>
+</table>
+<p>A trigger is an attribute of the event. <code>message="Order"</code> on a <code>catch</code> line waits for the message “Order”; the same attribute on a <code>throw</code> line sends it. Messages, signals, errors and escalations are declared implicitly by their name: two events that write <code>signal="Order closed"</code> refer to the same signal, and the BPMN export writes one <code>signal</code> element for both.</p>
+</div>
+<div id="triggers" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Triggers<a href="events-exceptions.html#triggers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The table lists every trigger and the positions where BPMN allows it. A trigger in a position the table does not allow is the error <code>E010</code> (for example a timer on an end event, or any trigger on the start event of an embedded sub-process).</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Trigger</th>
+<th>tok</th>
+<th>Catching positions</th>
+<th>Throwing positions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>message</td>
+<td><code>message="Name"</code></td>
+<td>start, catch, boundary</td>
+<td>throw, end</td>
+</tr>
+<tr class="even">
+<td>timer</td>
+<td><code>timer=VALUE</code></td>
+<td>start, catch, boundary</td>
+<td>none</td>
+</tr>
+<tr class="odd">
+<td>conditional</td>
+<td><code>condition="FEEL"</code></td>
+<td>start, catch, boundary</td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>signal</td>
+<td><code>signal="Name"</code></td>
+<td>start, catch, boundary</td>
+<td>throw, end</td>
+</tr>
+<tr class="odd">
+<td>error</td>
+<td><code>error="Name"</code></td>
+<td>boundary, start of an event sub-process</td>
+<td>end</td>
+</tr>
+<tr class="even">
+<td>escalation</td>
+<td><code>escalation="Name"</code></td>
+<td>boundary, start of an event sub-process</td>
+<td>throw, end</td>
+</tr>
+<tr class="odd">
+<td>compensation</td>
+<td><code>compensate</code> (flag)</td>
+<td>boundary</td>
+<td>throw, end</td>
+</tr>
+<tr class="even">
+<td>cancel</td>
+<td><code>cancel</code> (flag)</td>
+<td>boundary of a transaction</td>
+<td>end inside a transaction</td>
+</tr>
+<tr class="odd">
+<td>link</td>
+<td><code>link="Name"</code></td>
+<td>catch</td>
+<td>throw</td>
+</tr>
+<tr class="even">
+<td>terminate</td>
+<td><code>terminate</code> (flag)</td>
+<td>none</td>
+<td>end</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message.</strong> A message is sent from one participant to another: a request, a letter, an e-mail, a reply from a supplier. A message event usually has a message flow from or to another pool (Chapter <a href="collaboration.html#collaboration">4</a>); in a model with several pools, a message event without a message flow is the warning <code>W054</code>.</p>
+<p><strong>Timer.</strong> A timer is a duration (<code>P14D</code>, <code>PT2H</code>), a date and time (<code>2027-01-15T09:00</code>) or a cycle (<code>R3/PT1H</code>, three times every hour). Chapter <a href="process-basics.html#process-basics">3</a> has the table of ISO 8601 values. A value that contains a space must be quoted.</p>
+<p><strong>Conditional.</strong> <code>condition="FEEL"</code> waits until a condition over the data of the process becomes true: <code>condition="status = \"withdrawn\""</code>. The condition is written in FEEL without a leading <code>=</code> (Chapter <a href="decisions.html#decisions">9</a> describes FEEL).</p>
+<p><strong>Signal.</strong> A signal is broadcast: every process that catches a signal of that name reacts to it, and the thrower does not know who listens. Use a signal for announcements (“the reading room is closed today”) and a message for communication with a known partner.</p>
+<p><strong>Error.</strong> An error ends the work of an activity because it cannot be completed: a record cannot be saved, a payment is refused. An error is thrown by an end event inside a sub-process and caught by a boundary event of that sub-process or by an event sub-process. A boundary error event on a task stands for a failure of the task itself. Both <code>error=</code> and <code>escalation=</code> accept a <code>code="…"</code>, the code a process engine matches.</p>
+<p><strong>Escalation.</strong> An escalation tells someone higher up that something needs their attention, without necessarily stopping the work: a search is taking too long, a request needs the director’s decision. It can be thrown by an intermediate event, so the work continues after it.</p>
+<p><strong>Compensation, cancel.</strong> Compensation undoes completed work; cancellation ends a transaction. Both are described in their own sections below.</p>
+<p><strong>Link.</strong> A pair of link events is a “go to” inside one process: the throwing link event jumps to the catching link event with the same name. Links help to break a long diagram into parts, or to avoid long crossing lines. They have no meaning beyond the drawing.</p>
+<p><strong>Terminate.</strong> A terminate end event ends the whole process instance at once, including every other path that is still active.</p>
+<div id="events-on-a-path-waiting-for-a-supplier" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Events on a path: waiting for a supplier<a href="events-exceptions.html#events-on-a-path-waiting-for-a-supplier" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A library orders a book that is out of stock. After sending the order, it waits for whichever happens first: the book arrives, the supplier refuses, the publisher withdraws the title, or fourteen days pass.</p>
+<pre class="tok"><code>tok 1.0 &quot;Waiting for a supplier&quot;
+
+start needed &quot;Book needed&quot;
+send order &quot;Send the order&quot; message=&quot;Order&quot;
+eventgw first &quot;What happens first?&quot;
+catch delivered &quot;Book delivered&quot; message=&quot;Delivery&quot;
+catch refused &quot;Refusal received&quot; message=&quot;Refusal&quot;
+catch timeout &quot;14 days passed&quot; timer=P14D
+catch withdrawn &quot;Title withdrawn by the publisher&quot; condition=&quot;status = \&quot;withdrawn\&quot;&quot;
+user receive-book &quot;Receive the book&quot;
+end done &quot;Book received&quot;
+throw closed &quot;Order closed&quot; signal=&quot;Order closed&quot;
+end not-delivered &quot;Order not fulfilled&quot;
+throw to-reminder &quot;To reminder&quot; link=&quot;Reminder&quot;
+catch reminder &quot;Reminder&quot; link=&quot;Reminder&quot;
+user send-reminder &quot;Send a reminder&quot;
+end reminded &quot;Reminder sent&quot;
+
+flow needed -&gt; order -&gt; first
+flow first -&gt; delivered
+flow first -&gt; refused
+flow first -&gt; timeout
+flow first -&gt; withdrawn
+flow delivered -&gt; receive-book -&gt; done
+flow refused -&gt; closed -&gt; not-delivered
+flow withdrawn -&gt; closed
+flow timeout -&gt; to-reminder
+flow reminder -&gt; send-reminder -&gt; reminded</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-supplier-diagram"></span>
+<img src="examples/05-waiting-for-supplier.svg" alt="Catching events after an event-based gateway, a signal throw event and a pair of link events." width="100%" />
+<p class="caption">
+Figure 5.1: Catching events after an event-based gateway, a signal throw event and a pair of link events.
+</p>
+</div>
+<p><a class="download" href="examples/05-waiting-for-supplier.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-waiting-for-supplier.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>The event-based gateway <code>first</code> is followed by four catching events: two message events, a conditional event and a timer event. The first of them to happen decides the path, and the others are no longer awaited. Both negative outcomes pass the signal throw event “Order closed”, which announces the closure to anyone who listens (for example the acquisitions statistics). The timeout does not draw a long line back across the diagram: it jumps through the link events “To reminder” and “Reminder” to a separate part of the diagram. The catching link event has no incoming sequence flow; the link is its incoming path.</p>
+</div>
+<div id="triggers-without-a-value" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Triggers without a value<a href="events-exceptions.html#triggers-without-a-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In an early draft you may know that a step waits for a message without knowing which one. The trigger keys <code>message</code>, <code>timer</code>, <code>signal</code>, <code>condition</code>, <code>error</code> and <code>escalation</code> may be written as <strong>flags</strong> without a value: <code>catch reply "Reply or timeout" message timer</code>. The event gets the event definition without a reference, as graphical BPMN tools draw it when the details are not filled in yet. Such an event is valid; a message event without a message is the note <code>L010</code>, a reminder to complete the model. On boundary events and on the start events of event sub-processes the flags <code>error</code> and <code>escalation</code> have a precise meaning: they catch <strong>every</strong> error or escalation, whatever its name.</p>
+</div>
+</div>
+<div id="boundary-events" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Boundary events<a href="events-exceptions.html#boundary-events" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Many exceptions happen <strong>during</strong> an activity: while the reader has not yet collected the book, the deadline passes; while the system records the copy, the database fails. A boundary event is attached to the activity with <code>on=ID</code> and catches its trigger only while that activity is running:</p>
+<pre class="tok"><code>boundary seven-days &quot;7 days passed&quot; on=pickup timer=P7D</code></pre>
+<p>A boundary event is <strong>interrupting</strong> by default: when its trigger happens, the activity is cancelled and the process continues along the outgoing flow of the boundary event. With the flag <code>noninterrupting</code> the activity keeps running, and the boundary event starts an additional path in parallel. The diagram draws a non-interrupting boundary event with a dashed circle.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Boundary trigger</th>
+<th>Interrupting</th>
+<th>Non-interrupting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>message, timer, conditional, signal, escalation</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td>error</td>
+<td>yes</td>
+<td>no: an error always interrupts (<code>E012</code>)</td>
+</tr>
+<tr class="odd">
+<td>cancel</td>
+<td>yes (only on a transaction)</td>
+<td>no: always interrupts (<code>R060</code>)</td>
+</tr>
+<tr class="even">
+<td>compensation</td>
+<td>not a path: it connects the activity with its compensation handler</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>A boundary event needs <code>on=</code> (<code>R032</code>), the activity must exist (<code>R002</code>) and must be an activity, not a gateway or an event (<code>R003</code>). A boundary event has no incoming sequence flow: its only “incoming path” is the activity.</p>
+<p>The following model shows a reader picking up a book that arrived through interlibrary loan. Three boundary events cover three exceptions.</p>
+<pre class="tok"><code>tok 1.0 &quot;Picking up an interlibrary loan&quot;
+
+pool library &quot;University library&quot;
+  lane librarian &quot;Interlibrary loan librarian&quot;
+    start arrived &quot;Book arrived&quot;
+    service register &quot;Register the copy&quot;
+    boundary save-failed &quot;Saving failed&quot; on=register error=&quot;Saving failed&quot;
+    user register-by-hand &quot;Register the copy by hand&quot;
+    user notify &quot;Notify the reader&quot;
+    user send-back &quot;Send the book back&quot;
+    end returned &quot;Book returned to the lending library&quot;
+  lane reader &quot;Reader&quot;
+    user pickup &quot;Pick up the book&quot;
+    boundary three-days &quot;3 days passed&quot; noninterrupting on=pickup timer=P3D
+    boundary seven-days &quot;7 days passed&quot; on=pickup timer=P7D
+    end picked-up &quot;Book picked up&quot;
+  lane system &quot;Library system&quot;
+    service remind &quot;Send a reminder&quot;
+    end reminded &quot;Reminder sent&quot;
+
+flow arrived -&gt; register -&gt; notify -&gt; pickup -&gt; picked-up
+flow save-failed -&gt; register-by-hand -&gt; notify
+flow three-days -&gt; remind -&gt; reminded
+flow seven-days -&gt; send-back -&gt; returned</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-pickup-diagram"></span>
+<img src="examples/05-book-pickup.svg" alt="An error boundary event and two timer boundary events, one of them non-interrupting." width="100%" />
+<p class="caption">
+Figure 5.2: An error boundary event and two timer boundary events, one of them non-interrupting.
+</p>
+</div>
+<p><a class="download" href="examples/05-book-pickup.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-book-pickup.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<ul>
+<li><code>save-failed</code> is an <strong>error</strong> boundary event on the service task “Register the copy”. If the system cannot save the record, the task is abandoned and the librarian registers the copy by hand; both paths meet again at “Notify the reader”.</li>
+<li><code>three-days</code> is a <strong>non-interrupting</strong> timer. After three days the system sends a reminder, but the reader can still pick up the book: the task “Pick up the book” continues.</li>
+<li><code>seven-days</code> is an <strong>interrupting</strong> timer. After seven days the pick-up is cancelled and the book is sent back to the lending library.</li>
+</ul>
+<p>Two timers on one task, one non-interrupting and one interrupting, are a common pattern: a reminder first, a deadline later. Note what the model says precisely: the reminder is sent once, after three days. A reminder every three days would be the cycle <code>timer=R/P3D</code>.</p>
+</div>
+<div id="embedded-sub-processes" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Embedded sub-processes<a href="events-exceptions.html#embedded-sub-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>sub-process</strong> (<code>sub</code>) groups activities that belong together into one activity of the parent process. It has its own block, with its own start event, end events and sequence flows:</p>
+<pre class="tok"><code>sub search &quot;Search the holdings&quot;
+  start search-start
+  user finding-aids &quot;Review the finding aids&quot;
+  ...</code></pre>
+<p>The block of a sub-process is a separate scope for sequence flows. A flow cannot cross its border: a flow from a node inside the sub-process to a node outside it is the error <code>R021</code>. The parent process enters the sub-process through its incoming flow, the inner start event begins, and when every inner path has reached an end event the sub-process completes and the parent continues along its outgoing flow. The start event of an embedded sub-process has no trigger (<code>E010</code>); the sub-process starts when the token arrives.</p>
+<p>The flows of a sub-process may be written in its block or at the top level; the canonical form prints them with the other sequence flows after the pools, because the identifiers alone say where each flow belongs.</p>
+<p>A sub-process is useful for three reasons. It gives the diagram a level of detail that can be read separately from the whole. It is a <strong>scope</strong> for boundary events: a timer on the sub-process limits the duration of all its work together, and an error thrown anywhere inside it can be caught on its border. And it is a scope for event sub-processes and data.</p>
+<div id="escalation-from-a-sub-process" class="section level3 hasAnchor" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Escalation from a sub-process<a href="events-exceptions.html#escalation-from-a-sub-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The search of an archive for a reader’s request is a sub-process. Sometimes the archivist cannot decide alone whether the search should continue, and the head of department has to decide. The archivist does not stop working: the escalation is thrown inside the sub-process, caught by a non-interrupting boundary event on its border, and the head’s decision runs in parallel with the search.</p>
+<pre class="tok"><code>tok 1.0 &quot;Archival search with a sub-process&quot;
+
+pool archive &quot;State archive&quot;
+  lane registry &quot;Registry office&quot;
+    start request &quot;Search request received&quot; message=&quot;Search request&quot;
+    user register &quot;Register the request&quot;
+    xor in-scope &quot;Does the request concern the holdings?&quot;
+    end out-of-scope &quot;Request outside the holdings&quot; terminate
+    eventsub withdrawal &quot;Withdrawal of the request&quot;
+      start withdrawn &quot;Request withdrawn&quot; message=&quot;Withdrawal&quot;
+      user close &quot;Close the case&quot;
+      end closed &quot;Case closed&quot;
+  lane archivist &quot;Archivist&quot;
+    sub search &quot;Search the holdings&quot;
+      start search-start
+      user finding-aids &quot;Review the finding aids&quot;
+      xor found &quot;Were the records found?&quot;
+      throw difficult &quot;Head of department must decide&quot; escalation=&quot;Difficult search&quot;
+      user analyse &quot;Analyse the records&quot;
+      end search-end &quot;Search finished&quot;
+    boundary escalated &quot;Difficult search&quot; noninterrupting on=search escalation=&quot;Difficult search&quot;
+    user answer &quot;Prepare the answer&quot;
+    end answered &quot;Answer sent&quot; message=&quot;Search answer&quot;
+  lane head &quot;Head of department&quot;
+    user decide &quot;Decide on further searching&quot;
+    end decided &quot;Decision recorded&quot;
+
+pool applicant &quot;Applicant&quot;
+
+flow withdrawn -&gt; close -&gt; closed
+flow search-start -&gt; finding-aids -&gt; found
+flow found -&gt; analyse &quot;yes&quot;
+flow found -&gt; difficult &quot;no&quot;
+flow difficult -&gt; analyse -&gt; search-end
+flow request -&gt; register -&gt; in-scope
+flow in-scope -&gt; search &quot;yes&quot;
+flow in-scope -&gt; out-of-scope &quot;no&quot;
+flow search -&gt; answer -&gt; answered
+flow escalated -&gt; decide -&gt; decided
+
+message applicant -&gt; request &quot;Search request&quot;
+message answered -&gt; applicant &quot;Search answer&quot;
+message applicant -&gt; withdrawn &quot;Withdrawal&quot;</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-archive-diagram"></span>
+<img src="examples/05-archive-search.svg" alt="An escalation thrown inside a sub-process and caught on its border, an event sub-process and a terminate end event." width="100%" />
+<p class="caption">
+Figure 5.3: An escalation thrown inside a sub-process and caught on its border, an event sub-process and a terminate end event.
+</p>
+</div>
+<p><a class="download" href="examples/05-archive-search.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-archive-search.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>The throw event <code>difficult</code> and the boundary event <code>escalated</code> name the same escalation, “Difficult search”. If nothing inside the sub-process throws the escalation or error that a boundary event of the sub-process catches, <code>tok check</code> reports the warning <code>W052</code>; an escalation that is thrown and caught nowhere is the warning <code>W053</code>. Both usually mean a typing error in the name.</p>
+<p>The model also shows a <strong>terminate</strong> end event: a request outside the holdings ends the whole case at once.</p>
+</div>
+</div>
+<div id="event-sub-processes" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Event sub-processes<a href="events-exceptions.html#event-sub-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An <strong>event sub-process</strong> (<code>eventsub</code>) is a sub-process that is not on the path of the process. It has no incoming or outgoing sequence flows, and its block begins with exactly one start event with a trigger. It runs when that trigger happens while the enclosing process (or sub-process) is active. In the archive model, the event sub-process “Withdrawal of the request” runs when the applicant withdraws the request:</p>
+<pre class="tok"><code>eventsub withdrawal &quot;Withdrawal of the request&quot;
+  start withdrawn &quot;Request withdrawn&quot; message=&quot;Withdrawal&quot;
+  user close &quot;Close the case&quot;
+  end closed &quot;Case closed&quot;</code></pre>
+<p>The start event of an event sub-process may be <strong>interrupting</strong> (the default) or <code>noninterrupting</code>. An interrupting start cancels everything else in the enclosing scope: when the request is withdrawn, the search stops and only the closing of the case remains. A non-interrupting start runs the event sub-process alongside the normal work, for example a change of address that has to be recorded while the case continues. The diagram draws an event sub-process with a dotted border, and a non-interrupting start event with a dashed circle.</p>
+<p>Its start event may have a message, timer, conditional, signal, error or escalation trigger. An error start event, such as <code>start failure "Any error" error</code>, handles an error thrown inside the enclosing scope: it is an alternative to a boundary error event that keeps the handling inside the scope. An event sub-process with a sequence flow to or from it, or without a triggered start event, is the error <code>E013</code>.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Construct</th>
+<th>Where it is</th>
+<th>When it runs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>boundary event on a sub-process</td>
+<td>on the border of the sub-process</td>
+<td>its trigger happens while the sub-process runs; the handling continues outside</td>
+</tr>
+<tr class="even">
+<td>event sub-process</td>
+<td>inside the process or sub-process it belongs to</td>
+<td>its trigger happens while that scope runs; the handling stays inside</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="compensation" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Compensation<a href="events-exceptions.html#compensation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Some completed work cannot simply be cancelled: a reservation of funds has already been made, an order has already been sent. When the process later decides that the work must be undone, BPMN <strong>compensates</strong> it: it runs, for each completed activity, a <strong>compensation handler</strong> that reverses its effect.</p>
+<p>In tok, an activity names its handler with <code>compensate=HANDLER</code>, and the handler carries the flag <code>compensation</code>:</p>
+<pre class="tok"><code>service reserve &quot;Reserve funds&quot; compensate=release
+service release &quot;Release the reserved funds&quot; compensation</code></pre>
+<p>The export attaches a compensation boundary event to <code>reserve</code> and connects it with <code>release</code> by an association. The handler has no sequence flows (<code>R051</code>); it is not a step of the normal path, it is called only by compensation. If you want to give the boundary event a label or documentation, declare it yourself with <code>boundary ID "Label" on=ACTIVITY compensate</code>; the export then uses that event.</p>
+<p>Compensation is triggered by a throwing compensation event:</p>
+<ul>
+<li><code>throw ID "Label" compensate</code> or <code>end ID "Label" compensate</code> compensates every completed activity of the scope that has a handler, the latest completed first;</li>
+<li>with <code>activity=ID</code> it compensates only that activity.</li>
+</ul>
+<pre class="tok"><code>tok 1.0 &quot;Ordering books from a supplier&quot;
+
+start s &quot;Order approved&quot;
+service reserve &quot;Reserve funds&quot; compensate=release
+service release &quot;Release the reserved funds&quot; compensation
+user send-order &quot;Send the order&quot; compensate=withdraw
+manual withdraw &quot;Withdraw the order&quot; compensation
+xor confirmed &quot;Did the supplier confirm the delivery?&quot;
+end ordered &quot;Books ordered&quot;
+throw undo-funds &quot;Undo the reservation&quot; compensate activity=reserve
+end cancelled &quot;Order cancelled&quot; compensate
+
+flow s -&gt; reserve -&gt; send-order -&gt; confirmed
+flow confirmed -&gt; ordered &quot;yes&quot;
+flow confirmed -&gt; undo-funds &quot;no&quot;
+flow undo-funds -&gt; cancelled</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-compensation-diagram"></span>
+<img src="examples/05-compensation.svg" alt="Two compensation handlers, a throw event that compensates one activity and an end event that compensates the rest." width="100%" />
+<p class="caption">
+Figure 5.4: Two compensation handlers, a throw event that compensates one activity and an end event that compensates the rest.
+</p>
+</div>
+<p><a class="download" href="examples/05-compensation.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-compensation.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>If the supplier does not confirm the delivery, the throw event <code>undo-funds</code> first compensates only <code>reserve</code> (<code>activity=reserve</code>): the funds are released. The end event <code>cancelled</code> then compensates whatever else has completed and has a handler, here the sending of the order, which is withdrawn by its manual handler. Compensation runs only for activities that have <strong>completed</strong>; an activity that never ran has nothing to undo.</p>
+</div>
+<div id="transactions-and-cancellation" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Transactions and cancellation<a href="events-exceptions.html#transactions-and-cancellation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>transaction</strong> is a sub-process whose activities succeed or fail together. If the transaction is cancelled, its completed activities are compensated, and the process continues from the cancel boundary event of the transaction:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>BPMN</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>transaction ID "Label"</code> with a block</td>
+<td>a transaction: a sub-process with a double border</td>
+</tr>
+<tr class="even">
+<td><code>method=compensate\|store\|image</code></td>
+<td>the transaction method (written only when given; compensate is the BPMN default)</td>
+</tr>
+<tr class="odd">
+<td><code>end ID "Label" cancel</code></td>
+<td>a cancel end event, only directly inside a transaction (<code>R060</code>)</td>
+</tr>
+<tr class="even">
+<td><code>boundary ID "Label" on=TRANSACTION cancel</code></td>
+<td>a cancel boundary event, only on a transaction, always interrupting (<code>R060</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Booking a study trip shows the pattern. The room and the ticket are booked together; if one of them fails, both bookings are reversed.</p>
+<pre class="tok"><code>tok 1.0 &quot;Booking a study trip&quot;
+
+start requested &quot;Trip requested&quot;
+transaction booking &quot;Book the room and the ticket&quot;
+  start booking-start
+  service room &quot;Book a room&quot; compensate=release-room
+  service release-room &quot;Release the room&quot; compensation
+  service ticket &quot;Buy a ticket&quot; compensate=refund-ticket
+  service refund-ticket &quot;Refund the ticket&quot; compensation
+  xor booked &quot;Was everything booked?&quot;
+  end booked-end &quot;Booked&quot;
+  end cancel-end &quot;Cancel the booking&quot; cancel
+boundary cancelled &quot;Booking cancelled&quot; cancel on=booking
+user confirm &quot;Confirm the trip to the traveller&quot;
+user inform &quot;Inform the traveller of the cancellation&quot;
+end trip-booked &quot;Trip booked&quot;
+end trip-cancelled &quot;Trip cancelled&quot;
+
+flow booking-start -&gt; room -&gt; ticket -&gt; booked
+flow booked -&gt; booked-end &quot;yes&quot;
+flow booked -&gt; cancel-end &quot;no&quot;
+flow requested -&gt; booking -&gt; confirm -&gt; trip-booked
+flow cancelled -&gt; inform -&gt; trip-cancelled</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-trip-diagram"></span>
+<img src="examples/05-trip-booking.svg" alt="A transaction with compensation handlers, a cancel end event and a cancel boundary event." width="100%" />
+<p class="caption">
+Figure 5.5: A transaction with compensation handlers, a cancel end event and a cancel boundary event.
+</p>
+</div>
+<p><a class="download" href="examples/05-trip-booking.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-trip-booking.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>When the token reaches the cancel end event <code>cancel-end</code>, three things happen in order. The transaction stops. Its completed activities are compensated through their handlers, the latest completed first: the ticket is refunded, then the room released. Finally the process continues from the cancel boundary event <code>cancelled</code>, so the traveller is informed. When the transaction completes normally, through <code>booked-end</code>, the process continues along its ordinary outgoing flow to “Confirm the trip”.</p>
+</div>
+<div id="multiple-and-parallel-multiple-events" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Multiple and parallel multiple events<a href="events-exceptions.html#multiple-and-parallel-multiple-events" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An event may have more than one trigger. On a catching event, several triggers mean “any one of them”: the event happens when the first of them happens. On a throwing event, all triggers happen. BPMN calls such an event a <strong>multiple event</strong> and draws it with a pentagon. A trigger key may be repeated for this purpose, and different keys may be combined:</p>
+<pre class="tok"><code>tok 1.0 &quot;Handling a service request&quot;
+
+start request &quot;Request by e-mail or web form&quot; message=&quot;E-mail&quot; message=&quot;Web form&quot;
+user record &quot;Record the request&quot;
+boundary nudge &quot;Three days passed or reminder received&quot; noninterrupting on=record timer=P3D signal=&quot;Reminder&quot;
+user chase &quot;Chase the case owner&quot;
+end chased &quot;Case owner chased&quot;
+catch confirmed &quot;Confirmation and payment&quot; parallel message=&quot;Confirmation&quot; signal=&quot;Payment&quot;
+throw announce &quot;Notify the customer and the manager&quot; message=&quot;To customer&quot; signal=&quot;Case confirmed&quot;
+end closed &quot;Request closed&quot; message=&quot;Closing note&quot; signal=&quot;Request closed&quot;
+
+flow request -&gt; record -&gt; confirmed -&gt; announce -&gt; closed
+flow nudge -&gt; chase -&gt; chased</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-multiple-diagram"></span>
+<img src="examples/05-multiple-events.svg" alt="Multiple start, boundary and end events, a parallel multiple catch event and a multiple throw event." width="100%" />
+<p class="caption">
+Figure 5.6: Multiple start, boundary and end events, a parallel multiple catch event and a multiple throw event.
+</p>
+</div>
+<p><a class="download" href="examples/05-multiple-events.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-multiple-events.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<ul>
+<li>The start event <code>request</code> starts the process when an e-mail <strong>or</strong> a web form arrives.</li>
+<li>The non-interrupting boundary event <code>nudge</code> fires after three days <strong>or</strong> when the signal “Reminder” arrives, whichever comes first.</li>
+<li>The catch event <code>confirmed</code> has the flag <code>parallel</code>: it waits until <strong>both</strong> the confirmation and the payment have arrived. BPMN calls this a parallel multiple event and draws it with a plus sign. <code>parallel</code> needs a catching event with two or more triggers (<code>R062</code>).</li>
+<li>The throw event <code>announce</code> and the end event <code>closed</code> throw all their triggers.</li>
+</ul>
+<p>The triggers terminate, compensation, cancel and link cannot be combined with any other trigger (<code>R062</code>). Only events take several triggers: a trigger key repeated on another flow node, such as <code>message=</code> written twice on a send task, is also <code>R062</code>. Any other key or flag written twice on one line is the deprecation warning <code>R090</code> in a 1.0 document, and only its last value counts.</p>
+</div>
+<div id="ad-hoc-sub-processes" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> Ad-hoc sub-processes<a href="events-exceptions.html#ad-hoc-sub-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Some work has no fixed order. Processing a bequest of papers involves describing, digitising and conserving files, but which of these is done first, and how often, is decided by the archivist case by case. An <strong>ad-hoc sub-process</strong> (<code>adhoc</code>) contains activities that can be performed in any order and as often as needed:</p>
+<pre class="tok"><code>adhoc processing &quot;Process the papers&quot;
+  user describe &quot;Describe the files&quot;
+  user digitise &quot;Digitise the files&quot;
+  manual conserve &quot;Conserve damaged files&quot;
+  flow describe -&gt; digitise</code></pre>
+<p>An ad-hoc sub-process contains at least one activity and no start or end events (<code>R050</code>). Flows between inner activities are allowed and express a constraint: here, a file is digitised after it is described. The flag <code>sequential</code> says that only one activity runs at a time (the BPMN ordering is then sequential instead of parallel). The diagram marks an ad-hoc sub-process with a tilde. The attributes that tell a process engine which activities to activate and when the sub-process is complete (<code>active=</code>, <code>until=</code>, <code>wait</code>) belong to the executable layer of Chapter <a href="executable.html#executable">10</a>.</p>
+</div>
+<div id="call-activities-and-global-tasks" class="section level2 hasAnchor" number="5.10">
+<h2><span class="header-section-number">5.10</span> Call activities and global tasks<a href="events-exceptions.html#call-activities-and-global-tasks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>call activity</strong> (<code>call</code>) runs something defined elsewhere, so that a procedure used in several processes is modelled once:</p>
+<ul>
+<li><code>call ID "Label" process=ID</code> calls a process, usually defined in another file. The diagram draws it with a thick border and a <code>+</code> marker.</li>
+<li><code>call ID "Label" task=ID</code> calls a <strong>global task</strong>, a task declared once at the top level of the document with <code>global</code>:</li>
+</ul>
+<pre class="tok"><code>global identity-check &quot;Check the donor&#39;s identity&quot; kind=user
+call check-donor &quot;Check the donor&#39;s identity&quot; task=identity-check</code></pre>
+<p><code>kind=</code> is <code>task</code> (default), <code>user</code>, <code>manual</code>, <code>script</code> or <code>rule</code>; it gives the BPMN element (<code>globalUserTask</code> and so on) and the icon of the call activity. A call activity has either <code>process=</code> or <code>task=</code>, not both (<code>R065</code>); a <code>task=</code> that names no <code>global</code> is <code>R066</code>. The bindings of a called process for Camunda 8 (<code>binding=</code>, <code>version=</code>, variable propagation) are described in Chapter <a href="executable.html#executable">10</a>.</p>
+</div>
+<div id="loops-and-multi-instance" class="section level2 hasAnchor" number="5.11">
+<h2><span class="header-section-number">5.11</span> Loops and multi-instance<a href="events-exceptions.html#loops-and-multi-instance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chapter <a href="process-basics.html#process-basics">3</a> introduced three markers of repetition. Their full form describes how the repetition works.</p>
+<p>A <strong>standard loop</strong> repeats an activity while a condition holds:</p>
+<pre class="tok"><code>service publish &quot;Publish the finding aid&quot; loop test-before while=&quot;not(published)&quot; loop-max=3</code></pre>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>tok</th>
+<th>BPMN</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>loop</code></td>
+<td><code>standardLoopCharacteristics</code></td>
+<td>the activity repeats</td>
+</tr>
+<tr class="even">
+<td><code>while="FEEL"</code></td>
+<td><code>loopCondition</code></td>
+<td>it repeats while the condition is true</td>
+</tr>
+<tr class="odd">
+<td><code>test-before</code></td>
+<td><code>testBefore="true"</code></td>
+<td>the condition is tested before each iteration, so the activity may not run at all; by default it is tested after, so the activity runs at least once</td>
+</tr>
+<tr class="even">
+<td><code>loop-max=N</code></td>
+<td><code>loopMaximum</code></td>
+<td>at most N iterations</td>
+</tr>
+</tbody>
+</table>
+<p><code>while=</code>, <code>test-before</code> and <code>loop-max=</code> require <code>loop</code>, and <code>loop-max</code> is a whole number (<code>R061</code>).</p>
+<p>A <strong>multi-instance</strong> activity runs once for each element of a collection: once per box of a bequest, once per reviewer of a manuscript. <code>parallel</code> runs the instances at the same time (three vertical bars), <code>sequential</code> one after another (three horizontal bars). Which collection the instances work through, and when the activity is complete, are attributes of the executable layer (<code>collection=</code>, <code>item=</code>, <code>output=</code>, <code>until=</code>; Chapter <a href="executable.html#executable">10</a>). The markers apply to tasks, sub-processes and call activities alike.</p>
+<p>The bequest process combines most of the constructs of the last three sections:</p>
+<pre class="tok"><code>tok 1.0 &quot;Processing a bequest of papers&quot;
+
+global identity-check &quot;Check the donor&#39;s identity&quot; kind=user
+
+start received &quot;Bequest offered&quot;
+call check-donor &quot;Check the donor&#39;s identity&quot; task=identity-check
+user appraise &quot;Appraise each box&quot; parallel
+adhoc processing &quot;Process the papers&quot;
+  user describe &quot;Describe the files&quot;
+  user digitise &quot;Digitise the files&quot;
+  manual conserve &quot;Conserve damaged files&quot;
+service publish &quot;Publish the finding aid&quot; loop test-before while=&quot;not(published)&quot; loop-max=3
+user proofread &quot;Proofread the finding aid&quot; sequential
+call catalogue &quot;Catalogue the collection&quot; process=cataloguing
+end done &quot;Bequest processed&quot;
+
+flow describe -&gt; digitise
+flow received -&gt; check-donor -&gt; appraise -&gt; processing -&gt; publish -&gt; proofread -&gt; catalogue -&gt; done</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:events-bequest-diagram"></span>
+<img src="examples/05-bequest.svg" alt="A call activity of a global user task, a parallel multi-instance task, an ad-hoc sub-process, a standard loop, a sequential multi-instance task and a call activity of a process." width="100%" />
+<p class="caption">
+Figure 5.7: A call activity of a global user task, a parallel multi-instance task, an ad-hoc sub-process, a standard loop, a sequential multi-instance task and a call activity of a process.
+</p>
+</div>
+<p><a class="download" href="examples/05-bequest.tok" download>Download the model (.tok)</a> <a class="download" href="examples/05-bequest.bpmn" download>Download the BPMN export (.bpmn)</a></p>
+<p>Each box of the bequest is appraised (parallel multi-instance); the papers are then processed in an ad-hoc sub-process; publishing the finding aid is attempted until it succeeds, at most three times; it is proofread section by section (sequential multi-instance); and cataloguing, a procedure of its own, is called as a separate process.</p>
+</div>
+<div id="exceptions-and-process-engines" class="section level2 hasAnchor" number="5.12">
+<h2><span class="header-section-number">5.12</span> Exceptions and process engines<a href="events-exceptions.html#exceptions-and-process-engines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Everything in this chapter is BPMN 2.0.2, and every BPMN tool that supports the full notation reads it. A process engine may support less. Camunda 8 does not execute transactions, cancel events, multiple and parallel multiple events, standard loops with <code>while=</code>, <code>test-before</code> or <code>loop-max=</code>, instantiating receive tasks and event-based gateways, or calls of global tasks. In a document marked <code>executable</code> for Camunda, <code>tok check</code> reports each of them with a code from <code>C100</code> to <code>C108</code>, so that a model meant for execution does not rely on what the engine cannot run. Descriptive and analytic models are not affected. Chapter <a href="executable.html#executable">10</a> lists the codes, and Chapter <a href="checking.html#checking">7</a> explains how to check a model against the conformance classes of BPMN.</p>
+<p>The levels of <code>tok check</code> follow the same line: boundary events, sub-processes and the triggers of BPMN’s analytic class pass at the level <code>analytic</code>, while transactions, multiple events, the loop attributes and global tasks need the level <code>full</code>.</p>
+</div>
+<div id="typical-mistakes-1" class="section level2 hasAnchor" number="5.13">
+<h2><span class="header-section-number">5.13</span> Typical mistakes<a href="events-exceptions.html#typical-mistakes-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The following model of returning a damaged book contains several mistakes with events and handlers.</p>
+<pre class="tok"><code>tok 1.0 &quot;Returning a damaged book&quot;
+
+start returned &quot;Book returned&quot;
+user inspect &quot;Inspect the book&quot;
+boundary too-long &quot;2 days passed&quot; timer=P2D
+service charge &quot;Charge the reader&quot; compensate=refund
+service refund &quot;Refund the charge&quot;
+eventsub dispute &quot;Reader disputes the charge&quot;
+  start disputed &quot;Dispute received&quot;
+  user review &quot;Review the dispute&quot;
+  end reviewed &quot;Dispute reviewed&quot;
+end done &quot;Return closed&quot;
+end cancelled &quot;Return cancelled&quot; cancel
+
+flow returned -&gt; inspect -&gt; charge -&gt; done
+flow too-long -&gt; cancelled
+flow charge -&gt; refund
+flow disputed -&gt; review -&gt; reviewed</code></pre>
+<pre><code>tok check 05-exceptions-error.tok
+05-exceptions-error.tok:5: error R032: boundary event &#39;too-long&#39; needs on=ACTIVITY
+05-exceptions-error.tok:6: error R051: compensation handler &#39;refund&#39; needs the flag compensation
+05-exceptions-error.tok:13: error R060: cancel end event &#39;cancelled&#39; must be inside a transaction
+05-exceptions-error.tok: 3 error(s), 0 warning(s), 0 note(s)</code></pre>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Problem</th>
+<th>Correction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R032</code></td>
+<td>the boundary event does not say which activity it is attached to</td>
+<td>add <code>on=inspect</code></td>
+</tr>
+<tr class="even">
+<td><code>R051</code></td>
+<td>the handler named by <code>compensate=</code> lacks the flag, and it also has a sequence flow</td>
+<td>add <code>compensation</code> to <code>refund</code> and remove the flow <code>charge -&gt; refund</code></td>
+</tr>
+<tr class="odd">
+<td><code>R060</code></td>
+<td>a cancel end event outside a transaction</td>
+<td>a plain end event is enough here: remove <code>cancel</code></td>
+</tr>
+</tbody>
+</table>
+<p>After these corrections, <code>tok check</code> reaches the BPMN rules and reports one more error, <code>E013</code>: the start event of the event sub-process has no trigger. Errors of the BPMN layer appear only when the tok layer is clean; Chapter <a href="checking.html#checking">7</a> explains this order.</p>
+</div>
+<div id="exercises-4" class="section level2 unnumbered hasAnchor">
+<h2>Exercises<a href="events-exceptions.html#exercises-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-6" class="exercise"><strong>Exercise 5.1  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><strong>Fix the returned book.</strong> Download <code>05-exceptions-error.tok</code> and correct it until <code>tok check</code> reports no errors and no warnings. The dispute arrives as a message from the reader: give the start event of the event sub-process the right trigger. <a class="download" href="examples/05-exceptions-error.tok" download>Download the model with errors (.tok)</a></li>
+<li><strong>Deadlines on a task.</strong> An editor reviews a manuscript. After 10 days the system reminds the editor (the review continues); after 30 days the manuscript goes to another editor (the review stops). Model both deadlines with boundary events and draw the diagram. Then change the reminder so that it repeats every 10 days.</li>
+<li><strong>Error or escalation?</strong> For each situation, decide whether it is an error or an escalation, whether it interrupts, and where it is caught: (a) the digitisation scanner breaks down in the middle of a sub-process “Digitise the volume”; (b) a cataloguer finds a rare item that the head of collections must see, but cataloguing continues; (c) the payment gateway refuses a fee payment. Write the events in tok.</li>
+<li><strong>An event sub-process.</strong> Extend the archive search of this chapter with a non-interrupting event sub-process: when the applicant sends additional information (a message), the registry office adds it to the case file while the search continues. Check that the new message has a message flow from the applicant.</li>
+<li><strong>A transaction.</strong> A conference registration books a seat in a session and charges the fee. If the charge fails, the seat is released and the participant is told. Model it as a transaction with compensation handlers and a cancel boundary event, and check it with <code>--level analytic</code> and <code>--level full</code>. Explain the difference.</li>
+<li><strong>Multiple triggers.</strong> A process starts when a request arrives by post, by e-mail or at the desk. Write it once with three start events and once with one multiple start event. Which version would you show to the staff, and which to a process engine that does not execute multiple events?</li>
+</ol>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="collaboration.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-artifacts.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>
