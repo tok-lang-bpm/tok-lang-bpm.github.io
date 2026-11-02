@@ -1,7 +1,7 @@
 # Simulation and process mining {#simulation}
 
 ::: {.goals}
-**In this chapter** you will add durations, resources, case variables, branch probabilities and arrivals to a model · run `tok sim` and read its indicators: end events, cycle time, waiting, processing and utilization · compare scenarios with the same seed and with replications · write the event log as CSV and XES and open it in process-mining tools · simulate from R and Python, run large experiments natively in Julia with `Tok.Sim` and calibrate a model on an event log with `Tok.Fit`
+**In this chapter** you will add durations, resources, case variables, branch probabilities and arrivals to a model · run `tok sim` and read its indicators: end events, cycle time, waiting, processing and utilization · compare scenarios with the same seed and with replications · write the event log as CSV and XES and open it in process-mining tools · simulate from R and Python, run large experiments natively in Julia with `TokLang.Sim` and calibrate a model on an event log with `TokLang.Fit`
 :::
 
 A process model shows what happens and who does it. It does not show how long the work takes when there are many cases and few people. A head of an archive asks questions of exactly that kind: how long do applicants wait for an answer when requests double, would a third archivist shorten the wait or sit idle, what would change if impossible requests were refused at registration? Trying the answers out in practice is expensive: hiring someone or changing a procedure is a decision for months.
@@ -340,11 +340,11 @@ The indicators have the structure of `tok sim --json`: `kpi["cases"]` with `star
 
 ## Native simulation in Julia
 
-Experiments with many scenarios and hundreds of replications are faster in the native simulator of the Julia package, `Tok.Sim`. It reads the model through the engine, so the document is parsed and checked exactly as `tok check` does, and it asks the engine to evaluate the conditions of flows, so conditions mean exactly what they mean in `tok sim`. Everything else runs in compiled Julia, in parallel on the threads you give Julia (`julia -t auto`).
+Experiments with many scenarios and hundreds of replications are faster in the native simulator of the Julia package, `TokLang.Sim`. It reads the model through the engine, so the document is parsed and checked exactly as `tok check` does, and it asks the engine to evaluate the conditions of flows, so conditions mean exactly what they mean in `tok sim`. Everything else runs in compiled Julia, in parallel on the threads you give Julia (`julia -t auto`).
 
 ```julia
-using Tok
-const S = Tok.Sim
+using TokLang
+const S = TokLang.Sim
 
 text = read("11-archive-queries.tok", String)
 m = S.model(text)
@@ -376,11 +376,11 @@ Each line gives the mean of an indicator over 200 replications and the half-widt
 
 Each replication has its own random stream, derived from the seed and the number of the replication, so the results do not depend on the number of threads, and a single replication can be repeated (`S.simulate(m; seed=1, replication=17)`). By default all scenarios use the same streams (common random numbers), which makes the differences between scenarios more precise than the scenarios themselves.
 
-The native simulator agrees with the engine in distribution, not number by number: it has its own generator. The tests of the package compare the two on 44 models with the Kolmogorov–Smirnov test. Some elements are not run natively: decisions of business rule tasks, script expressions, multi-instance activities with a collection, ad-hoc sub-processes, compensation, transactions, complex gateways, standard loops with conditions, multiple events and instantiating elements. `S.unsupported(m)` lists them before any run; a model that has them runs in the engine instead, with `Tok.Engine.simulate(text; cases=…, seed=…)`.
+The native simulator agrees with the engine in distribution, not number by number: it has its own generator. The tests of the package compare the two on 44 models with the Kolmogorov–Smirnov test. Some elements are not run natively: decisions of business rule tasks, script expressions, multi-instance activities with a collection, ad-hoc sub-processes, compensation, transactions, complex gateways, standard loops with conditions, multiple events and instantiating elements. `S.unsupported(m)` lists them before any run; a model that has them runs in the engine instead, with `TokLang.Engine.simulate(text; cases=…, seed=…)`.
 
 ## Calibration on an event log
 
-The parameters of a simulation are assumptions, and the best source of assumptions is a log of the real process. `Tok.Fit` estimates them from an event log and writes them back into the document, so that the model simulates the process that produced the log:
+The parameters of a simulation are assumptions, and the best source of assumptions is a log of the real process. `TokLang.Fit` estimates them from an event log and writes them back into the document, so that the model simulates the process that produced the log:
 
 | Parameter | Statement | Observations in the log |
 |---|---|---|
@@ -393,11 +393,11 @@ Each duration is fitted in the family the model declares for it (`exp`, `norm`, 
 The logs are read by `F.read_xes` (XES from `tok sim --xes` or from process-mining tools) and `F.read_csv_log` (the CSV log of `tok sim --log`, optionally with the table of cases). A test of the method is to fit a log whose true parameters you know. Here the log comes from 3000 simulated cases of the archive model:
 
 ```julia
-using Tok
-const F = Tok.Fit
+using TokLang
+const F = TokLang.Fit
 
 text = read("11-archive-queries.tok", String)
-log = F.read_xes(Tok.Engine.sim_xes(text; cases=3000, seed=11))
+log = F.read_xes(TokLang.Engine.sim_xes(text; cases=3000, seed=11))
 f = F.fit(text, log)
 for r in F.table(f)
     println(rpad(r.element, 24), rpad("$(r.family) $(r.name)", 12), round(r.estimate; sigdigits=4),
@@ -444,7 +444,7 @@ b = F.fit_bayes(text, log; samples=1000)
 F.table(b)
 ```
 
-Turing is not a dependency of Tok.jl; the function becomes available when Turing is loaded. With logs of a few hundred cases the posterior means differ from the maximum-likelihood estimates by a fraction of their uncertainty; the Bayesian intervals are worth having when the log is small.
+Turing is not a dependency of TokLang.jl; the function becomes available when Turing is loaded. With logs of a few hundred cases the posterior means differ from the maximum-likelihood estimates by a fraction of their uncertainty; the Bayesian intervals are worth having when the log is small.
 
 The cycle closes here: a model is written from a description, its parameters are estimated from the log of the real process, the calibrated model is simulated in scenarios, and the scenario that is chosen becomes the next version of the model.
 
@@ -463,5 +463,5 @@ The cycle closes here: a model is written from a description, its parameters are
 3. **Earlier refusal.** Change the model so that the clerk checks feasibility at registration (`tri(10m, 20m, 30m)`) and refuses impossible requests with `p=0.15` there; the archivist's assessment then takes `tri(10m, 15m, 30m)` and refuses nothing. Compare the scenario with the original by replications in Python or Julia. Does the registry become a new bottleneck?
 4. **More requests.** Set `arrival="exp(3h)"` with two and with three archivists and run both. What happens to the waiting times with two archivists as you increase `--cases` from 300 to 1000? What does that tell you about the process?
 5. **Process mining.** Write the XES log of the model and open it in a process-mining tool (PM4Py, bupaR, ProM or Disco). Discover the process from the log and compare it with the diagram. Where does the loop through the missing details appear, and how often is it taken?
-6. **Calibration.** In Julia, simulate 500 cases of the model, fit the log with `Tok.Fit.fit` and compare the intervals with those of 3000 cases. Then change the model to `duration="exp(6h)"` for the search, fit the same log again, and compare the estimates of the two families. Which family does the log support, and how can you tell?
+6. **Calibration.** In Julia, simulate 500 cases of the model, fit the log with `TokLang.Fit.fit` and compare the intervals with those of 3000 cases. Then change the model to `duration="exp(6h)"` for the search, fit the same log again, and compare the estimates of the two families. Which family does the log support, and how can you tell?
 :::

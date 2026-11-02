@@ -1,7 +1,7 @@
 # Programming interfaces {#programming}
 
 ::: {.goals}
-**In this chapter** you will see how one engine in Rust reaches every host language · call tok from Python with `tok.api` · work with models as data frames in R with `tokr`, draw them with `tok_plot()` and write them in R Markdown and Quarto chunks · use `Tok.jl` and `Tok.Engine` in Julia · run the engine in a web page through WebAssembly · link the C library `tokengine` with `tok.h` · use the Rust crates from crates.io · choose the interface that fits your program
+**In this chapter** you will see how one engine in Rust reaches every host language · call tok from Python with `tok.api` · work with models as data frames in R with `tokr`, draw them with `tok_plot()` and write them in R Markdown and Quarto chunks · use `TokLang.jl` and `TokLang.Engine` in Julia · run the engine in a web page through WebAssembly · link the C library `tokengine` with `tok.h` · use the Rust crates from crates.io · choose the interface that fits your program
 :::
 
 Everything tok does, from checking a document to simulating it, is written once, in Rust. The command `tok`, the language server, the MCP server and the playground are programs around that engine, and so are the packages for Python, R and Julia. This chapter is about using the engine from your own code: a script that checks every model of a repository, a notebook that draws a model next to its analysis, a web service that converts text to BPMN, a Julia experiment that simulates thousands of scenarios.
@@ -19,7 +19,7 @@ The engine consists of a few Rust crates. The bindings are thin layers that pass
      R tokr    tok (CLI)    tok-lsp     tok-mcp      tokengine     tok-wasm     Python tok-lang
                             (editors)   (agents)     (C, tok.h)    (browser)    (tok.api, tok mcp)
                                                          │
-                                                    Julia Tok.jl
+                                                  Julia TokLang.jl
 ```
 
 The functions in `tok_cli::api` take the text of a document and options as JSON and return a JSON result. The C library, the language server, the MCP server and the WebAssembly module call exactly these functions, so they accept the same options and give the same results; the Python package builds on the same crates, and the R package compiles the core crates into itself. The consequence for you is simple: **every interface gives the same diagnostics, the same canonical text, the same files and the same simulation results**, number by number for the same seed. A model checked in a notebook is checked exactly as in continuous integration, and a simulation in R can be reproduced in the playground.
@@ -29,7 +29,7 @@ The functions in `tok_cli::api` take the text of a document and options as JSON 
 | command line | `tok` | `pip install tok-lang` or `cargo install tok-cli` | shells, scripts, continuous integration |
 | Python | `tok-lang`, module `tok.api` | `pip install tok-lang` | scripts, notebooks, services |
 | R | `tokr` | `install.packages("tokr")` | data analysis, R Markdown and Quarto documents |
-| Julia | `Tok.jl` | `Pkg.add("Tok")` | large simulation experiments, calibration |
+| Julia | `TokLang.jl` | `Pkg.add("TokLang")` | large simulation experiments, calibration |
 | JavaScript | `tok-wasm` | the WebAssembly module of the playground | web pages, browser tools |
 | C and any language with a C interface | `tokengine`, header `tok.h` | release archives, or a build from source | C, C++, Go, Zig, Fortran, … |
 | Rust | `tok-core`, `tok-bpmn`, `tok-sim`, `tok-cli` | crates.io | Rust programs |
@@ -196,16 +196,16 @@ The diagram is written as an SVG file, which suits HTML output; for PDF output u
 
 ## Julia
 
-**Tok.jl** brings tok to Julia in three layers: `Tok.Engine` gives the whole language through the C interface of the engine; the module `Tok` itself contains a second, independent implementation of the core of the specification; and `Tok.Sim` and `Tok.Fit` are a native simulator and the calibration of simulation parameters (Chapter \@ref(simulation)).
+**TokLang.jl** brings tok to Julia in three layers: `TokLang.Engine` gives the whole language through the C interface of the engine; the module `TokLang` itself contains a second, independent implementation of the core of the specification; and `TokLang.Sim` and `TokLang.Fit` are a native simulator and the calibration of simulation parameters (Chapter \@ref(simulation)).
 
 ```julia
 using Pkg
-Pkg.add("Tok")
+Pkg.add("TokLang")
 ```
 
-The package needs Julia 1.10 or newer. It looks for the engine library in this order: at the path in the environment variable `TOK_LIBTOK` (`tokengine.dll`, `libtokengine.so` or `libtokengine.dylib`), in the binary package `tok_jll` when it is installed in the active environment, and in the build folder of a checkout of the repository. `Tok.Engine.available()` tells whether it was found and `Tok.Engine.library()` where. Without it the independent core still works.
+The package needs Julia 1.10 or newer. It looks for the engine library in this order: at the path in the environment variable `TOK_LIBTOK` (`tokengine.dll`, `libtokengine.so` or `libtokengine.dylib`), in the binary package `tok_jll` when it is installed in the active environment, and in the build folder of a checkout of the repository. `TokLang.Engine.available()` tells whether it was found and `TokLang.Engine.library()` where. Without it the independent core still works.
 
-The functions of `Tok.Engine` mirror those of Python and R:
+The functions of `TokLang.Engine` mirror those of Python and R:
 
 | Julia | Python | R |
 |---|---|---|
@@ -222,8 +222,8 @@ The functions of `Tok.Engine` mirror those of Python and R:
 `export`, `import` and `eval` are reserved words or functions of Julia, hence the longer names.
 
 ```julia
-using Tok
-const E = Tok.Engine
+using TokLang
+const E = TokLang.Engine
 
 text = read("13-loan-renewal.tok", String)
 println(E.check(text))
@@ -244,7 +244,7 @@ SimResult(500 cases, seed 1)
 11.7 min
 ```
 
-The mean cycle time is the one Python gave for the same cases and seed, because both ran the same engine. The class `full` is the smallest BPMN 2.0.2 conformance class the document fits (Chapter \@ref(checking)). Errors of the engine are thrown as `Tok.Engine.TokError` with a `kind`, a `message` and, for a document with errors, its `diagnostics`:
+The mean cycle time is the one Python gave for the same cases and seed, because both ran the same engine. The class `full` is the smallest BPMN 2.0.2 conformance class the document fits (Chapter \@ref(checking)). Errors of the engine are thrown as `TokLang.Engine.TokError` with a `kind`, a `message` and, for a document with errors, its `diagnostics`:
 
 ```julia
 try
@@ -263,9 +263,9 @@ The functions may be called from several threads at once.
 The **independent core** is a second implementation of the lexer, the parser, the canonical printer and the semantic BPMN export, written in Julia without the engine. It exists because two implementations of one specification are the strongest test that the specification is unambiguous, and it passes the core level of the conformance corpus for every case:
 
 ```julia
-doc, diags = Tok.parse_tok(text)
-print(Tok.fmt(doc))            # the canonical text
-print(Tok.semantic_xml(doc))   # the semantic BPMN XML of the conformance corpus
+doc, diags = TokLang.parse_tok(text)
+print(TokLang.fmt(doc))            # the canonical text
+print(TokLang.semantic_xml(doc))   # the semantic BPMN XML of the conformance corpus
 ```
 
 ## JavaScript and WebAssembly
@@ -319,7 +319,7 @@ where `document` is the `kind` and the rest the `message`. Browsers load WebAsse
 
 ## The C interface
 
-The engine is also a C library, **`tokengine`**, with the declarations in the header **`tok.h`**. Any language that can call C can use it: C and C++ directly, Go through cgo, Zig, Fortran, and Julia, whose `Tok.Engine` is built on it. The library comes as a shared library (`tokengine.dll` on Windows, `libtokengine.so` on Linux, `libtokengine.dylib` on macOS) and as a static library.
+The engine is also a C library, **`tokengine`**, with the declarations in the header **`tok.h`**. Any language that can call C can use it: C and C++ directly, Go through cgo, Zig, Fortran, and Julia, whose `TokLang.Engine` is built on it. The library comes as a shared library (`tokengine.dll` on Windows, `libtokengine.so` on Linux, `libtokengine.dylib` on macOS) and as a static library.
 
 Every function has the same shape:
 
@@ -342,7 +342,7 @@ char *tok_check(const char *text, const char *options);
 | `tok_import` | `format` (`auto`, `bpmn`, `dmn`), `flow_ids`, `layout` | `{"format", "text", "warnings", "layout"}` |
 | `tok_eval` | `decision`, `values`, `lang` | the value of the decision |
 | `tok_sim` | `cases`, `seed`, `lang`, `log`, `cases_table`, `csv`, `xes` | `{"kpi", "report", …}` |
-| `tok_sim_model`, `tok_sim_dist`, `tok_sim_eval` | | the simulation model, a parsed distribution, an evaluated expression: the building blocks of external simulators such as `Tok.Sim` |
+| `tok_sim_model`, `tok_sim_dist`, `tok_sim_eval` | | the simulation model, a parsed distribution, an evaluated expression: the building blocks of external simulators such as `TokLang.Sim` |
 | `tok_cli` | | the `tok` command line with the arguments of a JSON array |
 | `tok_version()`, `tok_abi_version()`, `tok_free(s)` | | the version of the engine (a static string, not freed), the version of the C interface, freeing a result |
 
@@ -451,7 +451,7 @@ The JSON interface of `tok_cli::api` is the stable one: it is the interface of t
 | a script in a shell or a CI job | the `tok` command, with `--json` where a program reads the output |
 | a Python script, notebook or web service | `tok.api` |
 | an analysis or a report in R, a course with R Markdown | `tokr` and its knitr engine |
-| simulation experiments with many scenarios and replications | `Tok.Sim` in Julia |
+| simulation experiments with many scenarios and replications | `TokLang.Sim` in Julia |
 | a web page that checks or draws models in the browser | the WebAssembly module |
 | a program in C, C++, Go or another language with a C interface | `tokengine` with `tok.h` |
 | a Rust program | `tok_cli::api`, or `tok-core` for the document model |
@@ -465,7 +465,7 @@ Whatever you choose, the text of the model stays the source. Programs read and w
 ::: {.exercise}
 1. **A checker for a folder.** Write a Python script that checks every `.tok` file in a folder with `api.check`, prints one line per file with the numbers of errors and warnings, and exits with status 1 when any file has errors. Run it on the `examples/` folder of this book: which files have errors, and why?
 2. **Decisions as a table.** In R, evaluate the decision `renewal` of `13-loan-renewal.tok` for every combination of `renewals` from 0 to 4 and `reserved` `TRUE` and `FALSE` with `tok_eval`, and arrange the results in a data frame with one row per combination. Compare the table with the rules of the decision.
-3. **Two implementations.** In Julia, parse the examples of this book with the independent core (`Tok.parse_tok`) and print them with `Tok.fmt`. Compare the text with `Tok.Engine.fmt` for each file. Are there differences?
+3. **Two implementations.** In Julia, parse the examples of this book with the independent core (`TokLang.parse_tok`) and print them with `TokLang.fmt`. Compare the text with `TokLang.Engine.fmt` for each file. Are there differences?
 4. **A page.** Build a minimal web page with a text area and a picture: on every change it calls `check` of the WebAssembly module and shows the number of errors, and when there are none, puts the result of `svg` into the page. Serve it with `python -m http.server`.
 5. **The same result everywhere.** Simulate `13-loan-renewal.tok` with 300 cases and seed 5 from the command line (`tok sim --cases 300 --seed 5`), from Python and from R or Julia. Compare the mean cycle times and the utilization. What do you conclude about reproducing results reported by someone else?
 :::

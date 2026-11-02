@@ -13,7 +13,7 @@ All the tools of tok run the same engine, so you may start with whichever suits 
 | Python package `tok-lang` | the `tok` command, the Python module `tok.api`, the MCP server (`tok mcp`) | `pip install tok-lang` |
 | Rust crate `tok-cli` | the `tok` command alone | `cargo install tok-cli` |
 | R package `tokr` | functions for R, diagrams in the viewer, a knitr engine for R Markdown and Quarto | `install.packages("tokr")` |
-| Julia package `Tok` | the engine in Julia, a native simulator, calibration on event logs | `Pkg.add(["Tok", "tok_jll"])` |
+| Julia package `TokLang` | the engine in Julia, a native simulator, calibration on event logs | `Pkg.add(["TokLang", "tok_jll"])` |
 | VS Code extension *tok* | highlighting, live diagnostics, formatting, a diagram beside the editor, export | from the Visual Studio Marketplace or Open VSX |
 | Playground | the engine in a web page: editor, diagnostics, diagram, simulation, downloads | nothing: <https://tok-lang-bpm.github.io/playground/> |
 | Agent bundle | the skills that teach an agent to model in tok and in BPMN XML, with the MCP server | see Chapter \@ref(agents) |
@@ -103,15 +103,15 @@ tok_check("model.tok")
 
 ### Julia
 
-The Julia package `Tok` (Julia 1.10 or newer) gives the whole engine to Julia and adds a native simulator for large experiments and the calibration of simulation parameters on event logs:
+The Julia package `TokLang` (Julia 1.10 or newer) gives the whole engine to Julia and adds a native simulator for large experiments and the calibration of simulation parameters on event logs:
 
 ```julia
 using Pkg
-Pkg.add(["Tok", "tok_jll"])   # tok_jll is the engine library, built for every platform
+Pkg.add(["TokLang", "tok_jll"])   # tok_jll is the engine library, built for every platform
 
-using Tok
-Tok.Engine.available()                       # true when the engine library was found
-Tok.Engine.check(read("model.tok", String))  # the diagnostics
+using TokLang
+TokLang.Engine.available()                       # true when the engine library was found
+TokLang.Engine.check(read("model.tok", String))  # the diagnostics
 ```
 
 Chapter \@ref(programming) describes the Python, R, Julia and C interfaces in detail, including where the Julia package looks for the engine library.

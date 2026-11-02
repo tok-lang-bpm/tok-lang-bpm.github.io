@@ -262,7 +262,7 @@ For an executable model, `tok export` writes everything Camunda 8 needs (the BPM
 
 `tok sim --xes` writes the simulated event log in XES (IEEE 1849-2016), which ProM, PM4Py, bupaR, Disco, Celonis and other process-mining tools read without any mapping; `--log` writes the same log as CSV, with the columns `case`, `label`, `start` and `end` that these tools map to case, activity and timestamps. In R, the event log of `tok_sim()` has the column names bupaR expects. Chapter \@ref(simulation) shows the code.
 
-The direction from logs to models exists too: `Tok.Fit` in Julia estimates the durations, arrivals and branch probabilities of a model from an XES or CSV log of a real system and writes them into the document.
+The direction from logs to models exists too: `TokLang.Fit` in Julia estimates the durations, arrivals and branch probabilities of a model from an XES or CSV log of a real system and writes them into the document.
 
 ## Decisions in other DMN engines
 
