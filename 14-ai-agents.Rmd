@@ -57,10 +57,11 @@ The **Model Context Protocol** (MCP) is a standard way for an agent application 
 
 ### Starting the server
 
-There are two ways to run it. Both speak MCP over standard input and output (the stdio transport) and serve one client until it closes the connection:
+There are three ways to run it. All speak MCP over standard input and output (the stdio transport) and serve one client until it closes the connection:
 
 - **`tok mcp`** from the Python package. If you have installed tok with `pip install tok-lang`, you already have the server: the command `tok mcp` starts it. This is the simplest way on any computer with Python.
-- **`tok-mcp`**, a separate program, from crates.io (`cargo install tok-mcp`) or from the release archives of the repository. It is useful where you do not want Python, for example in a container.
+- **`uvx tok-lang mcp`** with uv (https://docs.astral.sh/uv/), without installing tok: uv downloads the package `tok-lang` at the first start and keeps it in its cache. The MCP Registry (https://registry.modelcontextprotocol.io) lists the server in this form, under the name `io.github.tok-lang-bpm/tok`.
+- **`tok-mcp`**, a separate program, from the release archives of the repository (https://github.com/tok-lang-bpm/tok/releases), where it sits next to `tok`, or from crates.io (`cargo install tok-mcp`). It is useful where you do not want Python, for example in a container.
 
 `tok mcp --version` and `tok-mcp --version` print the version of the server. You do not normally start the server yourself: the agent application starts it when it needs it, using the configuration below.
 
@@ -86,13 +87,13 @@ Three properties of the server are worth knowing:
 - **Two kinds of errors.** A problem the agent can fix (a document with errors, an unknown decision, an argument of the wrong type) is a tool error with an explanation; a malformed request is a protocol error. `check` is the exception: a document with errors is its normal result, with `errors` greater than 0.
 - **No network, the rights of its user.** The server opens no network connection and runs with the rights of the user who starts it; it reads the files named by `path` and the layout sidecars next to them. A client that lets an agent call tools should still show you the calls, as MCP recommends.
 
-To try the server by hand, the MCP Inspector of the protocol project starts it and lists its tools: `npx @modelcontextprotocol/inspector tok mcp`.
+To try the server by hand, the MCP Inspector of the protocol project (it needs Node.js) starts it: `npx @modelcontextprotocol/inspector tok mcp` opens the Inspector in the browser, and `npx @modelcontextprotocol/inspector --cli tok mcp --method tools/list` prints the tools in the terminal.
 
 ## Configuring clients
 
 ### Clients with an `mcpServers` configuration
 
-Many agent applications read a JSON configuration with an object `mcpServers`. The server needs no environment and, with the Python package, one argument:
+Many agent applications read a JSON configuration with an object `mcpServers`. The server needs no environment variables and, with the Python package, one argument:
 
 ```json
 {
@@ -105,7 +106,20 @@ Many agent applications read a JSON configuration with an object `mcpServers`. T
 }
 ```
 
-With the separate program, the command is `"tok-mcp"` without arguments. When the program is not on the `PATH`, give its full path; on Windows, for example, `"command": "C:\\tools\\tok\\tok-mcp.exe"`. Paths given to the tools are read relative to the working directory of the server, which is the folder the client starts it in; give the agent absolute paths when in doubt.
+With uv, without installing tok, the command is `"uvx"` with the arguments `["tok-lang", "mcp"]`:
+
+```json
+{
+  "mcpServers": {
+    "tok": {
+      "command": "uvx",
+      "args": ["tok-lang", "mcp"]
+    }
+  }
+}
+```
+
+With the separate program, the command is `"tok-mcp"` without arguments. When the program is not on the `PATH` of the client, for example when tok is installed in a virtual environment that is not active when the client starts, give its full path; on Windows, for example, `"command": "C:\\tools\\tok\\tok-mcp.exe"`. Paths given to the tools are read relative to the working directory of the server, which is the folder the client starts it in; give the agent absolute paths when in doubt.
 
 ### VS Code
 
@@ -123,7 +137,7 @@ VS Code reads the MCP servers of a workspace from `.vscode/mcp.json`, with the k
 }
 ```
 
-Commit the file with the project, and everyone who opens the folder gets the server for the agent of VS Code. The VS Code extension of tok (Chapter \@ref(editors)) is independent of it: the extension serves you while you edit, the MCP server serves the agent.
+With uv, the command is `"uvx"` with the arguments `["tok-lang", "mcp"]`, as above. Commit the file with the project, and everyone who opens the folder and has tok or uv installed gets the server for the agent of VS Code. The VS Code extension of tok (Chapter \@ref(editors)) is independent of it: the extension serves you while you edit, the MCP server serves the agent.
 
 ### Claude Code
 
@@ -134,7 +148,7 @@ For Claude Code, the repository **tok-agent** (https://github.com/tok-lang-bpm/t
 /plugin install tok@tok-lang-bpm
 ```
 
-The first command adds the marketplace (named `tok-lang-bpm`), the second installs the plugin `tok` from it; the skill is then available as `tok:tok-modelling`, with its companion `tok:bpmn-modelling` for agents that write BPMN 2.0 XML directly, and the plugin starts the MCP server with `tok mcp`. Install the engine on the computer first (`pip install tok-lang`), so that the tools of the server and the commands of the skill can run. To add only the MCP server to Claude Code, without the plugin, the command line of Claude Code takes the command of the server after `--`: `claude mcp add tok -- tok mcp`.
+The first command adds the marketplace (named `tok-lang-bpm`), the second installs the plugin `tok` from it; the skill is then available as `tok:tok-modelling`, with its companion `tok:bpmn-modelling` for agents that write BPMN 2.0 XML directly, and the plugin starts the MCP server with `tok mcp`. Install the engine on the computer first (`pip install tok-lang`), so that the tools of the server and the commands of the skill can run. To add only the MCP server to Claude Code, without the plugin, the command line of Claude Code takes the command of the server after `--`: `claude mcp add tok -- tok mcp`, or with uv `claude mcp add tok -- uvx tok-lang mcp`. Without `--scope`, Claude Code adds the server for the current folder only; `--scope user` adds it for every folder, and `--scope project` writes it to `.mcp.json` of the project, which Claude Code asks to approve when it next starts there.
 
 ### Other agents
 
