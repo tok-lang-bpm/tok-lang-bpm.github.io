@@ -44,7 +44,7 @@ The decision is named by its identifier. Each argument is `name=value`, where `n
 The exit code is 0 for a result, 1 when the document has errors or a hit policy is violated (below), and 2 for an unknown decision or an argument that is not `name=value`.
 
 ::: {.tip}
-A decision sees exactly what it **requires**, nothing else. If the table above did not declare `age` and `account` as input data and require them, the names in its header would refer to nothing, both inputs would be `null`, and every evaluation would fall through to the last rule: `tok eval` would print `10` for every reader. Declare the inputs of every decision as `inputdata` and list them in `requires=`. When a decision uses a name of the document without requiring it, `tok check` reports the warning `R079`.
+A decision sees what it **requires**. A name that no element of the document declares is a variable of the caller: `tok eval` takes it from its arguments, `tok sim` from the variables of the case, and Camunda 8 from the process variables, so the table above works without `inputdata` as well. Declare the inputs of a decision as `inputdata` and list them in `requires=` all the same, because the decision requirements diagram then shows them and their types are checked. A column that gets no value is `null`, and `tok eval` warns about it. When a decision uses a name of the document without requiring it, `tok check` reports the warning `R079`.
 :::
 
 ## Hit policies

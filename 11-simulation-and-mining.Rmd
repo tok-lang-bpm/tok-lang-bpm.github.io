@@ -255,6 +255,8 @@ Each activity instance gives up to three events in the standard lifecycle: `sche
 
 Process mining discovers processes from event logs: it draws the process that the log contains, measures the times between activities and finds the variants cases follow. On a simulated log you can try the methods before you have real data, check that a discovered model looks like the one you simulated, and prepare the analysis that will later run on the log of a real system: the columns of `tok sim --log` have the same structure as event logs exported from workflow and records management systems.
 
+To replay a log on the model in PM4Py, write the BPMN file with `tok bpmn FILE --flow-refs`, which adds the optional `incoming` and `outgoing` of every flow node. PM4Py reads the sequence flows of a BPMN file from them.
+
 In Python, PM4Py reads the XES file directly:
 
 ```python

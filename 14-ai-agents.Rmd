@@ -74,7 +74,7 @@ Every tool that reads a document takes it either as `text` (the tok text) or as 
 | `check` | `text` or `path`, `lang`, `level` (`basic`, `analytic`, `full`), `class` (`descriptive`, `analytic`, `common-executable`, `full`), `bpmn` (default `true`: also the BPMN 2.0 rules) | `{"errors", "bpmn_class", "diagnostics"}`, as `tok check --json` |
 | `fmt` | `text` or `path`, `lang` | `{"text"}`: the canonical form |
 | `export` | `text` or `path`, `formats` (a list of `bpmn`, `svg`, `dmn`, `forms`; all when left out), `name`, `sidecar`, `lang` | `{"files": {NAME: CONTENT}}`: the files `tok export` writes |
-| `import` | `xml` or `path`, `format` (`auto`, `bpmn`, `dmn`), `flow_ids`, `layout` | `{"format", "text", "warnings", "layout"}`: the tok document, what was not kept, and for BPMN the layout sidecar |
+| `import` | `text` (the XML) or `path`, `format` (`auto`, `bpmn`, `dmn`), `flow_ids`, `layout` | `{"format", "text", "warnings", "layout"}`: the tok document, what was not kept, and for BPMN the layout sidecar |
 | `sim` | `text` or `path`, `cases`, `seed`, and the booleans `log`, `cases_table`, `csv`, `xes` | `{"kpi", "report"}` and, on request, the event log and the table of cases |
 | `eval` | `text` or `path`, `decision`, `values` (an object input name → value), `lang` | `{"value"}`: the value of the decision |
 | `reference` | `topic`: `cheatsheet` (default), `spec`, `diagnostics`, `feel`, `cli` | `{"text"}`: the reference document |
