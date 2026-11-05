@@ -13,7 +13,7 @@ All the tools of tok run the same engine, so you may start with whichever suits 
 | Python package `tok-lang` | the `tok` command, the Python module `tok.api`, the MCP server (`tok mcp`) | `pip install tok-lang` |
 | Rust crate `tok-cli` | the `tok` command alone | `cargo install tok-cli` |
 | R package `tokr` | functions for R, diagrams in the viewer, a knitr engine for R Markdown and Quarto | `install.packages("tokr")` |
-| Julia package `TokLang` | the engine in Julia, a native simulator, calibration on event logs | `Pkg.add(["TokLang", "tok_jll"])` |
+| Julia package `TokLang` | the engine in Julia, a native simulator, calibration on event logs | `Pkg.add("TokLang")` |
 | VS Code extension *tok* | highlighting, live diagnostics, formatting, a diagram beside the editor, export | from the Visual Studio Marketplace or Open VSX |
 | Playground | the engine in a web page: editor, diagnostics, diagram, simulation, downloads | nothing: <https://tok-lang-bpm.github.io/playground/> |
 | Agent bundle | the skills that teach an agent to model in tok and in BPMN XML, with the MCP server | see Chapter \@ref(agents) |
@@ -107,7 +107,7 @@ The Julia package `TokLang` (Julia 1.10 or newer) gives the whole engine to Juli
 
 ```julia
 using Pkg
-Pkg.add(["TokLang", "tok_jll"])   # tok_jll is the engine library, built for every platform
+Pkg.add("TokLang")   # installs tok_jll, the engine library built for every platform
 
 using TokLang
 TokLang.Engine.available()                       # true when the engine library was found

@@ -203,7 +203,7 @@ using Pkg
 Pkg.add("TokLang")
 ```
 
-The package needs Julia 1.10 or newer. It looks for the engine library in this order: at the path in the environment variable `TOK_LIBTOK` (`tokengine.dll`, `libtokengine.so` or `libtokengine.dylib`), in the binary package `tok_jll` when it is installed in the active environment, and in the build folder of a checkout of the repository. `TokLang.Engine.available()` tells whether it was found and `TokLang.Engine.library()` where. Without it the independent core still works.
+The package needs Julia 1.10 or newer. The engine library comes with it: the binary package `tok_jll`, a dependency of TokLang.jl, holds it for Linux, macOS and Windows. `TokLang.Engine.available()` tells whether it can be loaded and `TokLang.Engine.library()` where it is. On any other platform the independent core still works. The public API is listed in the [API reference](https://tok-lang-bpm.github.io/julia/).
 
 The functions of `TokLang.Engine` mirror those of Python and R:
 

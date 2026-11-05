@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Builds the guide into _book/: the book, the downloadable models of examples/, the symbols, the
 # images, and the playground when a built playground is given.
-# Usage: bash tools/build.sh [PLAYGROUND_FOLDER]
+# Usage: bash tools/build.sh [PLAYGROUND_FOLDER] [JULIA_REFERENCE_FOLDER]
 #   PLAYGROUND_FOLDER: the folder written by tools/playground.sh of the tok repository
+#   JULIA_REFERENCE_FOLDER: julia/TokLang.jl/docs/build of the tok repository, published at /julia/
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -15,6 +16,11 @@ if [ -n "${1:-}" ]; then
   rm -rf _book/playground
   cp -r "$1" _book/playground
   echo "  playground: _book/playground"
+fi
+if [ -n "${2:-}" ]; then
+  rm -rf _book/julia
+  cp -r "$2" _book/julia
+  echo "  Julia reference: _book/julia"
 fi
 # a plain-text map of the site for programs and AI agents (llms.txt)
 {
