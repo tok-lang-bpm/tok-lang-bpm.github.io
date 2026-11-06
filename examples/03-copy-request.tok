@@ -1,0 +1,13 @@
+# Digital copy request in a library
+tok 1.0 "Digital copy request"
+
+start received "Request received" message="Copy request"
+service register "Register the request"
+user review "Check the copyright status"
+manual fetch "Fetch the original from the stacks"
+user scan "Scan the item"
+script fee "Calculate the fee"
+send deliver "Send the copy" message="Digital copy"
+end sent "Copy sent"
+
+flow received -> register -> review -> fetch -> scan -> fee -> deliver -> sent

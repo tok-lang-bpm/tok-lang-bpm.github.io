@@ -1,0 +1,19 @@
+tok 1.0 "Book purchase: choreography"
+
+pool library "Library"
+
+pool supplier "Book supplier"
+
+choreography purchase "Book purchase"
+  start need "Purchase approved"
+  choreo order "Place the order" from=library to=supplier message="Order" reply="Order confirmation"
+  xor stock "Is the book in stock?"
+  choreo ship "Ship the book" from=supplier to=library message="Parcel and invoice"
+  choreo decline "Decline the order" from=supplier to=library message="Out of stock notice"
+  end delivered "Book delivered"
+  end declined "Order declined"
+  flow need -> order -> stock
+  flow stock -> ship "yes" default
+  flow stock -> decline "no" when="in_stock = false"
+  flow ship -> delivered
+  flow decline -> declined

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0sc4acc" name="Access to special collections" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="Decision_0access" name="Access mode">
+    <decisionTable id="DecisionTable_1mode" hitPolicy="FIRST">
+      <input id="Input_1age" label="Age of the material (years)">
+        <inputExpression id="InputExpression_1age" typeRef="number">
+          <text>materialAge</text>
+        </inputExpression>
+      </input>
+      <input id="Input_2pers" label="Contains personal data">
+        <inputExpression id="InputExpression_2pers" typeRef="boolean">
+          <text>personalData</text>
+        </inputExpression>
+      </input>
+      <input id="Input_3purpose" label="Purpose">
+        <inputExpression id="InputExpression_3purpose" typeRef="string">
+          <text>purpose</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_3purpose">
+          <text>"research","official","private"</text>
+        </inputValues>
+      </input>
+      <output id="Output_1mode" label="Access mode" name="mode" typeRef="string">
+        <outputValues id="UnaryTests_1mode">
+          <text>"reading room","anonymised copy","director's consent","refused"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_1">
+        <description>Old material: no restrictions</description>
+        <inputEntry id="UnaryTests_1a"><text>&gt;= 100</text></inputEntry>
+        <inputEntry id="UnaryTests_1b"><text>-</text></inputEntry>
+        <inputEntry id="UnaryTests_1c"><text>-</text></inputEntry>
+        <outputEntry id="LiteralExpression_1"><text>"reading room"</text></outputEntry>
+      </rule>
+      <rule id="DecisionRule_2">
+        <description>No personal data</description>
+        <inputEntry id="UnaryTests_2a"><text>-</text></inputEntry>
+        <inputEntry id="UnaryTests_2b"><text>false</text></inputEntry>
+        <inputEntry id="UnaryTests_2c"><text>-</text></inputEntry>
+        <outputEntry id="LiteralExpression_2"><text>"reading room"</text></outputEntry>
+      </rule>
+      <rule id="DecisionRule_3">
+        <description>Research: a copy without personal data</description>
+        <inputEntry id="UnaryTests_3a"><text>-</text></inputEntry>
+        <inputEntry id="UnaryTests_3b"><text>true</text></inputEntry>
+        <inputEntry id="UnaryTests_3c"><text>"research"</text></inputEntry>
+        <outputEntry id="LiteralExpression_3"><text>"anonymised copy"</text></outputEntry>
+      </rule>
+      <rule id="DecisionRule_4">
+        <description>Private purpose, recent material</description>
+        <inputEntry id="UnaryTests_4a"><text>&lt; 30</text></inputEntry>
+        <inputEntry id="UnaryTests_4b"><text>true</text></inputEntry>
+        <inputEntry id="UnaryTests_4c"><text>"private"</text></inputEntry>
+        <outputEntry id="LiteralExpression_4"><text>"refused"</text></outputEntry>
+      </rule>
+      <rule id="DecisionRule_5">
+        <description>Everything else</description>
+        <inputEntry id="UnaryTests_5a"><text>-</text></inputEntry>
+        <inputEntry id="UnaryTests_5b"><text>-</text></inputEntry>
+        <inputEntry id="UnaryTests_5c"><text>-</text></inputEntry>
+        <outputEntry id="LiteralExpression_5"><text>"director's consent"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <textAnnotation id="TextAnnotation_0rule">
+    <text>Based on the archive law</text>
+  </textAnnotation>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_0sc4acc">
+      <dmndi:DMNShape id="DMNShape_0access" dmnElementRef="Decision_0access">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0rule" dmnElementRef="TextAnnotation_0rule">
+        <dc:Bounds height="45" width="180" x="400" y="110" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

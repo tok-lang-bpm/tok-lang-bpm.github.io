@@ -1,0 +1,23 @@
+tok 1.0 "Archive query: two participants"
+
+pool applicant "Applicant"
+  start need "Information needed"
+  send submit "Submit the query" message="Query"
+  catch answer "Answer received" message="Answer"
+  manual read "Read the answer"
+  end done "Information obtained"
+
+pool archive "State archive"
+  lane registry "Registry"
+    start received "Query received" message="Query"
+    user register "Register the query"
+    end sent "Answer sent" message="Answer"
+  lane archivist "Archivist"
+    user search "Search the holdings"
+    user draft "Draft the answer"
+
+flow need -> submit -> answer -> read -> done
+flow received -> register -> search -> draft -> sent
+
+message submit -> received "Query"
+message sent -> answer "Answer"

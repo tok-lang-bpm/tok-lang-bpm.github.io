@@ -1,0 +1,28 @@
+tok 1.0 "Approving a purchase proposal"
+
+start submitted "Proposal submitted"
+rule mode "Determine the approval mode" decision=approval-mode result=mode
+xor needs-head "Must the head of department approve?"
+user approve "Review the proposal"
+xor agreed "Did the head agree?"
+xor merge
+user order "Order the book"
+end ordered "Book ordered"
+end rejected "Proposal rejected"
+
+flow submitted -> mode -> needs-head
+flow needs-head -> approve "yes" when="mode = \"head\""
+flow needs-head -> merge "no" default
+flow approve -> agreed
+flow agreed -> merge "yes" when="agreed = true"
+flow agreed -> rejected "no" default
+flow merge -> order -> ordered
+
+inputdata format "Format" type=string
+inputdata price "Price (EUR)" type=number
+
+decision approval-mode "Approval mode" requires="format price" hit=first
+  | format: string | price: number || mode: string || annotation      |
+  | "e-book"       | -             || "head"       || licences        |
+  | "print"        | <= 150        || "automatic"  || cheap print     |
+  | -              | -             || "head"       || everything else |

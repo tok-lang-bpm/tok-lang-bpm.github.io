@@ -1,0 +1,48 @@
+tok 1.0 "Book purchase proposal" executable process=book-purchase version-tag="1.0"
+
+# an executable process for Camunda 8: a start form, a decision, a user task with a form
+# and an assignment, a timer, a script, a job for a worker and a message with correlation
+start proposed "Proposal submitted" form=f-proposal
+rule mode "Determine approval mode" decision=approval-mode result=mode
+xor needs "Manager approval needed?"
+user approve "Approve proposal" form=f-approval candidate-groups="acquisitions" due="=now() + duration(\"P7D\")" priority=70
+boundary expired "7 days passed" on=approve timer=P7D
+xor agreed "Approved?"
+xor merge
+script cost "Compute cost" expr="price + 12.5" result=cost
+service order "Order from supplier" type="order-book" retries=3 headers="channel: api; supplier: central" inputs="title = title; amount = cost" outputs="orderNumber = order.number"
+catch delivered "Book delivered" message="Delivery" correlation="orderNumber"
+end done "Purchase completed"
+end rejected "Proposal rejected"
+end lapsed "Proposal lapsed"
+
+flow proposed -> mode -> needs
+flow needs -> approve "yes" when="mode = \"manager\""
+flow needs -> merge "no" default
+flow approve -> agreed
+flow agreed -> merge "yes" when="approved = true"
+flow agreed -> rejected "no" default
+flow expired -> lapsed
+flow merge -> cost -> order -> delivered -> done
+
+inputdata kind "Kind of publication" type=string
+inputdata price "Estimated price" type=number
+
+decision approval-mode "Approval mode" type=string requires="kind price" hit=first
+  | kind: string | price: number || mode: string ||                 |
+  | "e-book"     | -             || "manager"    || licences        |
+  | "print"      | <= 150        || "automatic"  || cheap books     |
+  | -            | -             || "manager"    || everything else |
+
+form f-proposal "Purchase proposal"
+  text "## Propose a book for the library"
+  field title "Title" required type=textfield
+  field author "Author" type=textfield
+  field kind "Kind of publication" required type=select options="print:printed book, e-book:e-book"
+  field price "Estimated price" required type=number min=0
+  field reason "Reason" type=textarea
+
+form f-approval "Approval"
+  text "## Proposal: {{title}} ({{price}})"
+  field approved "Decision" required type=radio options="true:approve, false:reject"
+  field comment "Comment for the reader" type=textarea

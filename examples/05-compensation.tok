@@ -1,0 +1,16 @@
+tok 1.0 "Ordering books from a supplier"
+
+start s "Order approved"
+service reserve "Reserve funds" compensate=release
+service release "Release the reserved funds" compensation
+user send-order "Send the order" compensate=withdraw
+manual withdraw "Withdraw the order" compensation
+xor confirmed "Did the supplier confirm the delivery?"
+end ordered "Books ordered"
+throw undo-funds "Undo the reservation" compensate activity=reserve
+end cancelled "Order cancelled" compensate
+
+flow s -> reserve -> send-order -> confirmed
+flow confirmed -> ordered "yes"
+flow confirmed -> undo-funds "no"
+flow undo-funds -> cancelled

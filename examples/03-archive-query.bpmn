@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Archive query" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Answer" name="Answer" />
+  <bpmn:process id="process" name="Archive query" isExecutable="false">
+    <bpmn:startEvent id="arrived" name="Query received" />
+    <bpmn:userTask id="assess" name="Assess the query" />
+    <bpmn:exclusiveGateway id="complete" name="Is the query complete?" default="f-complete-ask" />
+    <bpmn:userTask id="ask" name="Ask for missing details" />
+    <bpmn:parallelGateway id="search" />
+    <bpmn:userTask id="finding-aids" name="Search the finding aids" />
+    <bpmn:userTask id="register" name="Search the query register" />
+    <bpmn:parallelGateway id="results" />
+    <bpmn:userTask id="answer" name="Draft the answer" />
+    <bpmn:inclusiveGateway id="channel" name="How should the answer be sent?" default="f-channel-desk" />
+    <bpmn:sendTask id="email" name="Send the answer by e-mail" messageRef="Message_Answer" />
+    <bpmn:sendTask id="post" name="Send the answer by post" messageRef="Message_Answer" />
+    <bpmn:manualTask id="desk" name="Hand the answer over at the desk" />
+    <bpmn:inclusiveGateway id="delivered" />
+    <bpmn:endEvent id="closed" name="Query closed" />
+    <bpmn:sequenceFlow id="f-arrived-assess" sourceRef="arrived" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-assess-complete" sourceRef="assess" targetRef="complete" />
+    <bpmn:sequenceFlow id="f-complete-search" name="yes" sourceRef="complete" targetRef="search">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">complete = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-complete-ask" name="no" sourceRef="complete" targetRef="ask" />
+    <bpmn:sequenceFlow id="f-ask-assess" sourceRef="ask" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-search-finding-aids" sourceRef="search" targetRef="finding-aids" />
+    <bpmn:sequenceFlow id="f-finding-aids-results" sourceRef="finding-aids" targetRef="results" />
+    <bpmn:sequenceFlow id="f-search-register" sourceRef="search" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-results" sourceRef="register" targetRef="results" />
+    <bpmn:sequenceFlow id="f-results-answer" sourceRef="results" targetRef="answer" />
+    <bpmn:sequenceFlow id="f-answer-channel" sourceRef="answer" targetRef="channel" />
+    <bpmn:sequenceFlow id="f-channel-email" name="e-mail" sourceRef="channel" targetRef="email">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">email != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-channel-post" name="post" sourceRef="channel" targetRef="post">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">address != null and paper = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-channel-desk" name="in person" sourceRef="channel" targetRef="desk" />
+    <bpmn:sequenceFlow id="f-email-delivered" sourceRef="email" targetRef="delivered" />
+    <bpmn:sequenceFlow id="f-post-delivered" sourceRef="post" targetRef="delivered" />
+    <bpmn:sequenceFlow id="f-desk-delivered" sourceRef="desk" targetRef="delivered" />
+    <bpmn:sequenceFlow id="f-delivered-closed" sourceRef="delivered" targetRef="closed" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrived_di" bpmnElement="arrived">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="8" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assess_di" bpmnElement="assess">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="complete_di" bpmnElement="complete" isMarkerVisible="true">
+        <dc:Bounds x="266" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="218" y="98" width="68" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ask_di" bpmnElement="ask">
+        <dc:Bounds x="366" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search_di" bpmnElement="search">
+        <dc:Bounds x="391" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="finding-aids_di" bpmnElement="finding-aids">
+        <dc:Bounds x="516" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="516" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="results_di" bpmnElement="results">
+        <dc:Bounds x="666" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answer_di" bpmnElement="answer">
+        <dc:Bounds x="766" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="channel_di" bpmnElement="channel">
+        <dc:Bounds x="916" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="947" y="98" width="56" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="email_di" bpmnElement="email">
+        <dc:Bounds x="1016" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="post_di" bpmnElement="post">
+        <dc:Bounds x="1016" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="desk_di" bpmnElement="desk">
+        <dc:Bounds x="1016" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="delivered_di" bpmnElement="delivered">
+        <dc:Bounds x="1166" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="closed_di" bpmnElement="closed">
+        <dc:Bounds x="1266" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1250" y="93" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-arrived-assess_di" bpmnElement="f-arrived-assess">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-assess-complete_di" bpmnElement="f-assess-complete">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-complete-search_di" bpmnElement="f-complete-search">
+        <di:waypoint x="316" y="70" />
+        <di:waypoint x="391" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-complete-ask_di" bpmnElement="f-complete-ask">
+        <di:waypoint x="291" y="95" />
+        <di:waypoint x="291" y="200" />
+        <di:waypoint x="366" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="299" y="185" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-ask-assess_di" bpmnElement="f-ask-assess">
+        <di:waypoint x="416" y="240" />
+        <di:waypoint x="416" y="273" />
+        <di:waypoint x="166" y="273" />
+        <di:waypoint x="166" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-finding-aids_di" bpmnElement="f-search-finding-aids">
+        <di:waypoint x="441" y="70" />
+        <di:waypoint x="516" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-finding-aids-results_di" bpmnElement="f-finding-aids-results">
+        <di:waypoint x="616" y="70" />
+        <di:waypoint x="666" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-register_di" bpmnElement="f-search-register">
+        <di:waypoint x="441" y="70" />
+        <di:waypoint x="491" y="70" />
+        <di:waypoint x="491" y="200" />
+        <di:waypoint x="516" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-results_di" bpmnElement="f-register-results">
+        <di:waypoint x="616" y="200" />
+        <di:waypoint x="691" y="200" />
+        <di:waypoint x="691" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-results-answer_di" bpmnElement="f-results-answer">
+        <di:waypoint x="716" y="70" />
+        <di:waypoint x="766" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-answer-channel_di" bpmnElement="f-answer-channel">
+        <di:waypoint x="866" y="70" />
+        <di:waypoint x="916" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-channel-email_di" bpmnElement="f-channel-email">
+        <di:waypoint x="966" y="70" />
+        <di:waypoint x="1016" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="974" y="55" width="34" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-channel-post_di" bpmnElement="f-channel-post">
+        <di:waypoint x="941" y="95" />
+        <di:waypoint x="941" y="200" />
+        <di:waypoint x="1016" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="948" y="185" width="24" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-channel-desk_di" bpmnElement="f-channel-desk">
+        <di:waypoint x="941" y="95" />
+        <di:waypoint x="941" y="330" />
+        <di:waypoint x="1016" y="330" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="948" y="315" width="52" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-email-delivered_di" bpmnElement="f-email-delivered">
+        <di:waypoint x="1116" y="70" />
+        <di:waypoint x="1166" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-post-delivered_di" bpmnElement="f-post-delivered">
+        <di:waypoint x="1116" y="200" />
+        <di:waypoint x="1191" y="200" />
+        <di:waypoint x="1191" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-desk-delivered_di" bpmnElement="f-desk-delivered">
+        <di:waypoint x="1116" y="330" />
+        <di:waypoint x="1191" y="330" />
+        <di:waypoint x="1191" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-delivered-closed_di" bpmnElement="f-delivered-closed">
+        <di:waypoint x="1216" y="70" />
+        <di:waypoint x="1266" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

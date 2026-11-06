@@ -1,0 +1,24 @@
+tok 1.0 "Picking up an interlibrary loan"
+
+pool library "University library"
+  lane librarian "Interlibrary loan librarian"
+    start arrived "Book arrived"
+    service register "Register the copy"
+    boundary save-failed "Saving failed" on=register error="Saving failed"
+    user register-by-hand "Register the copy by hand"
+    user notify "Notify the reader"
+    user send-back "Send the book back"
+    end returned "Book returned to the lending library"
+  lane reader "Reader"
+    user pickup "Pick up the book"
+    boundary three-days "3 days passed" noninterrupting on=pickup timer=P3D
+    boundary seven-days "7 days passed" on=pickup timer=P7D
+    end picked-up "Book picked up"
+  lane system "Library system"
+    service remind "Send a reminder"
+    end reminded "Reminder sent"
+
+flow arrived -> register -> notify -> pickup -> picked-up
+flow save-failed -> register-by-hand -> notify
+flow three-days -> remind -> reminded
+flow seven-days -> send-back -> returned

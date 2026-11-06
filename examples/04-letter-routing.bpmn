@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Routing an incoming letter" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="university" name="University" processRef="letter-routing" />
+  </bpmn:collaboration>
+  <bpmn:process id="letter-routing" name="Routing an incoming letter" isExecutable="false">
+    <bpmn:laneSet id="university-lanes">
+      <bpmn:lane id="registry" name="Central registry">
+        <bpmn:flowNodeRef>received</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>register</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="faculty" name="Faculty">
+        <bpmn:childLaneSet id="faculty-lanes">
+          <bpmn:lane id="office" name="Dean's office">
+            <bpmn:flowNodeRef>assign</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>reply</bpmn:flowNodeRef>
+          </bpmn:lane>
+          <bpmn:lane id="dean" name="Dean">
+            <bpmn:flowNodeRef>sign</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>replied</bpmn:flowNodeRef>
+          </bpmn:lane>
+        </bpmn:childLaneSet>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="received" name="Letter received" />
+    <bpmn:userTask id="register" name="Register the letter in the records system" />
+    <bpmn:userTask id="assign" name="Assign the letter to a unit" />
+    <bpmn:userTask id="reply" name="Draft the reply" />
+    <bpmn:userTask id="sign" name="Sign the reply" />
+    <bpmn:endEvent id="replied" name="Reply sent" />
+    <bpmn:sequenceFlow id="f-received-register" sourceRef="received" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-assign" sourceRef="register" targetRef="assign" />
+    <bpmn:sequenceFlow id="f-assign-reply" sourceRef="assign" targetRef="reply" />
+    <bpmn:sequenceFlow id="f-reply-sign" sourceRef="reply" targetRef="sign" />
+    <bpmn:sequenceFlow id="f-sign-replied" sourceRef="sign" targetRef="replied" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="university_di" bpmnElement="university" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="880" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="registry_di" bpmnElement="registry" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="850" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="faculty_di" bpmnElement="faculty" isHorizontal="true">
+        <dc:Bounds x="30" y="140" width="850" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="office_di" bpmnElement="office" isHorizontal="true">
+        <dc:Bounds x="60" y="140" width="820" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="dean_di" bpmnElement="dean" isHorizontal="true">
+        <dc:Bounds x="60" y="280" width="820" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="120" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="96" y="93" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="206" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assign_di" bpmnElement="assign">
+        <dc:Bounds x="356" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reply_di" bpmnElement="reply">
+        <dc:Bounds x="506" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sign_di" bpmnElement="sign">
+        <dc:Bounds x="656" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="replied_di" bpmnElement="replied">
+        <dc:Bounds x="806" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="796" y="373" width="56" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-received-register_di" bpmnElement="f-received-register">
+        <di:waypoint x="156" y="70" />
+        <di:waypoint x="206" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-assign_di" bpmnElement="f-register-assign">
+        <di:waypoint x="306" y="70" />
+        <di:waypoint x="406" y="70" />
+        <di:waypoint x="406" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-assign-reply_di" bpmnElement="f-assign-reply">
+        <di:waypoint x="456" y="210" />
+        <di:waypoint x="506" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reply-sign_di" bpmnElement="f-reply-sign">
+        <di:waypoint x="606" y="210" />
+        <di:waypoint x="706" y="210" />
+        <di:waypoint x="706" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-sign-replied_di" bpmnElement="f-sign-replied">
+        <di:waypoint x="756" y="350" />
+        <di:waypoint x="806" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Book purchase proposal" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:documentation>How the library handles a reader's proposal to buy a book.</bpmn:documentation>
+  <bpmn:dataStore id="catalogue-store" name="Library catalogue" />
+  <bpmn:dataStore id="finance-store" name="Finance system" />
+  <bpmn:category id="categories">
+    <bpmn:categoryValue id="decision-stage-value" value="Acquisition decision" />
+  </bpmn:category>
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="library" name="University library" processRef="library-process" />
+    <bpmn:group id="decision-stage" categoryValueRef="decision-stage-value" />
+  </bpmn:collaboration>
+  <bpmn:process id="library-process" name="Book purchase proposal" isExecutable="false">
+    <bpmn:laneSet id="library-lanes">
+      <bpmn:lane id="reader" name="Reader">
+        <bpmn:flowNodeRef>need</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>propose</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="acquisitions" name="Acquisitions librarian">
+        <bpmn:flowNodeRef>check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>accepted</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>order</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>refuse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ordered</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>refused</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="need" name="Reader needs a book" />
+    <bpmn:userTask id="propose" name="Fill in the purchase proposal">
+      <bpmn:ioSpecification id="propose-io">
+        <bpmn:dataOutput id="propose-out-1" name="Purchase proposal" />
+        <bpmn:inputSet id="propose-inputs" />
+        <bpmn:outputSet id="propose-outputs">
+          <bpmn:dataOutputRefs>propose-out-1</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:dataOutputAssociation id="propose-doa-1">
+        <bpmn:sourceRef>propose-out-1</bpmn:sourceRef>
+        <bpmn:targetRef>proposal</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:userTask id="check" name="Check the catalogue and the budget">
+      <bpmn:documentation>Duplicates are rejected. The budget is read from the finance system.</bpmn:documentation>
+      <bpmn:ioSpecification id="check-io">
+        <bpmn:dataInput id="check-in-2" name="Purchase proposal" />
+        <bpmn:dataInput id="check-in-3" name="Library catalogue" />
+        <bpmn:dataInput id="check-in-4" name="Finance system" />
+        <bpmn:dataOutput id="check-out-5" name="Purchase proposal" />
+        <bpmn:inputSet id="check-inputs">
+          <bpmn:dataInputRefs>check-in-2</bpmn:dataInputRefs>
+          <bpmn:dataInputRefs>check-in-3</bpmn:dataInputRefs>
+          <bpmn:dataInputRefs>check-in-4</bpmn:dataInputRefs>
+        </bpmn:inputSet>
+        <bpmn:outputSet id="check-outputs">
+          <bpmn:dataOutputRefs>check-out-5</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:dataInputAssociation id="check-dia-2">
+        <bpmn:sourceRef>proposal</bpmn:sourceRef>
+        <bpmn:targetRef>check-in-2</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataInputAssociation id="check-dia-3">
+        <bpmn:sourceRef>catalogue</bpmn:sourceRef>
+        <bpmn:targetRef>check-in-3</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataInputAssociation id="check-dia-4">
+        <bpmn:sourceRef>finance</bpmn:sourceRef>
+        <bpmn:targetRef>check-in-4</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="check-doa-5">
+        <bpmn:sourceRef>check-out-5</bpmn:sourceRef>
+        <bpmn:targetRef>proposal-checked</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="accepted" name="Is the purchase accepted?" />
+    <bpmn:userTask id="order" name="Order the book">
+      <bpmn:ioSpecification id="order-io">
+        <bpmn:dataInput id="order-in-6" name="Purchase proposal" />
+        <bpmn:dataOutput id="order-out-7" name="Order lines" />
+        <bpmn:inputSet id="order-inputs">
+          <bpmn:dataInputRefs>order-in-6</bpmn:dataInputRefs>
+        </bpmn:inputSet>
+        <bpmn:outputSet id="order-outputs">
+          <bpmn:dataOutputRefs>order-out-7</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:dataInputAssociation id="order-dia-6">
+        <bpmn:sourceRef>proposal-checked</bpmn:sourceRef>
+        <bpmn:targetRef>order-in-6</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="order-doa-7">
+        <bpmn:sourceRef>order-out-7</bpmn:sourceRef>
+        <bpmn:targetRef>order-lines</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:userTask id="refuse" name="Inform the reader of the refusal" />
+    <bpmn:endEvent id="ordered" name="Book ordered" />
+    <bpmn:endEvent id="refused" name="Proposal refused" />
+    <bpmn:sequenceFlow id="f-need-propose" sourceRef="need" targetRef="propose" />
+    <bpmn:sequenceFlow id="f-propose-check" sourceRef="propose" targetRef="check" />
+    <bpmn:sequenceFlow id="f-check-accepted" sourceRef="check" targetRef="accepted" />
+    <bpmn:sequenceFlow id="f-accepted-order" name="yes" sourceRef="accepted" targetRef="order" />
+    <bpmn:sequenceFlow id="f-accepted-refuse" name="no" sourceRef="accepted" targetRef="refuse" />
+    <bpmn:sequenceFlow id="f-order-ordered" sourceRef="order" targetRef="ordered" />
+    <bpmn:sequenceFlow id="f-refuse-refused" sourceRef="refuse" targetRef="refused" />
+    <bpmn:dataObject id="proposal-object" name="Purchase proposal" />
+    <bpmn:dataObjectReference id="proposal" name="Purchase proposal" dataObjectRef="proposal-object">
+      <bpmn:dataState id="proposal-state" name="submitted" />
+    </bpmn:dataObjectReference>
+    <bpmn:dataObjectReference id="proposal-checked" name="Purchase proposal" dataObjectRef="proposal-object">
+      <bpmn:dataState id="proposal-checked-state" name="checked" />
+    </bpmn:dataObjectReference>
+    <bpmn:dataObject id="order-lines-object" name="Order lines" isCollection="true" />
+    <bpmn:dataObjectReference id="order-lines" name="Order lines" dataObjectRef="order-lines-object" />
+    <bpmn:dataStoreReference id="catalogue" name="Library catalogue" dataStoreRef="catalogue-store" />
+    <bpmn:dataStoreReference id="finance" name="Finance system" dataStoreRef="finance-store" />
+    <bpmn:textAnnotation id="budget-rule">
+      <bpmn:text>Purchases over 500 EUR need the director's approval.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="budget-rule-assoc" sourceRef="budget-rule" targetRef="accepted" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="library_di" bpmnElement="library" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="880" height="710" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reader_di" bpmnElement="reader" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="850" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="acquisitions_di" bpmnElement="acquisitions" isHorizontal="true">
+        <dc:Bounds x="30" y="240" width="850" height="470" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="need_di" bpmnElement="need">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="54" y="93" width="108" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="propose_di" bpmnElement="propose">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check_di" bpmnElement="check">
+        <dc:Bounds x="326" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="accepted_di" bpmnElement="accepted" isMarkerVisible="true">
+        <dc:Bounds x="516" y="285" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499" y="259" width="84" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order_di" bpmnElement="order">
+        <dc:Bounds x="656" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refuse_di" bpmnElement="refuse">
+        <dc:Bounds x="656" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ordered_di" bpmnElement="ordered">
+        <dc:Bounds x="806" y="292" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="790" y="333" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refused_di" bpmnElement="refused">
+        <dc:Bounds x="806" y="422" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="779" y="463" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="proposal_di" bpmnElement="proposal">
+        <dc:Bounds x="208" y="160" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="247" y="174" width="96" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="proposal-checked_di" bpmnElement="proposal-checked">
+        <dc:Bounds x="358" y="415" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="468" width="96" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order-lines_di" bpmnElement="order-lines">
+        <dc:Bounds x="688" y="530" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="675" y="585" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="catalogue_di" bpmnElement="catalogue">
+        <dc:Bounds x="351" y="530" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="583" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="finance_di" bpmnElement="finance">
+        <dc:Bounds x="351" y="630" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="336" y="685" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="budget-rule_di" bpmnElement="budget-rule">
+        <dc:Bounds x="476" y="405" width="130" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="propose-doa-1_di" bpmnElement="propose-doa-1">
+        <di:waypoint x="226" y="110" />
+        <di:waypoint x="226" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="check-dia-2_di" bpmnElement="check-dia-2">
+        <di:waypoint x="244" y="200" />
+        <di:waypoint x="328" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="check-dia-3_di" bpmnElement="check-dia-3">
+        <di:waypoint x="376" y="530" />
+        <di:waypoint x="376" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="check-dia-4_di" bpmnElement="check-dia-4">
+        <di:waypoint x="376" y="630" />
+        <di:waypoint x="376" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="check-doa-5_di" bpmnElement="check-doa-5">
+        <di:waypoint x="376" y="350" />
+        <di:waypoint x="376" y="415" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="order-dia-6_di" bpmnElement="order-dia-6">
+        <di:waypoint x="394" y="433" />
+        <di:waypoint x="656" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="order-doa-7_di" bpmnElement="order-doa-7">
+        <di:waypoint x="706" y="350" />
+        <di:waypoint x="706" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-need-propose_di" bpmnElement="f-need-propose">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-propose-check_di" bpmnElement="f-propose-check">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-check-accepted_di" bpmnElement="f-check-accepted">
+        <di:waypoint x="426" y="310" />
+        <di:waypoint x="516" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-accepted-order_di" bpmnElement="f-accepted-order">
+        <di:waypoint x="566" y="310" />
+        <di:waypoint x="656" y="310" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="573" y="295" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-accepted-refuse_di" bpmnElement="f-accepted-refuse">
+        <di:waypoint x="566" y="310" />
+        <di:waypoint x="631" y="310" />
+        <di:waypoint x="631" y="440" />
+        <di:waypoint x="656" y="440" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="637" y="320" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-order-ordered_di" bpmnElement="f-order-ordered">
+        <di:waypoint x="756" y="310" />
+        <di:waypoint x="806" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-refuse-refused_di" bpmnElement="f-refuse-refused">
+        <di:waypoint x="756" y="440" />
+        <di:waypoint x="806" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="budget-rule-assoc_di" bpmnElement="budget-rule-assoc">
+        <di:waypoint x="541" y="405" />
+        <di:waypoint x="541" y="335" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

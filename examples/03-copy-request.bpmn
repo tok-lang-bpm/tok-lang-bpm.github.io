@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Digital copy request" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Copy_request" name="Copy request" />
+  <bpmn:message id="Message_Digital_copy" name="Digital copy" />
+  <bpmn:process id="process" name="Digital copy request" isExecutable="false">
+    <bpmn:startEvent id="received" name="Request received">
+      <bpmn:messageEventDefinition id="received-def" messageRef="Message_Copy_request" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="register" name="Register the request" />
+    <bpmn:userTask id="review" name="Check the copyright status" />
+    <bpmn:manualTask id="fetch" name="Fetch the original from the stacks" />
+    <bpmn:userTask id="scan" name="Scan the item" />
+    <bpmn:scriptTask id="fee" name="Calculate the fee" />
+    <bpmn:sendTask id="deliver" name="Send the copy" messageRef="Message_Digital_copy" />
+    <bpmn:endEvent id="sent" name="Copy sent" />
+    <bpmn:sequenceFlow id="f-received-register" sourceRef="received" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-review" sourceRef="register" targetRef="review" />
+    <bpmn:sequenceFlow id="f-review-fetch" sourceRef="review" targetRef="fetch" />
+    <bpmn:sequenceFlow id="f-fetch-scan" sourceRef="fetch" targetRef="scan" />
+    <bpmn:sequenceFlow id="f-scan-fee" sourceRef="scan" targetRef="fee" />
+    <bpmn:sequenceFlow id="f-fee-deliver" sourceRef="fee" targetRef="deliver" />
+    <bpmn:sequenceFlow id="f-deliver-sent" sourceRef="deliver" targetRef="sent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3" y="93" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="review_di" bpmnElement="review">
+        <dc:Bounds x="266" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fetch_di" bpmnElement="fetch">
+        <dc:Bounds x="416" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="scan_di" bpmnElement="scan">
+        <dc:Bounds x="566" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fee_di" bpmnElement="fee">
+        <dc:Bounds x="716" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="deliver_di" bpmnElement="deliver">
+        <dc:Bounds x="866" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sent_di" bpmnElement="sent">
+        <dc:Bounds x="1016" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1008" y="93" width="52" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-received-register_di" bpmnElement="f-received-register">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-review_di" bpmnElement="f-register-review">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-review-fetch_di" bpmnElement="f-review-fetch">
+        <di:waypoint x="366" y="70" />
+        <di:waypoint x="416" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-fetch-scan_di" bpmnElement="f-fetch-scan">
+        <di:waypoint x="516" y="70" />
+        <di:waypoint x="566" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-scan-fee_di" bpmnElement="f-scan-fee">
+        <di:waypoint x="666" y="70" />
+        <di:waypoint x="716" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-fee-deliver_di" bpmnElement="f-fee-deliver">
+        <di:waypoint x="816" y="70" />
+        <di:waypoint x="866" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-deliver-sent_di" bpmnElement="f-deliver-sent">
+        <di:waypoint x="966" y="70" />
+        <di:waypoint x="1016" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

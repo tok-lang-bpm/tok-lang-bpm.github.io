@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Archive queries: workload simulation" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Details" name="Details" />
+  <bpmn:resource id="archivists" name="Archivists" />
+  <bpmn:resource id="clerks" name="Registry clerks" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="archive" name="State archive" processRef="archive-process" />
+  </bpmn:collaboration>
+  <bpmn:process id="archive-process" name="Archive queries: workload simulation" isExecutable="false">
+    <bpmn:laneSet id="archive-lanes">
+      <bpmn:lane id="registry" name="Registry">
+        <bpmn:flowNodeRef>arrived</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>refuse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>refused</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>answer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>answered</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="archivist" name="Archivist">
+        <bpmn:flowNodeRef>assess</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>is-complete</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>details</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>feasible</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>search</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>write</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="arrived" name="Query request received" />
+    <bpmn:userTask id="register" name="Register the request">
+      <bpmn:humanPerformer id="register-performer">
+        <bpmn:resourceRef>clerks</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:userTask>
+    <bpmn:sendTask id="refuse" name="Send a refusal">
+      <bpmn:performer id="refuse-performer">
+        <bpmn:resourceRef>clerks</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="refused" name="Request refused" />
+    <bpmn:sendTask id="answer" name="Send the answer">
+      <bpmn:performer id="answer-performer">
+        <bpmn:resourceRef>clerks</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="answered" name="Query answered" />
+    <bpmn:userTask id="assess" name="Assess the request">
+      <bpmn:humanPerformer id="assess-performer">
+        <bpmn:resourceRef>archivists</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="is-complete" name="Is the request complete?" default="f-is-complete-ask" />
+    <bpmn:sendTask id="ask" name="Ask for missing details">
+      <bpmn:performer id="ask-performer">
+        <bpmn:resourceRef>archivists</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:sendTask>
+    <bpmn:intermediateCatchEvent id="details" name="Details received">
+      <bpmn:messageEventDefinition id="details-def" messageRef="Message_Details" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="feasible" name="Is the query feasible?" />
+    <bpmn:userTask id="search" name="Search the holdings">
+      <bpmn:humanPerformer id="search-performer">
+        <bpmn:resourceRef>archivists</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:userTask>
+    <bpmn:userTask id="write" name="Write the answer">
+      <bpmn:humanPerformer id="write-performer">
+        <bpmn:resourceRef>archivists</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="f-arrived-register" sourceRef="arrived" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-assess" sourceRef="register" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-assess-is-complete" sourceRef="assess" targetRef="is-complete" />
+    <bpmn:sequenceFlow id="f-is-complete-feasible" name="yes" sourceRef="is-complete" targetRef="feasible">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">complete = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="f-is-complete-ask" name="no" sourceRef="is-complete" targetRef="ask" />
+    <bpmn:sequenceFlow id="f-ask-details" sourceRef="ask" targetRef="details" />
+    <bpmn:sequenceFlow id="f-details-assess" sourceRef="details" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-feasible-search" name="yes" sourceRef="feasible" targetRef="search" />
+    <bpmn:sequenceFlow id="f-feasible-refuse" name="no" sourceRef="feasible" targetRef="refuse" />
+    <bpmn:sequenceFlow id="f-refuse-refused" sourceRef="refuse" targetRef="refused" />
+    <bpmn:sequenceFlow id="f-search-write" sourceRef="search" targetRef="write" />
+    <bpmn:sequenceFlow id="f-write-answer" sourceRef="write" targetRef="answer" />
+    <bpmn:sequenceFlow id="f-answer-answered" sourceRef="answer" targetRef="answered" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="archive_di" bpmnElement="archive" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="1250" height="410" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="registry_di" bpmnElement="registry" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="1220" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archivist_di" bpmnElement="archivist" isHorizontal="true">
+        <dc:Bounds x="30" y="140" width="1220" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="arrived_di" bpmnElement="arrived">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="71" y="93" width="74" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refuse_di" bpmnElement="refuse">
+        <dc:Bounds x="726" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refused_di" bpmnElement="refused">
+        <dc:Bounds x="908" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="884" y="93" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answer_di" bpmnElement="answer">
+        <dc:Bounds x="1026" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answered_di" bpmnElement="answered">
+        <dc:Bounds x="1176" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1154" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assess_di" bpmnElement="assess">
+        <dc:Bounds x="326" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="is-complete_di" bpmnElement="is-complete" isMarkerVisible="true">
+        <dc:Bounds x="476" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="461" y="159" width="80" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ask_di" bpmnElement="ask">
+        <dc:Bounds x="576" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="details_di" bpmnElement="details">
+        <dc:Bounds x="758" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="681" y="361" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="feasible_di" bpmnElement="feasible" isMarkerVisible="true">
+        <dc:Bounds x="601" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="592" y="240" width="68" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search_di" bpmnElement="search">
+        <dc:Bounds x="726" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="write_di" bpmnElement="write">
+        <dc:Bounds x="876" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-arrived-register_di" bpmnElement="f-arrived-register">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-assess_di" bpmnElement="f-register-assess">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-assess-is-complete_di" bpmnElement="f-assess-is-complete">
+        <di:waypoint x="426" y="210" />
+        <di:waypoint x="476" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-is-complete-feasible_di" bpmnElement="f-is-complete-feasible">
+        <di:waypoint x="526" y="210" />
+        <di:waypoint x="601" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="533" y="195" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-is-complete-ask_di" bpmnElement="f-is-complete-ask">
+        <di:waypoint x="501" y="235" />
+        <di:waypoint x="501" y="340" />
+        <di:waypoint x="576" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="509" y="325" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-ask-details_di" bpmnElement="f-ask-details">
+        <di:waypoint x="676" y="340" />
+        <di:waypoint x="758" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-details-assess_di" bpmnElement="f-details-assess">
+        <di:waypoint x="776" y="358" />
+        <di:waypoint x="776" y="391" />
+        <di:waypoint x="376" y="391" />
+        <di:waypoint x="376" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-feasible-search_di" bpmnElement="f-feasible-search">
+        <di:waypoint x="651" y="210" />
+        <di:waypoint x="726" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658" y="195" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-feasible-refuse_di" bpmnElement="f-feasible-refuse">
+        <di:waypoint x="626" y="185" />
+        <di:waypoint x="626" y="70" />
+        <di:waypoint x="726" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="634" y="55" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-refuse-refused_di" bpmnElement="f-refuse-refused">
+        <di:waypoint x="826" y="70" />
+        <di:waypoint x="908" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-write_di" bpmnElement="f-search-write">
+        <di:waypoint x="826" y="210" />
+        <di:waypoint x="876" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-write-answer_di" bpmnElement="f-write-answer">
+        <di:waypoint x="976" y="210" />
+        <di:waypoint x="1076" y="210" />
+        <di:waypoint x="1076" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-answer-answered_di" bpmnElement="f-answer-answered">
+        <di:waypoint x="1126" y="70" />
+        <di:waypoint x="1176" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

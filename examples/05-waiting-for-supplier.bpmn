@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Waiting for a supplier" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Order" name="Order" />
+  <bpmn:message id="Message_Delivery" name="Delivery" />
+  <bpmn:message id="Message_Refusal" name="Refusal" />
+  <bpmn:signal id="Signal_Order_closed" name="Order closed" />
+  <bpmn:process id="process" name="Waiting for a supplier" isExecutable="false">
+    <bpmn:startEvent id="needed" name="Book needed" />
+    <bpmn:sendTask id="order" name="Send the order" messageRef="Message_Order" />
+    <bpmn:eventBasedGateway id="first" name="What happens first?" />
+    <bpmn:intermediateCatchEvent id="delivered" name="Book delivered">
+      <bpmn:messageEventDefinition id="delivered-def" messageRef="Message_Delivery" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="refused" name="Refusal received">
+      <bpmn:messageEventDefinition id="refused-def" messageRef="Message_Refusal" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="timeout" name="14 days passed">
+      <bpmn:timerEventDefinition id="timeout-def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="withdrawn" name="Title withdrawn by the publisher">
+      <bpmn:conditionalEventDefinition id="withdrawn-def">
+        <bpmn:condition xsi:type="bpmn:tFormalExpression">status = "withdrawn"</bpmn:condition>
+      </bpmn:conditionalEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="receive-book" name="Receive the book" />
+    <bpmn:endEvent id="done" name="Book received" />
+    <bpmn:intermediateThrowEvent id="closed" name="Order closed">
+      <bpmn:signalEventDefinition id="closed-def" signalRef="Signal_Order_closed" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="not-delivered" name="Order not fulfilled" />
+    <bpmn:intermediateThrowEvent id="to-reminder" name="To reminder">
+      <bpmn:linkEventDefinition id="to-reminder-def" name="Reminder" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:intermediateCatchEvent id="reminder" name="Reminder">
+      <bpmn:linkEventDefinition id="reminder-def" name="Reminder" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="send-reminder" name="Send a reminder" />
+    <bpmn:endEvent id="reminded" name="Reminder sent" />
+    <bpmn:sequenceFlow id="f-needed-order" sourceRef="needed" targetRef="order" />
+    <bpmn:sequenceFlow id="f-order-first" sourceRef="order" targetRef="first" />
+    <bpmn:sequenceFlow id="f-first-delivered" sourceRef="first" targetRef="delivered" />
+    <bpmn:sequenceFlow id="f-first-refused" sourceRef="first" targetRef="refused" />
+    <bpmn:sequenceFlow id="f-first-timeout" sourceRef="first" targetRef="timeout" />
+    <bpmn:sequenceFlow id="f-first-withdrawn" sourceRef="first" targetRef="withdrawn" />
+    <bpmn:sequenceFlow id="f-delivered-receive-book" sourceRef="delivered" targetRef="receive-book" />
+    <bpmn:sequenceFlow id="f-receive-book-done" sourceRef="receive-book" targetRef="done" />
+    <bpmn:sequenceFlow id="f-refused-closed" sourceRef="refused" targetRef="closed" />
+    <bpmn:sequenceFlow id="f-closed-not-delivered" sourceRef="closed" targetRef="not-delivered" />
+    <bpmn:sequenceFlow id="f-withdrawn-closed" sourceRef="withdrawn" targetRef="closed" />
+    <bpmn:sequenceFlow id="f-timeout-to-reminder" sourceRef="timeout" targetRef="to-reminder" />
+    <bpmn:sequenceFlow id="f-reminder-send-reminder" sourceRef="reminder" targetRef="send-reminder" />
+    <bpmn:sequenceFlow id="f-send-reminder-reminded" sourceRef="send-reminder" targetRef="reminded" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="needed_di" bpmnElement="needed">
+        <dc:Bounds x="30" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="17" y="223" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order_di" bpmnElement="order">
+        <dc:Bounds x="116" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="first_di" bpmnElement="first">
+        <dc:Bounds x="266" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="257" y="149" width="68" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="delivered_di" bpmnElement="delivered">
+        <dc:Bounds x="366" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="344" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refused_di" bpmnElement="refused">
+        <dc:Bounds x="366" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="339" y="223" width="90" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="timeout_di" bpmnElement="timeout">
+        <dc:Bounds x="366" y="376" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="344" y="417" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="withdrawn_di" bpmnElement="withdrawn">
+        <dc:Bounds x="366" y="290" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="333" y="331" width="102" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="receive-book_di" bpmnElement="receive-book">
+        <dc:Bounds x="452" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="602" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="583" y="93" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="closed_di" bpmnElement="closed">
+        <dc:Bounds x="484" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468" y="223" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="not-delivered_di" bpmnElement="not-delivered">
+        <dc:Bounds x="602" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="566" y="223" width="108" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="to-reminder_di" bpmnElement="to-reminder">
+        <dc:Bounds x="484" y="290" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="471" y="331" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reminder_di" bpmnElement="reminder">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="25" y="93" width="46" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="send-reminder_di" bpmnElement="send-reminder">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reminded_di" bpmnElement="reminded">
+        <dc:Bounds x="273" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="254" y="93" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-needed-order_di" bpmnElement="f-needed-order">
+        <di:waypoint x="66" y="200" />
+        <di:waypoint x="116" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-order-first_di" bpmnElement="f-order-first">
+        <di:waypoint x="216" y="200" />
+        <di:waypoint x="266" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-first-delivered_di" bpmnElement="f-first-delivered">
+        <di:waypoint x="316" y="200" />
+        <di:waypoint x="341" y="200" />
+        <di:waypoint x="341" y="70" />
+        <di:waypoint x="366" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-first-refused_di" bpmnElement="f-first-refused">
+        <di:waypoint x="316" y="200" />
+        <di:waypoint x="366" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-first-timeout_di" bpmnElement="f-first-timeout">
+        <di:waypoint x="291" y="225" />
+        <di:waypoint x="291" y="394" />
+        <di:waypoint x="366" y="394" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-first-withdrawn_di" bpmnElement="f-first-withdrawn">
+        <di:waypoint x="291" y="225" />
+        <di:waypoint x="291" y="308" />
+        <di:waypoint x="366" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-delivered-receive-book_di" bpmnElement="f-delivered-receive-book">
+        <di:waypoint x="402" y="70" />
+        <di:waypoint x="452" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-receive-book-done_di" bpmnElement="f-receive-book-done">
+        <di:waypoint x="552" y="70" />
+        <di:waypoint x="602" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-refused-closed_di" bpmnElement="f-refused-closed">
+        <di:waypoint x="402" y="200" />
+        <di:waypoint x="484" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-closed-not-delivered_di" bpmnElement="f-closed-not-delivered">
+        <di:waypoint x="520" y="200" />
+        <di:waypoint x="602" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-withdrawn-closed_di" bpmnElement="f-withdrawn-closed">
+        <di:waypoint x="402" y="308" />
+        <di:waypoint x="459" y="308" />
+        <di:waypoint x="459" y="200" />
+        <di:waypoint x="484" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-timeout-to-reminder_di" bpmnElement="f-timeout-to-reminder">
+        <di:waypoint x="402" y="394" />
+        <di:waypoint x="459" y="394" />
+        <di:waypoint x="459" y="308" />
+        <di:waypoint x="484" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reminder-send-reminder_di" bpmnElement="f-reminder-send-reminder">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-send-reminder-reminded_di" bpmnElement="f-send-reminder-reminded">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="273" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

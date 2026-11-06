@@ -1,0 +1,23 @@
+tok 1.0 "Registering a thesis"
+
+item thesis-type "Thesis" structure="Thesis"
+
+start submitted "Thesis submitted"
+user check "Check the thesis"
+user register "Register the thesis"
+end registered "Thesis registered"
+data thesis "Thesis" state="submitted" type=thesis-type
+data thesis-checked "Thesis" state="submitted"
+data report "Plagiarism report" type=report-type
+store repository "Thesis repository"
+
+flow submitted -> check -> register -> registered
+
+reads check thesis
+writes check thesis-checked
+writes check report
+reads register thesis-checked
+writes register repositry
+writes registered thesis-checked
+
+note check-rule "Theses are checked within 14 days." on=chek

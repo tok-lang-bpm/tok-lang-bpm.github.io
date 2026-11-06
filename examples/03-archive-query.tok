@@ -1,0 +1,30 @@
+tok 1.0 "Archive query"
+
+start arrived "Query received"
+user assess "Assess the query"
+xor complete "Is the query complete?"
+user ask "Ask for missing details"
+and search
+user finding-aids "Search the finding aids"
+user register "Search the query register"
+and results
+user answer "Draft the answer"
+or channel "How should the answer be sent?"
+send email "Send the answer by e-mail" message="Answer"
+send post "Send the answer by post" message="Answer"
+manual desk "Hand the answer over at the desk"
+or delivered
+end closed "Query closed"
+
+flow arrived -> assess -> complete
+flow complete -> search "yes" when="complete = true"
+flow complete -> ask "no" default
+flow ask -> assess
+flow search -> finding-aids -> results
+flow search -> register -> results -> answer -> channel
+flow channel -> email "e-mail" when="email != null"
+flow channel -> post "post" when="address != null and paper = true"
+flow channel -> desk "in person" default
+flow email -> delivered
+flow post -> delivered
+flow desk -> delivered -> closed

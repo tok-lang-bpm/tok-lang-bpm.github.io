@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Processing a bequest of papers" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:globalUserTask id="identity-check" name="Check the donor's identity" />
+  <bpmn:process id="process" name="Processing a bequest of papers" isExecutable="false">
+    <bpmn:startEvent id="received" name="Bequest offered" />
+    <bpmn:callActivity id="check-donor" name="Check the donor's identity" calledElement="identity-check" />
+    <bpmn:userTask id="appraise" name="Appraise each box">
+      <bpmn:multiInstanceLoopCharacteristics isSequential="false" />
+    </bpmn:userTask>
+    <bpmn:adHocSubProcess id="processing" name="Process the papers">
+      <bpmn:userTask id="describe" name="Describe the files" />
+      <bpmn:userTask id="digitise" name="Digitise the files" />
+      <bpmn:manualTask id="conserve" name="Conserve damaged files" />
+      <bpmn:sequenceFlow id="f-describe-digitise" sourceRef="describe" targetRef="digitise" />
+    </bpmn:adHocSubProcess>
+    <bpmn:serviceTask id="publish" name="Publish the finding aid">
+      <bpmn:standardLoopCharacteristics testBefore="true" loopMaximum="3">
+        <bpmn:loopCondition xsi:type="bpmn:tFormalExpression">not(published)</bpmn:loopCondition>
+      </bpmn:standardLoopCharacteristics>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="proofread" name="Proofread the finding aid">
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+    </bpmn:userTask>
+    <bpmn:callActivity id="catalogue" name="Catalogue the collection" calledElement="cataloguing" />
+    <bpmn:endEvent id="done" name="Bequest processed" />
+    <bpmn:sequenceFlow id="f-received-check-donor" sourceRef="received" targetRef="check-donor" />
+    <bpmn:sequenceFlow id="f-check-donor-appraise" sourceRef="check-donor" targetRef="appraise" />
+    <bpmn:sequenceFlow id="f-appraise-processing" sourceRef="appraise" targetRef="processing" />
+    <bpmn:sequenceFlow id="f-processing-publish" sourceRef="processing" targetRef="publish" />
+    <bpmn:sequenceFlow id="f-publish-proofread" sourceRef="publish" targetRef="proofread" />
+    <bpmn:sequenceFlow id="f-proofread-catalogue" sourceRef="proofread" targetRef="catalogue" />
+    <bpmn:sequenceFlow id="f-catalogue-done" sourceRef="catalogue" targetRef="done" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="30" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="6" y="193" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check-donor_di" bpmnElement="check-donor">
+        <dc:Bounds x="116" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="appraise_di" bpmnElement="appraise">
+        <dc:Bounds x="266" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="processing_di" bpmnElement="processing" isExpanded="true">
+        <dc:Bounds x="416" y="30" width="310" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="describe_di" bpmnElement="describe">
+        <dc:Bounds x="446" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="digitise_di" bpmnElement="digitise">
+        <dc:Bounds x="596" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="conserve_di" bpmnElement="conserve">
+        <dc:Bounds x="446" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="publish_di" bpmnElement="publish">
+        <dc:Bounds x="776" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="proofread_di" bpmnElement="proofread">
+        <dc:Bounds x="926" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="catalogue_di" bpmnElement="catalogue">
+        <dc:Bounds x="1076" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="1226" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1196" y="193" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-describe-digitise_di" bpmnElement="f-describe-digitise">
+        <di:waypoint x="546" y="110" />
+        <di:waypoint x="596" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-received-check-donor_di" bpmnElement="f-received-check-donor">
+        <di:waypoint x="66" y="170" />
+        <di:waypoint x="116" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-check-donor-appraise_di" bpmnElement="f-check-donor-appraise">
+        <di:waypoint x="216" y="170" />
+        <di:waypoint x="266" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-appraise-processing_di" bpmnElement="f-appraise-processing">
+        <di:waypoint x="366" y="170" />
+        <di:waypoint x="416" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-processing-publish_di" bpmnElement="f-processing-publish">
+        <di:waypoint x="726" y="170" />
+        <di:waypoint x="776" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-publish-proofread_di" bpmnElement="f-publish-proofread">
+        <di:waypoint x="876" y="170" />
+        <di:waypoint x="926" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-proofread-catalogue_di" bpmnElement="f-proofread-catalogue">
+        <di:waypoint x="1026" y="170" />
+        <di:waypoint x="1076" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-catalogue-done_di" bpmnElement="f-catalogue-done">
+        <di:waypoint x="1176" y="170" />
+        <di:waypoint x="1226" y="170" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

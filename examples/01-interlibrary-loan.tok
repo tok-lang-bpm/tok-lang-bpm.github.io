@@ -1,0 +1,19 @@
+tok 1.0 "Interlibrary loan"
+
+pool library "University library"
+  lane reader "Reader"
+    start need "Book needed"
+    user request "Submit a loan request"
+  lane librarian "Librarian"
+    user catalogues "Search the catalogues"
+    xor available "Is the book held locally?"
+    user locate "Point to the local copy"
+    user order "Order from another library"
+    end located "Local copy located"
+    end ordered "Order placed"
+
+flow need -> request -> catalogues -> available
+flow available -> locate "yes"
+flow available -> order "no"
+flow locate -> located
+flow order -> ordered

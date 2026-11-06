@@ -1,0 +1,15 @@
+tok 1.0 "Due dates"
+
+inputdata loaned "Loan date" name="Loan date" type=date
+inputdata period "Loan period in days" name="Loan period" type=number
+inputdata closed "Days the library is closed" type="list<string>"
+
+decision due "Due date" type=date requires="loaned period" expr="Loan date + duration(\"P\" + string(Loan period) + \"D\")"
+
+decision weekend "Is the due date on a weekend?" type=boolean requires="due" expr="day of week(due) in (\"Saturday\", \"Sunday\")"
+
+decision on-closed-day "Is the library closed on the due date?" type=boolean requires="due closed" expr="some d in closed satisfies date(d) = due"
+
+decision reminders "Reminder dates" requires="due" expr="for i in 1..3 return due + duration(\"P\" + string(7 * i) + \"D\")"
+
+decision summer "Loaned during the summer break?" type=boolean requires="loaned" expr="Loan date in [@\"2027-07-01\"..@\"2027-08-31\"]"

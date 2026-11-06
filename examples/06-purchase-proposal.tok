@@ -1,0 +1,35 @@
+tok 1.0 "Book purchase proposal" doc="How the library handles a reader's proposal to buy a book."
+
+pool library "University library"
+  lane reader "Reader"
+    start need "Reader needs a book"
+    user propose "Fill in the purchase proposal"
+  lane acquisitions "Acquisitions librarian"
+    user check "Check the catalogue and the budget" doc="Duplicates are rejected. The budget is read from the finance system."
+    xor accepted "Is the purchase accepted?"
+    user order "Order the book"
+    user refuse "Inform the reader of the refusal"
+    end ordered "Book ordered"
+    end refused "Proposal refused"
+  data proposal "Purchase proposal" state=submitted object="Purchase proposal"
+  data proposal-checked "Purchase proposal" state=checked object="Purchase proposal"
+  data order-lines "Order lines" collection
+  store catalogue "Library catalogue"
+  store finance "Finance system"
+
+flow need -> propose -> check -> accepted
+flow accepted -> order "yes"
+flow accepted -> refuse "no"
+flow order -> ordered
+flow refuse -> refused
+
+writes propose proposal
+reads check proposal
+reads check catalogue
+reads check finance
+writes check proposal-checked
+reads order proposal-checked
+writes order order-lines
+
+note budget-rule "Purchases over 500 EUR need the director's approval." on=accepted
+group decision-stage "Acquisition decision" members="check accepted"

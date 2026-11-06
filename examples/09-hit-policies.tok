@@ -1,0 +1,40 @@
+tok 1.0 "Overdue books"
+
+inputdata due "Due date" type=date
+inputdata returned "Return date" type=date
+inputdata value "Value of the copy" type=number
+inputdata account "Account type" type=string
+
+# unique: at most one rule may match
+decision fee-band "Fee band" requires="account" hit=unique
+  | account: string                     || band: string |
+  | "student", "doctoral"               || "reduced"    |
+  | "staff"                             || "none"       |
+  | not("student", "doctoral", "staff") || "full"       |
+
+# priority: the matching rule whose output comes first in the output values wins
+decision urgency "Urgency of the reminder" requires="due returned value" hit=priority
+  | returned - due: days and time duration | value: number = [0..10000] || urgency: string = "urgent", "normal", "none" |
+  | > duration("P30D")                     | -                          || "urgent"                                     |
+  | > duration("P0D")                      | > 200                      || "urgent"                                     |
+  | > duration("P0D")                      | -                          || "normal"                                     |
+  | -                                      | -                          || "none"                                       |
+
+# collect with an aggregation: the points of all matching rules are added up
+decision points "Penalty points" requires="due returned value" hit=collect aggregation=sum default="0"
+  | (returned - due).days: number | value: number || points: number ||                     |
+  | > 0                           | -             || 1              || any delay           |
+  | > 14                          | -             || 2              || more than two weeks |
+  | -                             | > 500         || 3              || valuable copy       |
+
+# rule order: every matching rule, in the order of the rules
+decision notices "Notices" requires="account due returned" hit=rule-order
+  | account: string | returned > due: boolean || channel: string | text: string              |
+  | "student"       | true                    || "e-mail"        | "Your loan is overdue."   |
+  | -               | true                    || "SMS"           | "Please return the book." |
+
+# output order: every matching rule, ordered by the output values; a default when none matches
+decision channels "Reminder channels" requires="account" hit=output-order default="channel = \"letter\"; cost = 0.8"
+  | account: string       || channel: string = "SMS", "e-mail", "letter" | cost: number |
+  | "student", "doctoral" || "e-mail"                                    | 0            |
+  | "student", "staff"    || "SMS"                                       | 0.1          |

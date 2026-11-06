@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1222" height="682" viewBox="0 0 1222 682" font-family="Arial, Helvetica, sans-serif" font-size="12">
+  <defs>
+    <marker id="information" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#222"/></marker>
+    <marker id="knowledge" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#222"/></marker>
+    <marker id="authority" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7"><circle cx="5" cy="5" r="4" fill="#222"/></marker>
+  </defs>
+  <rect width="1222" height="682" fill="white"/>
+  <g id="summary"><rect x="576" y="80" width="180" height="80" fill="#fff" stroke="#222" stroke-width="2"/><text x="666" y="124" text-anchor="middle">Summary for the reader</text></g>
+  <g id="blocked"><rect x="348" y="230" width="180" height="80" fill="#fff" stroke="#222" stroke-width="2"/><text x="438" y="274" text-anchor="middle">Block the account?</text></g>
+  <g id="fee"><rect x="829" y="230" width="180" height="80" fill="#fff" stroke="#222" stroke-width="2"/><text x="919" y="274" text-anchor="middle">Fee for the delay</text></g>
+  <g id="director"><path d="M 411 389 L 511 389 L 511 442 C 476 426 446 458 411 442 Z" fill="#fff" stroke="#222" stroke-width="2"/><text x="461" y="412" text-anchor="middle">Director's</text><text x="461" y="426" text-anchor="middle">order</text></g>
+  <g id="limit"><rect x="551" y="380" width="180" height="80" fill="#fff" stroke="#222" stroke-width="2"/><text x="641" y="424" text-anchor="middle">Loan limit</text></g>
+  <g id="days-late"><rect x="772" y="398" width="125" height="45" rx="22" ry="22" fill="#fff" stroke="#222" stroke-width="2"/><text x="834" y="424" text-anchor="middle">Days late</text></g>
+  <g id="late-fee"><polygon points="949,397 1072,397 1072,431 1060,443 937,443 937,409" fill="#fff" stroke="#222" stroke-width="2"/><text x="1004" y="424" text-anchor="middle">Late fee</text></g>
+  <g id="unpaid"><rect x="151" y="548" width="125" height="45" rx="22" ry="22" fill="#fff" stroke="#222" stroke-width="2"/><text x="213" y="567" text-anchor="middle">Unpaid fees</text><text x="213" y="581" text-anchor="middle">(EUR)</text></g>
+  <g id="age"><rect x="331" y="548" width="125" height="45" rx="22" ry="22" fill="#fff" stroke="#222" stroke-width="2"/><text x="393" y="574" text-anchor="middle">Reader's age</text></g>
+  <g id="account"><rect x="496" y="548" width="125" height="45" rx="22" ry="22" fill="#fff" stroke="#222" stroke-width="2"/><text x="558" y="574" text-anchor="middle">Account type</text></g>
+  <g id="rules"><path d="M 660 539 L 760 539 L 760 592 C 725 576 695 608 660 592 Z" fill="#fff" stroke="#222" stroke-width="2"/><text x="710" y="562" text-anchor="middle">Lending</text><text x="710" y="576" text-anchor="middle">rules</text></g>
+  <polyline points="685,539 444,452" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#authority)"/>
+  <polyline points="192,548 477,452" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#authority)"/>
+  <polyline points="710,539 1004,443" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#authority)"/>
+  <polyline points="393,548 596,460" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="558,548 641,460" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="735,539 686,460" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#authority)"/>
+  <polyline points="611,380 393,310" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="234,548 438,310" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="461,389 483,310" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#authority)"/>
+  <polyline points="1004,397 889,310" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#knowledge)"/>
+  <polyline points="834,398 949,310" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="671,380 621,160" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="919,230 666,160" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+  <polyline points="438,230 711,160" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#information)"/>
+</svg>

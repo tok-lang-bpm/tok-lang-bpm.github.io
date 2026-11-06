@@ -1,0 +1,29 @@
+tok 1.0 "Loan renewal"
+
+start asked "Reader asks for a renewal"
+rule decide "Decide on the renewal" decision=renewal result=renewal by=desk duration="tri(1m, 2m, 4m)"
+xor allowed "Is the renewal allowed?"
+task extend "Extend the loan period" by=desk duration="tri(1m, 3m, 6m)"
+task explain "Explain the refusal" by=desk duration="tri(3m, 5m, 10m)"
+end extended "Loan extended"
+end refused "Renewal refused"
+
+flow asked -> decide -> allowed
+flow allowed -> extend "yes" when="renewal = \"allowed\""
+flow allowed -> explain "no" default
+flow extend -> extended
+flow explain -> refused
+
+inputdata renewals "Renewals so far" type=number
+inputdata reserved "Reserved by another reader" type=boolean
+
+decision renewal "Renewal" type=string requires="renewals reserved" hit=first
+  | reserved: boolean | renewals: number || renewal: string |
+  | true              | -                || "refused"       |
+  | -                 | >= 3             || "refused"       |
+  | -                 | -                || "allowed"       |
+
+simulate cases=200 seed=3 arrival="exp(10m)"
+resource desk "Loan desk" count=1
+variable renewals "cat(0=0.5, 1=0.3, 2=0.15, 3=0.05)"
+variable reserved "bern(0.1)"

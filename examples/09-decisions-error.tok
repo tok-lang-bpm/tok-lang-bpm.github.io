@@ -1,0 +1,20 @@
+tok 1.0 "Interlibrary loan fees"
+
+inputdata pages "Number of pages" type=number
+inputdata delivery "Delivery" type=string
+
+bkm per-page "Price per page" params="pages: number" type=number expr="pages * 0.1"
+
+decision copy-fee "Fee for copies" type=number expr="per-page(pages)"
+
+decision postage "Postage" requires="delivery" hit=first
+  | delivery: string || postage: number |
+  | "post"           || 4               |
+  | "e-mail"         || 0 | 0          |
+
+decision total "Total fee" type=numbr requires="copy-fee postage" expr="copy-fee + postage +"
+
+decision band "Fee band" requires="total" hit=priority
+  | total: number || band: string |
+  | > 50          || "high"       |
+  | -             || "low"        |

@@ -1,0 +1,34 @@
+tok 1.0 "Copyright complaint in the university repository"
+
+pool repository "University repository"
+  lane officer "Repository officer"
+    start received "Complaint received" message="Complaint"
+    user register "Register the complaint"
+    user assess "Assess the complaint"
+    boundary reminder "10 days passed" noninterrupting on=assess timer=P10D
+    user remind "Remind the head of the repository"
+    end reminded "Head reminded"
+    xor justified "Is the complaint justified?"
+    send inform "Inform the author" message="Notice of removal"
+    xor merge
+    send reply "Reply to the complainant" message="Reply"
+    end closed "Complaint closed"
+  lane system "Repository system"
+    service hide "Hide the publication"
+    service remove "Remove the publication"
+    service restore "Restore the publication"
+
+pool complainant "Complainant"
+
+pool author "Author"
+
+flow received -> register -> hide -> assess -> justified
+flow justified -> inform "yes"
+flow justified -> restore "no"
+flow inform -> remove -> merge
+flow restore -> merge -> reply -> closed
+flow reminder -> remind -> reminded
+
+message complainant -> received "Complaint"
+message inform -> author "Notice of removal"
+message reply -> complainant "Reply"
