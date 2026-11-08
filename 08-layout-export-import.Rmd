@@ -49,6 +49,8 @@ SVG: 08-document-delivery.svg
 
 A model with errors has no picture: `tok svg` prints the diagnostics and exits with code 1. Warnings do not prevent the picture.
 
+Every picture carries a text alternative for screen readers. The title of the model (the file name when the model has no title) is the `<title>` of the picture, and a `<desc>` states what the picture shows, for example "Process diagram with 2 pools, 2 lanes, 8 flow nodes, 7 sequence flows and 1 message flow." The root element has `role="img"` and `aria-labelledby`, so a screen reader announces the title and the description of a picture embedded in a web page or a document. The description is a summary: the full model for a reader who does not see the picture is the text of the model itself.
+
 ## BPMN files: `tok bpmn`
 
 `tok bpmn FILE` writes the model as BPMN 2.0 XML, with a diagram (the BPMN DI part of the file) computed by the automatic layout:

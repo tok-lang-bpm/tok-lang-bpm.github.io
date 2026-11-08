@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Book purchase proposal" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
-  <bpmn:documentation>How the library handles a reader's proposal to buy a book.</bpmn:documentation>
   <bpmn:dataStore id="catalogue-store" name="Library catalogue" />
   <bpmn:dataStore id="finance-store" name="Finance system" />
   <bpmn:category id="categories">
     <bpmn:categoryValue id="decision-stage-value" value="Acquisition decision" />
   </bpmn:category>
   <bpmn:collaboration id="collaboration">
+    <bpmn:documentation>How the library handles a reader's proposal to buy a book.</bpmn:documentation>
     <bpmn:participant id="library" name="University library" processRef="library-process" />
     <bpmn:group id="decision-stage" categoryValueRef="decision-stage-value" />
   </bpmn:collaboration>
