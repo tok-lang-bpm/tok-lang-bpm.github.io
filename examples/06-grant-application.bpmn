@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Assessing a grant application" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <bpmn:itemDefinition id="application-type" structureRef="Application">
+    <bpmn:documentation>Grant application</bpmn:documentation>
+  </bpmn:itemDefinition>
+  <bpmn:itemDefinition id="decision-type" structureRef="xsd:string" itemKind="Information">
+    <bpmn:documentation>Decision letter</bpmn:documentation>
+  </bpmn:itemDefinition>
+  <bpmn:itemDefinition id="file-type" itemKind="Physical">
+    <bpmn:documentation>Paper file</bpmn:documentation>
+  </bpmn:itemDefinition>
+  <bpmn:dataStore id="files-store" name="Paper files" />
+  <bpmn:process id="process" name="Assessing a grant application" isExecutable="false">
+    <bpmn:ioSpecification id="process-io">
+      <bpmn:dataInput id="application" name="Grant application" itemSubjectRef="application-type" />
+      <bpmn:dataOutput id="decision" name="Decision" itemSubjectRef="decision-type" />
+      <bpmn:inputSet id="process-inputs">
+        <bpmn:dataInputRefs>application</bpmn:dataInputRefs>
+      </bpmn:inputSet>
+      <bpmn:outputSet id="process-outputs">
+        <bpmn:dataOutputRefs>decision</bpmn:dataOutputRefs>
+      </bpmn:outputSet>
+    </bpmn:ioSpecification>
+    <bpmn:startEvent id="received" name="Application received" />
+    <bpmn:userTask id="assess" name="Assess the application">
+      <bpmn:ioSpecification id="assess-io">
+        <bpmn:dataInput id="criteria" name="Assessment criteria" isCollection="true" />
+        <bpmn:dataInput id="scan-in" name="Scan to assess" />
+        <bpmn:dataInput id="assess-in-1" name="Grant application" />
+        <bpmn:dataOutput id="assess-out-3" name="Scanned application" />
+        <bpmn:dataOutput id="assess-out-4" name="Decision" />
+        <bpmn:inputSet id="assess-inputs">
+          <bpmn:dataInputRefs>criteria</bpmn:dataInputRefs>
+          <bpmn:dataInputRefs>scan-in</bpmn:dataInputRefs>
+          <bpmn:dataInputRefs>assess-in-1</bpmn:dataInputRefs>
+        </bpmn:inputSet>
+        <bpmn:outputSet id="assess-outputs">
+          <bpmn:dataOutputRefs>assess-out-3</bpmn:dataOutputRefs>
+          <bpmn:dataOutputRefs>assess-out-4</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:property id="reviews" name="Number of reviews" />
+      <bpmn:dataInputAssociation id="assess-dia-1">
+        <bpmn:sourceRef>application</bpmn:sourceRef>
+        <bpmn:targetRef>assess-in-1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataInputAssociation id="assess-dia-2">
+        <bpmn:sourceRef>scan</bpmn:sourceRef>
+        <bpmn:targetRef>scan-in</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="assess-doa-3">
+        <bpmn:sourceRef>assess-out-3</bpmn:sourceRef>
+        <bpmn:targetRef>scan-assessed</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+      <bpmn:dataOutputAssociation id="assess-doa-4">
+        <bpmn:sourceRef>assess-out-4</bpmn:sourceRef>
+        <bpmn:targetRef>decision</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:task id="archive" name="Archive the paper file">
+      <bpmn:ioSpecification id="archive-io">
+        <bpmn:dataOutput id="archive-out-5" name="Paper files" />
+        <bpmn:inputSet id="archive-inputs" />
+        <bpmn:outputSet id="archive-outputs">
+          <bpmn:dataOutputRefs>archive-out-5</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:dataOutputAssociation id="archive-doa-5">
+        <bpmn:sourceRef>archive-out-5</bpmn:sourceRef>
+        <bpmn:targetRef>files</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:endEvent id="decided" name="Application decided" />
+    <bpmn:sequenceFlow id="f-received-assess" sourceRef="received" targetRef="assess" />
+    <bpmn:sequenceFlow id="f-assess-archive" sourceRef="assess" targetRef="archive" />
+    <bpmn:sequenceFlow id="f-archive-decided" sourceRef="archive" targetRef="decided" />
+    <bpmn:dataObject id="scan-object" name="Scanned application" itemSubjectRef="application-type" />
+    <bpmn:dataObjectReference id="scan" name="Scanned application" dataObjectRef="scan-object">
+      <bpmn:dataState id="scan-state" name="received" />
+    </bpmn:dataObjectReference>
+    <bpmn:dataObject id="scan-assessed-object" name="Scanned application" />
+    <bpmn:dataObjectReference id="scan-assessed" name="Scanned application" dataObjectRef="scan-assessed-object">
+      <bpmn:dataState id="scan-assessed-state" name="assessed" />
+    </bpmn:dataObjectReference>
+    <bpmn:dataStoreReference id="files" name="Paper files" dataStoreRef="files-store" itemSubjectRef="file-type" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="application_di" bpmnElement="application">
+        <dc:Bounds x="30" y="160" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="0" y="215" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="decision_di" bpmnElement="decision">
+        <dc:Bounds x="298" y="260" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="293" y="315" width="46" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="17" y="93" width="62" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assess_di" bpmnElement="assess">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archive_di" bpmnElement="archive">
+        <dc:Bounds x="266" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="decided_di" bpmnElement="decided">
+        <dc:Bounds x="416" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="380" y="93" width="108" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="scan_di" bpmnElement="scan">
+        <dc:Bounds x="148" y="160" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="99" y="213" width="62" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="scan-assessed_di" bpmnElement="scan-assessed">
+        <dc:Bounds x="148" y="260" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="112" y="315" width="108" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="files_di" bpmnElement="files">
+        <dc:Bounds x="291" y="160" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="285" y="215" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="assess-dia-1_di" bpmnElement="assess-dia-1">
+        <di:waypoint x="66" y="167" />
+        <di:waypoint x="125" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="assess-dia-2_di" bpmnElement="assess-dia-2">
+        <di:waypoint x="166" y="160" />
+        <di:waypoint x="166" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="assess-doa-3_di" bpmnElement="assess-doa-3">
+        <di:waypoint x="166" y="110" />
+        <di:waypoint x="166" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="assess-doa-4_di" bpmnElement="assess-doa-4">
+        <di:waypoint x="194" y="110" />
+        <di:waypoint x="299" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="archive-doa-5_di" bpmnElement="archive-doa-5">
+        <di:waypoint x="316" y="110" />
+        <di:waypoint x="316" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-received-assess_di" bpmnElement="f-received-assess">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-assess-archive_di" bpmnElement="f-assess-archive">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-archive-decided_di" bpmnElement="f-archive-decided">
+        <di:waypoint x="366" y="70" />
+        <di:waypoint x="416" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

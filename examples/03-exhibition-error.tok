@@ -1,0 +1,21 @@
+tok 1.0 "Preparing an exhibition (with errors)"
+
+start decided "Exhibition decided"
+and prepare
+user select "Select the objects"
+user captions "Write the captions"
+xor ready
+xor accepted "Did the director approve?"
+user install "Install the exhibition"
+user revise "Revise the script"
+end opened "Exhibition opened"
+
+flow decided -> prepare
+flow prepare -> select "objects" when="objects = true"
+flow prepare -> captions
+flow select -> ready
+flow captions -> ready
+flow ready -> accepted
+flow accepted -> install "yes"
+flow accepted -> revise
+flow install -> opened

@@ -1,0 +1,37 @@
+tok 1.0 "Document delivery"
+
+pool reader "Reader"
+  start need "Article needed"
+  send request "Request a scan" message="Scan request"
+  eventgw reply "What comes back?"
+  catch scan "Scan received" message="Scan"
+  catch refusal "Refusal received" message="Refusal"
+  manual read "Read the article"
+  end done "Article read"
+  end gave-up "Article not obtained"
+
+pool library "University library"
+  lane desk "Document delivery desk"
+    start received "Request received" message="Scan request"
+    user check "Check the copyright limits"
+    xor allowed "Is copying allowed?"
+    send deliver "Send the scan" message="Scan"
+    end delivered "Scan delivered"
+    end refused "Request refused" message="Refusal"
+  lane stacks "Stacks staff"
+    user fetch "Fetch the volume"
+    user digitise "Scan the pages"
+
+flow need -> request -> reply
+flow reply -> scan
+flow reply -> refusal
+flow scan -> read -> done
+flow refusal -> gave-up
+flow received -> check -> allowed
+flow allowed -> fetch "yes"
+flow allowed -> refused "no"
+flow fetch -> digitise -> deliver -> delivered
+
+message request -> received "Scan request"
+message deliver -> scan "Scan"
+message refused -> refusal "Refusal"

@@ -1,0 +1,28 @@
+tok 1.0 "Waiting for a supplier"
+
+start needed "Book needed"
+send order "Send the order" message="Order"
+eventgw first "What happens first?"
+catch delivered "Book delivered" message="Delivery"
+catch refused "Refusal received" message="Refusal"
+catch timeout "14 days passed" timer=P14D
+catch withdrawn "Title withdrawn by the publisher" condition="status = \"withdrawn\""
+user receive-book "Receive the book"
+end done "Book received"
+throw closed "Order closed" signal="Order closed"
+end not-delivered "Order not fulfilled"
+throw to-reminder "To reminder" link="Reminder"
+catch reminder "Reminder" link="Reminder"
+user send-reminder "Send a reminder"
+end reminded "Reminder sent"
+
+flow needed -> order -> first
+flow first -> delivered
+flow first -> refused
+flow first -> timeout
+flow first -> withdrawn
+flow delivered -> receive-book -> done
+flow refused -> closed -> not-delivered
+flow withdrawn -> closed
+flow timeout -> to-reminder
+flow reminder -> send-reminder -> reminded

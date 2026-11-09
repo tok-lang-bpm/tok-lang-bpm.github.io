@@ -1,0 +1,22 @@
+tok 1.0 "Room and ticket booking" executable
+
+# elements of BPMN 2.0.2 that Camunda 8 does not execute, and a service task without a job type
+start s "Trip requested"
+transaction booking "Book room and ticket"
+  start bs
+  service room "Book the room" type="book-room" compensate=free-room
+  service free-room "Free the room" compensation type="free-room"
+  end booked
+  end abort "Booking aborted" cancel
+  xor ok "Both booked?"
+boundary cancelled "Booking cancelled" cancel on=booking
+complex enough "Enough offers?" activation="_activationCount >= 2"
+service notify "Notify the traveller"
+end e "Trip booked"
+end e2 "Trip cancelled"
+
+flow bs -> room -> ok
+flow ok -> booked "yes" when="ok = true"
+flow ok -> abort "no" default
+flow s -> booking -> enough -> notify -> e
+flow cancelled -> e2

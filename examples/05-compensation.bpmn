@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Ordering books from a supplier" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:process id="process" name="Ordering books from a supplier" isExecutable="false">
+    <bpmn:startEvent id="s" name="Order approved" />
+    <bpmn:serviceTask id="reserve" name="Reserve funds" />
+    <bpmn:boundaryEvent id="reserve-compensate" attachedToRef="reserve">
+      <bpmn:compensateEventDefinition id="reserve-compensate-def" />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="release" name="Release the reserved funds" isForCompensation="true" />
+    <bpmn:userTask id="send-order" name="Send the order" />
+    <bpmn:boundaryEvent id="send-order-compensate" attachedToRef="send-order">
+      <bpmn:compensateEventDefinition id="send-order-compensate-def" />
+    </bpmn:boundaryEvent>
+    <bpmn:manualTask id="withdraw" name="Withdraw the order" isForCompensation="true" />
+    <bpmn:exclusiveGateway id="confirmed" name="Did the supplier confirm the delivery?" />
+    <bpmn:endEvent id="ordered" name="Books ordered" />
+    <bpmn:intermediateThrowEvent id="undo-funds" name="Undo the reservation">
+      <bpmn:compensateEventDefinition id="undo-funds-def" activityRef="reserve" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="cancelled" name="Order cancelled">
+      <bpmn:compensateEventDefinition id="cancelled-def" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="f-s-reserve" sourceRef="s" targetRef="reserve" />
+    <bpmn:sequenceFlow id="f-reserve-send-order" sourceRef="reserve" targetRef="send-order" />
+    <bpmn:sequenceFlow id="f-send-order-confirmed" sourceRef="send-order" targetRef="confirmed" />
+    <bpmn:sequenceFlow id="f-confirmed-ordered" name="yes" sourceRef="confirmed" targetRef="ordered" />
+    <bpmn:sequenceFlow id="f-confirmed-undo-funds" name="no" sourceRef="confirmed" targetRef="undo-funds" />
+    <bpmn:sequenceFlow id="f-undo-funds-cancelled" sourceRef="undo-funds" targetRef="cancelled" />
+    <bpmn:association id="reserve-compensate-assoc" associationDirection="One" sourceRef="reserve-compensate" targetRef="release" />
+    <bpmn:association id="send-order-compensate-assoc" associationDirection="One" sourceRef="send-order-compensate" targetRef="withdraw" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="s_di" bpmnElement="s">
+        <dc:Bounds x="62" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="40" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reserve_di" bpmnElement="reserve">
+        <dc:Bounds x="180" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="release_di" bpmnElement="release">
+        <dc:Bounds x="30" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="send-order_di" bpmnElement="send-order">
+        <dc:Bounds x="330" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="withdraw_di" bpmnElement="withdraw">
+        <dc:Bounds x="30" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="confirmed_di" bpmnElement="confirmed" isMarkerVisible="true">
+        <dc:Bounds x="480" y="45" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="510" y="20" width="118" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ordered_di" bpmnElement="ordered">
+        <dc:Bounds x="580" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="561" y="93" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="undo-funds_di" bpmnElement="undo-funds">
+        <dc:Bounds x="580" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="567" y="223" width="62" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cancelled_di" bpmnElement="cancelled">
+        <dc:Bounds x="666" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="642" y="223" width="84" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reserve-compensate_di" bpmnElement="reserve-compensate">
+        <dc:Bounds x="232" y="92" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="send-order-compensate_di" bpmnElement="send-order-compensate">
+        <dc:Bounds x="382" y="92" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-s-reserve_di" bpmnElement="f-s-reserve">
+        <di:waypoint x="98" y="70" />
+        <di:waypoint x="180" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-reserve-send-order_di" bpmnElement="f-reserve-send-order">
+        <di:waypoint x="280" y="70" />
+        <di:waypoint x="330" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-send-order-confirmed_di" bpmnElement="f-send-order-confirmed">
+        <di:waypoint x="430" y="70" />
+        <di:waypoint x="480" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-confirmed-ordered_di" bpmnElement="f-confirmed-ordered">
+        <di:waypoint x="530" y="70" />
+        <di:waypoint x="580" y="70" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="537" y="55" width="18" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-confirmed-undo-funds_di" bpmnElement="f-confirmed-undo-funds">
+        <di:waypoint x="505" y="95" />
+        <di:waypoint x="505" y="200" />
+        <di:waypoint x="580" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="513" y="185" width="12" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-undo-funds-cancelled_di" bpmnElement="f-undo-funds-cancelled">
+        <di:waypoint x="616" y="200" />
+        <di:waypoint x="666" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="reserve-compensate-assoc_di" bpmnElement="reserve-compensate-assoc">
+        <di:waypoint x="232" y="120" />
+        <di:waypoint x="130" y="174" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="send-order-compensate-assoc_di" bpmnElement="send-order-compensate-assoc">
+        <di:waypoint x="382" y="122" />
+        <di:waypoint x="130" y="296" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

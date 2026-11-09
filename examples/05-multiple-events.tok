@@ -1,0 +1,13 @@
+tok 1.0 "Handling a service request"
+
+start request "Request by e-mail or web form" message="E-mail" message="Web form"
+user record "Record the request"
+boundary nudge "Three days passed or reminder received" noninterrupting on=record timer=P3D signal="Reminder"
+user chase "Chase the case owner"
+end chased "Case owner chased"
+catch confirmed "Confirmation and payment" parallel message="Confirmation" signal="Payment"
+throw announce "Notify the customer and the manager" message="To customer" signal="Case confirmed"
+end closed "Request closed" message="Closing note" signal="Request closed"
+
+flow request -> record -> confirmed -> announce -> closed
+flow nudge -> chase -> chased

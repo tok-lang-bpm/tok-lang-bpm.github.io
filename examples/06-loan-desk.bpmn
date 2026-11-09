@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Lending a book at the desk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:resource id="librarian" name="Librarian" />
+  <bpmn:resource id="system" name="Library system" />
+  <bpmn:process id="process" name="Lending a book at the desk" isExecutable="false">
+    <bpmn:startEvent id="arrived" name="Reader at the desk" />
+    <bpmn:userTask id="lend" name="Check the reader's account">
+      <bpmn:humanPerformer id="lend-performer">
+        <bpmn:resourceRef>librarian</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="record" name="Record the loan">
+      <bpmn:performer id="record-performer">
+        <bpmn:resourceRef>system</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:serviceTask>
+    <bpmn:manualTask id="hand-over" name="Hand over the book">
+      <bpmn:humanPerformer id="hand-over-performer">
+        <bpmn:resourceRef>librarian</bpmn:resourceRef>
+      </bpmn:humanPerformer>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="lent" name="Book lent" />
+    <bpmn:sequenceFlow id="f-arrived-lend" sourceRef="arrived" targetRef="lend" />
+    <bpmn:sequenceFlow id="f-lend-record" sourceRef="lend" targetRef="record" />
+    <bpmn:sequenceFlow id="f-record-hand-over" sourceRef="record" targetRef="hand-over" />
+    <bpmn:sequenceFlow id="f-hand-over-lent" sourceRef="hand-over" targetRef="lent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrived_di" bpmnElement="arrived">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-3" y="93" width="102" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lend_di" bpmnElement="lend">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="record_di" bpmnElement="record">
+        <dc:Bounds x="266" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="hand-over_di" bpmnElement="hand-over">
+        <dc:Bounds x="416" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lent_di" bpmnElement="lent">
+        <dc:Bounds x="566" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="558" y="93" width="52" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-arrived-lend_di" bpmnElement="f-arrived-lend">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-lend-record_di" bpmnElement="f-lend-record">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="266" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-record-hand-over_di" bpmnElement="f-record-hand-over">
+        <di:waypoint x="366" y="70" />
+        <di:waypoint x="416" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-hand-over-lent_di" bpmnElement="f-hand-over-lent">
+        <di:waypoint x="516" y="70" />
+        <di:waypoint x="566" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

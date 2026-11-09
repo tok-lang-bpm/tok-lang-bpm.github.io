@@ -1,0 +1,16 @@
+tok 1.0 "Waiting for missing details"
+
+start asked "Request for details sent"
+eventgw wait "What happens first?"
+catch details "Details received" message="Missing details"
+catch deadline "14 days passed" timer=P14D
+user reassess "Reassess the query"
+user shelve "Close the query without action"
+end reassessed "Query reassessed"
+end shelved "Query closed without action"
+
+flow asked -> wait
+flow wait -> details
+flow wait -> deadline
+flow details -> reassess -> reassessed
+flow deadline -> shelve -> shelved

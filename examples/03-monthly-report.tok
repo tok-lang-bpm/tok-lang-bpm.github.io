@@ -1,0 +1,16 @@
+tok 1.0 "Monthly acquisitions report"
+
+start month "First working day of the month" timer=R/2027-01-04T08:00/P1M
+service figures "Collect the acquisition figures"
+user draft "Write the report"
+throw drafted "Report drafted"
+user approve "Approve the report"
+xor approved "Is the report approved?"
+service publish "Publish the report on the intranet"
+end published "Report published"
+end withdrawn "Report withdrawn" terminate
+
+flow month -> figures -> draft -> drafted -> approve -> approved
+flow approved -> publish "yes" default
+flow approved -> withdrawn "no" when="approved = false"
+flow publish -> published

@@ -1,0 +1,15 @@
+tok 1.0 "Peer review: conversations"
+
+pool author "Author"
+
+pool journal "Journal editorial office"
+
+pool reviewer "Reviewer" min=2 max=3
+
+message author -> journal "Manuscript" id=m-manuscript
+message journal -> author "Decision" id=m-decision
+message journal -> reviewer "Review invitation" id=m-invitation
+message reviewer -> journal "Review report" id=m-report
+
+conversation submission "Submission" pools="author journal" messages="m-manuscript m-decision"
+conversation review "Review" pools="journal reviewer" messages="m-invitation m-report"

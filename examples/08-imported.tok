@@ -1,0 +1,22 @@
+tok 0.1 "Booking a reading room seat" id=Definitions_0r7k2m1 collaboration=Collaboration_1x4d9qa
+
+pool Participant_0lib8rr "City library" process=Process_1seat42
+  lane Lane_0reader1 "Reader"
+    start Event_0asked1 "Seat needed"
+    user Activity_0ask1ab "Ask for a seat"
+  lane Lane_1staff22 "Reading room staff"
+    user Activity_1check3 "Check free seats"
+    xor Gateway_0free5k "Is a seat free?"
+    user Activity_0assign "Assign a seat"
+    user Activity_1offer9 "Offer another day"
+    end Event_1booked7 "Seat booked"
+    end Event_0other88 "Other day offered"
+
+flow Event_0asked1 -> Activity_0ask1ab -> Activity_1check3 -> Gateway_0free5k
+flow Gateway_0free5k -> Activity_0assign "yes"
+flow Gateway_0free5k -> Activity_1offer9 "no"
+flow Activity_0assign -> Event_1booked7
+flow Activity_1offer9 -> Event_0other88
+
+note TextAnnotation_0note1x "Seats can be booked up to 7 days ahead" on=Gateway_0free5k
+group Group_0alloc7 "Seat allocation"

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="Handling a service request" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_E_mail" name="E-mail" />
+  <bpmn:message id="Message_Web_form" name="Web form" />
+  <bpmn:message id="Message_Confirmation" name="Confirmation" />
+  <bpmn:message id="Message_To_customer" name="To customer" />
+  <bpmn:message id="Message_Closing_note" name="Closing note" />
+  <bpmn:signal id="Signal_Reminder" name="Reminder" />
+  <bpmn:signal id="Signal_Payment" name="Payment" />
+  <bpmn:signal id="Signal_Case_confirmed" name="Case confirmed" />
+  <bpmn:signal id="Signal_Request_closed" name="Request closed" />
+  <bpmn:process id="process" name="Handling a service request" isExecutable="false">
+    <bpmn:startEvent id="request" name="Request by e-mail or web form">
+      <bpmn:messageEventDefinition id="request-def" messageRef="Message_E_mail" />
+      <bpmn:messageEventDefinition id="request-def-2" messageRef="Message_Web_form" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="record" name="Record the request" />
+    <bpmn:boundaryEvent id="nudge" name="Three days passed or reminder received" attachedToRef="record" cancelActivity="false">
+      <bpmn:timerEventDefinition id="nudge-def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+      <bpmn:signalEventDefinition id="nudge-def-2" signalRef="Signal_Reminder" />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="chase" name="Chase the case owner" />
+    <bpmn:endEvent id="chased" name="Case owner chased" />
+    <bpmn:intermediateCatchEvent id="confirmed" name="Confirmation and payment" parallelMultiple="true">
+      <bpmn:messageEventDefinition id="confirmed-def" messageRef="Message_Confirmation" />
+      <bpmn:signalEventDefinition id="confirmed-def-2" signalRef="Signal_Payment" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateThrowEvent id="announce" name="Notify the customer and the manager">
+      <bpmn:messageEventDefinition id="announce-def" messageRef="Message_To_customer" />
+      <bpmn:signalEventDefinition id="announce-def-2" signalRef="Signal_Case_confirmed" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="closed" name="Request closed">
+      <bpmn:messageEventDefinition id="closed-def" messageRef="Message_Closing_note" />
+      <bpmn:signalEventDefinition id="closed-def-2" signalRef="Signal_Request_closed" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="f-request-record" sourceRef="request" targetRef="record" />
+    <bpmn:sequenceFlow id="f-record-confirmed" sourceRef="record" targetRef="confirmed" />
+    <bpmn:sequenceFlow id="f-confirmed-announce" sourceRef="confirmed" targetRef="announce" />
+    <bpmn:sequenceFlow id="f-announce-closed" sourceRef="announce" targetRef="closed" />
+    <bpmn:sequenceFlow id="f-nudge-chase" sourceRef="nudge" targetRef="chase" />
+    <bpmn:sequenceFlow id="f-chase-chased" sourceRef="chase" targetRef="chased" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process">
+      <bpmndi:BPMNShape id="request_di" bpmnElement="request">
+        <dc:Bounds x="30" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="0" y="93" width="96" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="record_di" bpmnElement="record">
+        <dc:Bounds x="116" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="chase_di" bpmnElement="chase">
+        <dc:Bounds x="266" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="chased_di" bpmnElement="chased">
+        <dc:Bounds x="416" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="386" y="223" width="96" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="confirmed_di" bpmnElement="confirmed">
+        <dc:Bounds x="298" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="271" y="93" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="announce_di" bpmnElement="announce">
+        <dc:Bounds x="416" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="400" y="93" width="68" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="closed_di" bpmnElement="closed">
+        <dc:Bounds x="502" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="480" y="93" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="nudge_di" bpmnElement="nudge">
+        <dc:Bounds x="168" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="69" y="130" width="96" height="35" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="f-request-record_di" bpmnElement="f-request-record">
+        <di:waypoint x="66" y="70" />
+        <di:waypoint x="116" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-record-confirmed_di" bpmnElement="f-record-confirmed">
+        <di:waypoint x="216" y="70" />
+        <di:waypoint x="298" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-confirmed-announce_di" bpmnElement="f-confirmed-announce">
+        <di:waypoint x="334" y="70" />
+        <di:waypoint x="416" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-announce-closed_di" bpmnElement="f-announce-closed">
+        <di:waypoint x="452" y="70" />
+        <di:waypoint x="502" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-nudge-chase_di" bpmnElement="f-nudge-chase">
+        <di:waypoint x="186" y="128" />
+        <di:waypoint x="186" y="200" />
+        <di:waypoint x="266" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-chase-chased_di" bpmnElement="f-chase-chased">
+        <di:waypoint x="366" y="200" />
+        <di:waypoint x="416" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Archive query: two participants" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Query" name="Query" />
+  <bpmn:message id="Message_Answer" name="Answer" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="applicant" name="Applicant" processRef="applicant-process" />
+    <bpmn:participant id="archive" name="State archive" processRef="archive-process" />
+    <bpmn:messageFlow id="m-submit-received" name="Query" sourceRef="submit" targetRef="received" messageRef="Message_Query" />
+    <bpmn:messageFlow id="m-sent-answer" name="Answer" sourceRef="sent" targetRef="answer" messageRef="Message_Answer" />
+  </bpmn:collaboration>
+  <bpmn:process id="applicant-process" name="Applicant" isExecutable="false">
+    <bpmn:startEvent id="need" name="Information needed" />
+    <bpmn:sendTask id="submit" name="Submit the query" messageRef="Message_Query" />
+    <bpmn:intermediateCatchEvent id="answer" name="Answer received">
+      <bpmn:messageEventDefinition id="answer-def" messageRef="Message_Answer" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:manualTask id="read" name="Read the answer" />
+    <bpmn:endEvent id="done" name="Information obtained" />
+    <bpmn:sequenceFlow id="f-need-submit" sourceRef="need" targetRef="submit" />
+    <bpmn:sequenceFlow id="f-submit-answer" sourceRef="submit" targetRef="answer" />
+    <bpmn:sequenceFlow id="f-answer-read" sourceRef="answer" targetRef="read" />
+    <bpmn:sequenceFlow id="f-read-done" sourceRef="read" targetRef="done" />
+  </bpmn:process>
+  <bpmn:process id="archive-process" name="State archive" isExecutable="false">
+    <bpmn:laneSet id="archive-lanes">
+      <bpmn:lane id="registry" name="Registry">
+        <bpmn:flowNodeRef>received</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>sent</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="archivist" name="Archivist">
+        <bpmn:flowNodeRef>search</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>draft</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="received" name="Query received">
+      <bpmn:messageEventDefinition id="received-def" messageRef="Message_Query" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="register" name="Register the query" />
+    <bpmn:endEvent id="sent" name="Answer sent">
+      <bpmn:messageEventDefinition id="sent-def" messageRef="Message_Answer" />
+    </bpmn:endEvent>
+    <bpmn:userTask id="search" name="Search the holdings" />
+    <bpmn:userTask id="draft" name="Draft the answer" />
+    <bpmn:sequenceFlow id="f-received-register" sourceRef="received" targetRef="register" />
+    <bpmn:sequenceFlow id="f-register-search" sourceRef="register" targetRef="search" />
+    <bpmn:sequenceFlow id="f-search-draft" sourceRef="search" targetRef="draft" />
+    <bpmn:sequenceFlow id="f-draft-sent" sourceRef="draft" targetRef="sent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="applicant_di" bpmnElement="applicant" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="700" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archive_di" bpmnElement="archive" isHorizontal="true">
+        <dc:Bounds x="0" y="180" width="700" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="registry_di" bpmnElement="registry" isHorizontal="true">
+        <dc:Bounds x="30" y="180" width="670" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="archivist_di" bpmnElement="archivist" isHorizontal="true">
+        <dc:Bounds x="30" y="320" width="670" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="need_di" bpmnElement="need">
+        <dc:Bounds x="60" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="27" y="93" width="102" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="submit_di" bpmnElement="submit">
+        <dc:Bounds x="146" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answer_di" bpmnElement="answer">
+        <dc:Bounds x="296" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="319" y="91" width="46" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="read_di" bpmnElement="read">
+        <dc:Bounds x="382" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="532" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="519" y="93" width="62" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="received_di" bpmnElement="received">
+        <dc:Bounds x="90" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="68" y="273" width="80" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="register_di" bpmnElement="register">
+        <dc:Bounds x="176" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sent_di" bpmnElement="sent">
+        <dc:Bounds x="626" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="613" y="273" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="search_di" bpmnElement="search">
+        <dc:Bounds x="326" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="draft_di" bpmnElement="draft">
+        <dc:Bounds x="476" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="m-submit-received_di" bpmnElement="m-submit-received">
+        <di:waypoint x="196" y="110" />
+        <di:waypoint x="196" y="154" />
+        <di:waypoint x="108" y="154" />
+        <di:waypoint x="108" y="232" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="142" width="28" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-sent-answer_di" bpmnElement="m-sent-answer">
+        <di:waypoint x="644" y="232" />
+        <di:waypoint x="644" y="166" />
+        <di:waypoint x="314" y="166" />
+        <di:waypoint x="314" y="88" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="485" y="154" width="34" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-need-submit_di" bpmnElement="f-need-submit">
+        <di:waypoint x="96" y="70" />
+        <di:waypoint x="146" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-submit-answer_di" bpmnElement="f-submit-answer">
+        <di:waypoint x="246" y="70" />
+        <di:waypoint x="296" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-answer-read_di" bpmnElement="f-answer-read">
+        <di:waypoint x="332" y="70" />
+        <di:waypoint x="382" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-read-done_di" bpmnElement="f-read-done">
+        <di:waypoint x="482" y="70" />
+        <di:waypoint x="532" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-received-register_di" bpmnElement="f-received-register">
+        <di:waypoint x="126" y="250" />
+        <di:waypoint x="176" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-register-search_di" bpmnElement="f-register-search">
+        <di:waypoint x="276" y="250" />
+        <di:waypoint x="376" y="250" />
+        <di:waypoint x="376" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-search-draft_di" bpmnElement="f-search-draft">
+        <di:waypoint x="426" y="390" />
+        <di:waypoint x="476" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-draft-sent_di" bpmnElement="f-draft-sent">
+        <di:waypoint x="526" y="350" />
+        <di:waypoint x="526" y="250" />
+        <di:waypoint x="626" y="250" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

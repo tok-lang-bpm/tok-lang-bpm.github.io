@@ -1,0 +1,37 @@
+# tok: Process Models as Text
+
+> The guide to tok, a plain-text language for BPMN 2.0 process models and DMN decisions: the language, the tools, the programming interfaces, AI agents and integrations.
+
+## Chapters
+
+- [Preface](https://tok-lang-bpm.github.io/index.html)
+- [Models as text](https://tok-lang-bpm.github.io/models-as-text.html)
+- [Getting started](https://tok-lang-bpm.github.io/getting-started.html)
+- [Process basics](https://tok-lang-bpm.github.io/process-basics.html)
+- [Pools, lanes and messages](https://tok-lang-bpm.github.io/collaboration.html)
+- [Events, sub-processes and exceptions](https://tok-lang-bpm.github.io/events-exceptions.html)
+- [Data, resources and artifacts](https://tok-lang-bpm.github.io/data-artifacts.html)
+- [Checking models](https://tok-lang-bpm.github.io/checking.html)
+- [Layout, export and import](https://tok-lang-bpm.github.io/layout-import.html)
+- [Decisions with DMN and FEEL](https://tok-lang-bpm.github.io/decisions.html)
+- [Executable models on Camunda 8](https://tok-lang-bpm.github.io/executable.html)
+- [Simulation and process mining](https://tok-lang-bpm.github.io/simulation.html)
+- [Editors and the playground](https://tok-lang-bpm.github.io/editors.html)
+- [Programming interfaces](https://tok-lang-bpm.github.io/programming.html)
+- [Working with AI agents](https://tok-lang-bpm.github.io/agents.html)
+- [Integrations](https://tok-lang-bpm.github.io/integrations.html)
+- [BPMN symbols](https://tok-lang-bpm.github.io/symbols.html)
+- [Language on one page](https://tok-lang-bpm.github.io/cheatsheet.html)
+- [Command reference](https://tok-lang-bpm.github.io/commands.html)
+- [Diagnostics](https://tok-lang-bpm.github.io/diagnostics.html)
+- [Conformance with Camunda 8](https://tok-lang-bpm.github.io/conformance.html)
+- [Glossary](https://tok-lang-bpm.github.io/glossary.html)
+- [References](https://tok-lang-bpm.github.io/references.html)
+
+## Reference
+
+- [Language on one page](https://github.com/tok-lang-bpm/tok/blob/main/docs/cheatsheet.md)
+- [Specification](https://github.com/tok-lang-bpm/tok/blob/main/docs/spec.md)
+- [Diagnostics](https://github.com/tok-lang-bpm/tok/blob/main/docs/diagnostics.md)
+- [MCP server](https://github.com/tok-lang-bpm/tok/blob/main/docs/mcp.md)
+- [Agent bundle: skill and MCP server](https://github.com/tok-lang-bpm/tok-agent)

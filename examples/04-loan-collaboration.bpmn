@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="definitions" name="Interlibrary loan: collaboration" targetNamespace="http://bpmn.io/schema/bpmn" exporter="tok" exporterVersion="1.0">
+  <bpmn:message id="Message_Loan_request" name="Loan request" />
+  <bpmn:message id="Message_Parcel_with_the_book" name="Parcel with the book" />
+  <bpmn:collaboration id="collaboration">
+    <bpmn:participant id="library" name="University library" processRef="library-process" />
+    <bpmn:participant id="lender" name="Lending library" />
+    <bpmn:messageFlow id="m-order-lender" name="Loan request" sourceRef="order" targetRef="lender" messageRef="Message_Loan_request" />
+    <bpmn:messageFlow id="m-lender-parcel" name="Parcel with the book" sourceRef="lender" targetRef="parcel" messageRef="Message_Parcel_with_the_book" />
+  </bpmn:collaboration>
+  <bpmn:process id="library-process" name="Interlibrary loan: collaboration" isExecutable="false">
+    <bpmn:laneSet id="library-lanes">
+      <bpmn:lane id="reader" name="Reader">
+        <bpmn:flowNodeRef>need</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>collect</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>borrowed</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="ill" name="Interlibrary loan desk">
+        <bpmn:flowNodeRef>catalogues</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>order</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>parcel</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="system" name="Library system">
+        <bpmn:flowNodeRef>record</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="need" name="Book needed" />
+    <bpmn:userTask id="request" name="Submit a loan request" />
+    <bpmn:userTask id="collect" name="Collect the book" />
+    <bpmn:endEvent id="borrowed" name="Book borrowed" />
+    <bpmn:userTask id="catalogues" name="Search the union catalogue" />
+    <bpmn:sendTask id="order" name="Send the loan request" messageRef="Message_Loan_request" />
+    <bpmn:receiveTask id="parcel" name="Receive the parcel" messageRef="Message_Parcel_with_the_book" />
+    <bpmn:serviceTask id="record" name="Record the loan" />
+    <bpmn:sequenceFlow id="f-need-request" sourceRef="need" targetRef="request" />
+    <bpmn:sequenceFlow id="f-request-catalogues" sourceRef="request" targetRef="catalogues" />
+    <bpmn:sequenceFlow id="f-catalogues-order" sourceRef="catalogues" targetRef="order" />
+    <bpmn:sequenceFlow id="f-order-parcel" sourceRef="order" targetRef="parcel" />
+    <bpmn:sequenceFlow id="f-parcel-record" sourceRef="parcel" targetRef="record" />
+    <bpmn:sequenceFlow id="f-record-collect" sourceRef="record" targetRef="collect" />
+    <bpmn:sequenceFlow id="f-collect-borrowed" sourceRef="collect" targetRef="borrowed" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration">
+      <bpmndi:BPMNShape id="library_di" bpmnElement="library" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="1150" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lender_di" bpmnElement="lender" isHorizontal="true">
+        <dc:Bounds x="0" y="460" width="1150" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reader_di" bpmnElement="reader" isHorizontal="true">
+        <dc:Bounds x="30" y="0" width="1120" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ill_di" bpmnElement="ill" isHorizontal="true">
+        <dc:Bounds x="30" y="140" width="1120" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="system_di" bpmnElement="system" isHorizontal="true">
+        <dc:Bounds x="30" y="280" width="1120" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="need_di" bpmnElement="need">
+        <dc:Bounds x="90" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="77" y="93" width="62" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="request_di" bpmnElement="request">
+        <dc:Bounds x="176" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="collect_di" bpmnElement="collect">
+        <dc:Bounds x="926" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="borrowed_di" bpmnElement="borrowed">
+        <dc:Bounds x="1076" y="52" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1057" y="93" width="74" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="catalogues_di" bpmnElement="catalogues">
+        <dc:Bounds x="326" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="order_di" bpmnElement="order">
+        <dc:Bounds x="476" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="parcel_di" bpmnElement="parcel">
+        <dc:Bounds x="626" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="record_di" bpmnElement="record">
+        <dc:Bounds x="776" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="m-order-lender_di" bpmnElement="m-order-lender">
+        <di:waypoint x="526" y="250" />
+        <di:waypoint x="526" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="531" y="256" width="68" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="m-lender-parcel_di" bpmnElement="m-lender-parcel">
+        <di:waypoint x="676" y="460" />
+        <di:waypoint x="676" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="681" y="432" width="84" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-need-request_di" bpmnElement="f-need-request">
+        <di:waypoint x="126" y="70" />
+        <di:waypoint x="176" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-request-catalogues_di" bpmnElement="f-request-catalogues">
+        <di:waypoint x="276" y="70" />
+        <di:waypoint x="376" y="70" />
+        <di:waypoint x="376" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-catalogues-order_di" bpmnElement="f-catalogues-order">
+        <di:waypoint x="426" y="210" />
+        <di:waypoint x="476" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-order-parcel_di" bpmnElement="f-order-parcel">
+        <di:waypoint x="576" y="210" />
+        <di:waypoint x="626" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-parcel-record_di" bpmnElement="f-parcel-record">
+        <di:waypoint x="726" y="210" />
+        <di:waypoint x="826" y="210" />
+        <di:waypoint x="826" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-record-collect_di" bpmnElement="f-record-collect">
+        <di:waypoint x="876" y="350" />
+        <di:waypoint x="976" y="350" />
+        <di:waypoint x="976" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="f-collect-borrowed_di" bpmnElement="f-collect-borrowed">
+        <di:waypoint x="1026" y="70" />
+        <di:waypoint x="1076" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

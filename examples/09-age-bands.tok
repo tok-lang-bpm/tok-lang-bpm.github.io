@@ -1,0 +1,9 @@
+tok 1.0 "Age bands"
+
+inputdata age "Reader's age" type=number
+
+decision band "Age band" requires="age"
+  | age: number || band: string |
+  | < 18        || "minor"      |
+  | <= 26       || "student"    |
+  | > 26        || "adult"      |
