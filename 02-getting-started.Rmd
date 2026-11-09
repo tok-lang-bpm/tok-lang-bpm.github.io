@@ -1,7 +1,7 @@
 # Getting started {#getting-started}
 
 ::: {.goals}
-**In this chapter** you will install the `tok` command on Windows, macOS or Linux · learn the other ways to reach the engine: R, Julia, VS Code, the browser playground and the bundle for AI agents · write your first model and take it through `tok check`, `tok fmt`, `tok bpmn` and `tok svg` · open the result in Camunda Modeler or bpmn.io · set up your editor for tok files
+**In this chapter** you will open a terminal and install the `tok` command on Windows, macOS or Linux · find out what to do when the system does not find `python` or `tok` · learn the other ways to reach the engine: R, Julia, VS Code, the browser playground and the bundle for AI agents · write your first model and take it through `tok check`, `tok fmt`, `tok bpmn` and `tok svg` · open the result in Camunda Modeler or bpmn.io · read, check and save models in the Python and R consoles · set up your editor for tok files
 :::
 
 ## Ways to use tok
@@ -21,6 +21,16 @@ All the tools of tok run the same engine, so you may start with whichever suits 
 For this book you need the `tok` command. The rest of this section shows how to install it; the other ways are described afterwards.
 
 ## Installing the command line
+
+### Opening a terminal
+
+The commands of this book are typed in a terminal: a window in which you type a command, press Enter and read the answer.
+
+- **Windows:** open the Start menu, type *PowerShell* (on Windows 11 also *Terminal*) and press Enter.
+- **macOS:** press Cmd+Space, type *Terminal* and press Enter.
+- **Linux:** open *Terminal* from the menu of applications; on Ubuntu, press Ctrl+Alt+T.
+
+The terminal always works in one folder, which it shows before the cursor. `cd` changes the folder: `cd Documents` goes into the folder `Documents`, `cd ..` goes one level up, and `ls` lists the files of the current folder (in PowerShell too). A folder name with spaces needs quotes: `cd "My models"`. A command that reads a model, such as `tok check reading-room.tok`, looks for the file in the current folder, so go to the folder of your models first.
 
 ### With Python
 
@@ -47,7 +57,7 @@ tok --version
 tok 1.0.4
 ```
 
-If the system answers that it does not know the command `tok`, the folder where pip puts commands is not on your path. You can always run the same program through Python instead: `py -m tok --version` on Windows, `python3 -m tok --version` elsewhere. Every command in this book works in that form.
+If the system answers that it does not know `py`, `python3` or `tok`, or pip refuses to install the package, the section [When a command is not found](#not-found) below has the fix. You can always run the program through Python instead: `py -m tok --version` on Windows, `python3 -m tok --version` elsewhere. Every command in this book works in that form, for example `py -m tok check reading-room.tok`.
 
 ::: {.note}
 On a platform without a ready wheel, pip builds the engine from the source archive. That needs the Rust toolchain, version 1.99 or newer, from <https://www.rust-lang.org/tools/install>. The build takes a few minutes; the result is the same program.
@@ -76,6 +86,37 @@ tok cheatsheet         # prints the whole language on one page
 ```
 
 Every command has its own help: `tok check --help`, `tok bpmn --help` and so on. The [command reference](#commands) in the appendix lists all of them with their options.
+
+### When a command is not found {#not-found}
+
+Three messages are common on a computer where Python has just been installed. Each has a short fix. A terminal reads the list of folders it searches for commands, the *path*, when it opens, so after every fix close the terminal and open a new one.
+
+**The system does not know `py` or `python3`.** Python is missing. Install it from <https://www.python.org/downloads/>. On Windows the installer also installs the launcher `py`; if the installer offers the option *Add python.exe to PATH*, tick it, because it also puts the folder of commands such as `tok` on the path. Typing `python` on a Windows computer without Python opens the Microsoft Store; the installer from python.org is the one this book assumes. On macOS the first `python3` may offer to install the command line developer tools, which contain a Python too; accept, or install Python from python.org. `py --version` or `python3 --version` confirms the installation; every version from 3.8 works.
+
+**pip refuses with `error: externally-managed-environment`.** The Python of Homebrew on macOS and the system Python of Ubuntu and Debian protect their own packages from pip. Install tok with pipx, which gives every command-line program an environment of its own:
+
+```
+brew install pipx          # macOS with Homebrew
+sudo apt install pipx      # Ubuntu, Debian
+pipx ensurepath
+pipx install tok-lang
+```
+
+`pipx ensurepath` adds the folder of pipx's commands to the path; open a new terminal before `tok --version`.
+
+**pip installed the package, and the system does not know `tok`.** pip put the program into a folder the terminal does not search. At the end of the installation pip names the folder in a warning: `The script tok is installed in '…' which is not on PATH`. The usual folders are:
+
+| System | Folder of the command `tok` |
+|---|---|
+| Windows | `C:\Users\NAME\AppData\Roaming\Python\Python3XX\Scripts`, or the folder `Scripts` beside `python.exe` |
+| macOS | `/Users/NAME/Library/Python/3.XX/bin` |
+| Linux | `/home/NAME/.local/bin` |
+
+On Python 3.10 and newer, `py -c "import sysconfig; print(sysconfig.get_path('scripts', sysconfig.get_preferred_scheme('user')))"` (with `python3` in place of `py` on macOS and Linux) prints the folder pip uses when it cannot write to the folder of Python itself, which is the usual case. Three ways lead out, from the quickest:
+
+1. Run tok through Python: `py -m tok` on Windows, `python3 -m tok` elsewhere, followed by the command, as in `py -m tok check reading-room.tok`. This form needs no change of the path.
+2. Let pipx set the path: `py -m pip install --user pipx`, `py -m pipx ensurepath`, a new terminal, then `py -m pipx install tok-lang` (on macOS and Linux with `python3` in place of `py`).
+3. Add the folder to the path yourself. On Windows, open the Start menu, type *environment variables*, choose *Edit environment variables for your account*, select *Path*, click *Edit*, then *New*, paste the folder and confirm with *OK*. On macOS, run `echo 'export PATH="$HOME/Library/Python/3.12/bin:$PATH"' >> ~/.zprofile` with your version of Python in place of `3.12`. On Linux, `~/.local/bin` is on the path of most distributions after the next login; otherwise add the line `export PATH="$HOME/.local/bin:$PATH"` to `~/.profile`.
 
 ## Other ways to reach the engine
 
@@ -267,6 +308,133 @@ Real work is a loop: change the text, check, format, export. Try it once now. Ad
 `tok export reading-room.tok -o out/` writes the BPMN file and the picture in one step, into the folder `out` (created when needed), together with any decision and form files the model has. For a descriptive model like this one, `tok bpmn` and `tok svg` are all you need.
 :::
 
+## Working in the Python and R consoles {#consoles}
+
+The steps of the previous section also work inside Python and R, which is convenient when a model belongs to an analysis, a notebook or a report. A console is the window of a programming language: you type one line, press Enter and see the result. Python starts its console in the terminal; RStudio and Positron show the R console in one of their panes. Chapter \@ref(programming) lists every function of both packages; this section takes you through a first session.
+
+Commands of the terminal and lines of a console belong to different windows. `tok check reading-room.tok` is a command of the terminal, and `api.check(model)` is a line of Python; typed in the other window, each ends in a syntax error.
+
+### Python
+
+Go to the folder of your models in the terminal and start the console with the command you used for pip: `py` on Windows, `python3` on macOS and Linux. The prompt changes to `>>>`, and `exit()` returns to the terminal.
+
+```python
+from pathlib import Path
+from urllib.request import urlretrieve
+from tok import api
+
+Path.cwd()       # the folder in which Python reads and writes files
+```
+
+When `from tok import api` ends in `ModuleNotFoundError: No module named 'tok'`, the console runs another Python than the one pip installed into. Leave it with `exit()`, run `py -m pip install tok-lang` (or `python3 -m pip install tok-lang`) and start the console again with the same command.
+
+The functions of `tok.api` take the text of a model. Reading a file gives the text, and writing the results gives the files of `tok svg` and `tok bpmn`. Here the model of this chapter comes from the examples of the guide:
+
+```python
+urlretrieve("https://tok-lang-bpm.github.io/examples/02-reading-room.tok", "reading-room.tok")
+model = Path("reading-room.tok").read_text(encoding="utf-8")
+print(model)                 # the text of the model
+api.check(model)             # [] when the model has no problems
+Path("reading-room.svg").write_text(api.svg(model), encoding="utf-8")
+Path("reading-room.bpmn").write_text(api.bpmn(model), encoding="utf-8")
+```
+
+The picture opens in the web browser with `import webbrowser; webbrowser.open(Path("reading-room.svg").resolve().as_uri())`.
+
+A model can also be typed in the console, between triple quotes, and saved as a file:
+
+```python
+text = """tok 1.0 "Book request"
+start asked "Reader asks for a book"
+user find "Find the book"
+end found "Book found"
+flow asked -> find -> found
+"""
+api.check(text, lang="pl")   # the messages in Polish
+Path("book-request.tok").write_text(api.fmt(text), encoding="utf-8")   # saved in canonical form
+```
+
+`api.check` returns the diagnostics as data. The functions that need a valid model, such as `api.svg` and `api.bpmn`, stop with a `ValueError` that carries the same messages:
+
+```python
+broken = text.replace("-> found", "-> fuond")
+api.check(broken)
+# [{'code': 'R002', 'severity': 'error', 'line': 5, 'id': 'fuond', 'message': "unknown flow node 'fuond'"}]
+api.svg(broken)
+# ValueError: line 5: error R002: unknown flow node 'fuond'
+```
+
+`api.export` gives every file of `tok export` as a dictionary of file names and contents. A loop writes them into a folder; in the console, the line with `for` ends with a colon, the next line is indented, and an empty line ends the loop:
+
+```python
+Path("out").mkdir(exist_ok=True)
+for name, content in api.export(model, name="reading-room").items():
+    Path("out", name).write_text(content, encoding="utf-8")
+
+```
+
+Another folder becomes the working folder with `import os; os.chdir("C:/Users/NAME/Documents/models")`. Forward slashes work in paths on Windows too.
+
+### R
+
+Install the package once with `install.packages("tokr")` and load it in every session with `library(tokr)`. R reads and writes files in its working directory: `getwd()` shows it, and `setwd("C:/Users/NAME/Documents/models")` or the menu *Session › Set Working Directory › Choose Directory…* of RStudio changes it. A project of RStudio sets the working directory to the folder of the project.
+
+The package contains three example models, in Polish: an interlibrary loan, a proposal to buy a book with its decision table, and an archive query with the parameters of a simulation. `system.file()` finds them in the folder where R installed the package. Copy a model into the working directory before you change it, because the folder of the package is replaced at every update:
+
+```r
+library(tokr)
+list.files(system.file("examples", package = "tokr"))
+#> [1] "kwerenda-symulacja.tok" "propozycja-zakupu.tok"  "wypozyczenie.tok"
+f <- system.file("examples", "wypozyczenie.tok", package = "tokr")
+file.copy(f, "wypozyczenie.tok")   # your own copy in the working directory
+```
+
+`tok_read()` reads a file into a model. Printed, the model shows its first lines; `cat()` shows the whole text, and `file.edit()` opens the file in the editor of RStudio. The model object keeps the text from the moment of reading, so after you edit and save the file, read it again:
+
+```r
+m <- tok_read("wypozyczenie.tok")
+m                              # the first lines of the model
+cat(m$text, sep = "\n")        # the whole text
+file.edit("wypozyczenie.tok")  # edit, save, then read again
+m <- tok_read("wypozyczenie.tok")
+tok_check(m)                   # "no problems", or one line per problem
+tok_check(m, lang = "pl")      # the messages in Polish
+tok_plot(m)                    # the diagram in the Viewer pane
+```
+
+`tok_svg()` and `tok_bpmn()` write a file when they get its name in `file`. Without `file` they return the text, and the console prints the SVG or XML code:
+
+```r
+tok_svg(m, file = "wypozyczenie.svg")
+tok_bpmn(m, file = "wypozyczenie.bpmn")
+tok_export(m, dir = "out")     # BPMN, SVG and every decision and form file
+```
+
+A model typed in the console goes between single quotes, because the labels use double quotes. `writeLines()` saves the text as a file, and `tok_fmt(write = TRUE)` rewrites a file read with `tok_read()` in canonical form:
+
+```r
+text <- 'tok 1.0 "Book request"
+start asked "Reader asks for a book"
+user find "Find the book"
+end found "Book found"
+flow asked -> find -> found'
+tok_check(text)
+writeLines(text, "book-request.tok")
+b <- tok_read("book-request.tok")
+tok_fmt(b, write = TRUE)
+```
+
+The examples of this guide download into the working directory with `download.file("https://tok-lang-bpm.github.io/examples/02-reading-room.tok", "reading-room.tok", mode = "wb")`. A model with an error gives one line per problem in `tok_check()`, and the functions that need a valid model stop with the same message:
+
+```r
+bad <- sub("-> found", "-> fuond", text)
+tok_check(bad)
+#> line:5: error R002: unknown flow node 'fuond'
+#> 1 error(s), 0 warning(s), 0 note(s)
+tok_svg(bad)
+#> Error in engine_svg(...) : line 5: error R002: unknown flow node 'fuond'
+```
+
 ## Setting up your editor
 
 A tok model is plain text, so any text editor will do. A few settings make the work smoother.
@@ -297,5 +465,6 @@ In VS Code with the *tok* extension, the settings `"editor.insertSpaces": true` 
 3. **Fix a model.** Download `02-reading-room-error.tok` from the examples. Run `tok check`, fix the first error, run `tok check` again, and continue until no errors remain. Write down every code you saw and what it meant. `r download_tok("02-reading-room-error", "Download the model with errors (.tok)")`
 4. **Into a BPMN tool.** Open your `reading-room.bpmn` in Camunda Modeler or on demo.bpmn.io. Click the gateway and the manual task and note the type the properties panel shows. Then rename a task in the graphical tool, save the file, and run `tok import reading-room.bpmn`: where does your change appear in the text?
 5. **Playground.** Paste your model into the playground. Introduce a tab character before one line, and then an unknown keyword (`taks` instead of `task`). Watch the diagnostics change as you type, and use *Copy link* to share the broken model with a colleague.
-6. **Editor.** Configure your editor to insert two spaces for the Tab key and to save in UTF-8. If you use VS Code, install the *tok* extension, open your model, and open the diagram beside it with *tok: Show diagram*. Change a label and watch the diagram follow.
+6. **Console.** In the Python or R console, read `reading-room.tok`, check it, and save its picture as `reading-room.svg`. Then type the book request of the section on consoles, misspell one identifier in a flow, and compare the message of the check with the message of `tok check` in the terminal for the same file.
+7. **Editor.** Configure your editor to insert two spaces for the Tab key and to save in UTF-8. If you use VS Code, install the *tok* extension, open your model, and open the diagram beside it with *tok: Show diagram*. Change a label and watch the diagram follow.
 :::
